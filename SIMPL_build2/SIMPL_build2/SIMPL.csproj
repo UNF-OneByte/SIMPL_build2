@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
