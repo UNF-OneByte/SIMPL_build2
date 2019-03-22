@@ -1,0 +1,61 @@
+﻿@page
+@model SIMPL.Pages.vendors.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Vendors</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendors.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors.Phone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendors.Phone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors.Zipcode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendors.Zipcode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors.StreetAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendors.StreetAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendors.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors.State)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendors.State)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors.Organization)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vendors.Organization)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Vendors.VendorId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

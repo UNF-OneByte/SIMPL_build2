@@ -29,6 +29,10 @@ namespace SIMPL.Models
             }
         }
 
+        public project_trackerContext(DbContextOptions<project_trackerContext> options)
+    : base(options)
+        {
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
