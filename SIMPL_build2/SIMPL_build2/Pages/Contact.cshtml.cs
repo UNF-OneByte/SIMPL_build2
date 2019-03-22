@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace SIMPL_build2.Pages
+namespace SIMPL.Pages
 {
     public class ContactModel : PageModel
     {

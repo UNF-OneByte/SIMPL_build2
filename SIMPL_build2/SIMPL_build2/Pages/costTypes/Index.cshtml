@@ -1,0 +1,36 @@
+﻿@page
+@model SIMPL.Pages.costTypes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CostTypes[0].Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CostTypes) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.CostTypeId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.CostTypeId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.CostTypeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
