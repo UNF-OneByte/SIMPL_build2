@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Areas\Test\" />
+    <Folder Include="Pages\projects_partial\" />
   </ItemGroup>
 
 </Project>
