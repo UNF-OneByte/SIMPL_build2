@@ -19,6 +19,43 @@
     </environment>
 </head>
 <body>
+
+    <script type="text/javascript" class="init">
+        //Gets todays date
+        var today = new Date();
+        var dd = today.getDate();
+
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = mm + '-' + dd + '-' + yyyy;
+        console.log(today);
+
+        //Get live time
+        function startTime() {
+            var tday = new Date();
+            var h = tday.getHours();
+            var m = tday.getMinutes();
+            var s = tday.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            document.getElementById('time').innerHTML =
+                h + ":" + m + ":" + s;
+            var t = setTimeout(startTime, 500);
+            document.getElementById('date').innerHTML = today
+        }
+        function checkTime(i) {
+            if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+            return i;
+        }
+    </script>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -37,11 +74,13 @@
                     <li><a asp-page="/Contact">Contact</a></li>
                 </ul>
                 <partial name="_LoginPartial" />
+                <p class="nav navbar-text navbar-right" id="time"></p>
+                <p class="nav navbar-text navbar-right" id="date"></p>
             </div>
         </div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
+    @*<partial name="_CookieConsentPartial" />*@
 
     <div class="container body-content">
         @RenderBody()
@@ -75,5 +114,6 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>
