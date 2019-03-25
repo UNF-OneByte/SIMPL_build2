@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.3.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "d3@5.9.2",
+      "destination": "wwwroot/lib/d3/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "datatables@1.10.19",
+      "destination": "wwwroot/lib/datatables/"
+    }
+  ]
+}

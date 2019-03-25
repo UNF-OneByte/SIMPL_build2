@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SIMPL_build2.Data.Migrations
+namespace SIMPL.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

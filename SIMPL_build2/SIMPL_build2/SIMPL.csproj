@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>aspnet-SIMPL_build2-CB8B3740-7319-40D6-9FC4-E45281FCFFFC</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\backups\**" />
+    <Content Remove="Pages\backups\**" />
+    <EmbeddedResource Remove="Pages\backups\**" />
+    <None Remove="Pages\backups\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Areas\Test\" />
+    <Folder Include="Pages\projects_partial\" />
+  </ItemGroup>
+
+</Project>

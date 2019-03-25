@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace SIMPL_build2.Data
+namespace SIMPL.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
