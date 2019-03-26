@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SIMPL.Models
 {
@@ -23,5 +24,12 @@ namespace SIMPL.Models
 
         public AspNetUsers ProjectManager { get; set; }
         public ICollection<Tasks> Tasks { get; set; }
+
+        public void getProjects()
+        {
+            var proj = from pro in ProjectName
+                       where ProjectId == 1
+                       select pro;
+        }
     }
 }
