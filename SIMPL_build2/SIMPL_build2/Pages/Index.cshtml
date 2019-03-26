@@ -5,31 +5,18 @@
     ViewData["Title"] = "Home page";
 }
 
-<!--<body>-->
+
 <div class="row">
-    <div class="col-lg-7">
-        <img src="~/images/5starlogo.png" alt="Smiley face" height="350" width="800" style="padding:100px">
+    <div class="col-md-6">
+        <img src="~/images/5starlogo.png" alt="Smiley face" height="325" width="770" style="padding:100px">
     </div>
-    <br />
-    <div class="col-md-4" id="info">
+    <div class="col-md-5" id="info" style="padding:100px">
         <div class="thumbnail">
             <h4><strong>My Projects:</strong></h4>
-            <hr />           
+            <hr />
             @{
                 var pCount = Model.Projects.Count;
-                <h5>Total projects opened: <strong>@pCount</strong> </h5>                
-            }
-            <hr />
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="thumbnail" id="info">
-            <h4><strong>My Tasks:</strong></h4>
-            <hr />
-            @{
-                var tCount = "Im running into an issue where I cannot ref two models in one page.. How can I grab both project model data AND task model data at once?";
-                <h5>Total tasks opened: <strong>@tCount</strong> </h5>                
+                <h5>Total projects opened: <strong>@pCount</strong> </h5>
             }
             <hr />
         </div>
@@ -52,8 +39,8 @@
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending">Project Mgr.</th>
                         </tr>
                     </thead>
-                    <tbody>                     
-                        @foreach(var item in Model.Projects)
+                    <tbody>
+                        @foreach (var item in Model.Projects)
                         {
                             <tr role="row" class="odd">
                                 <td class="sorting_1">@Html.DisplayFor(x => item.ProjectId)</td>
@@ -69,4 +56,23 @@
         </div>
     </div>
 </div>
-@*end*@
+
+<h3>LINQ Test</h3>
+<hr />
+@{
+    IEnumerable<SIMPL.Models.Projects> pro =
+        Model.Projects.Where(p => !p.ProjectId.Equals(1)).ToList();
+
+<p>
+    @foreach (var item in pro)
+    {
+        <p>@item.ProjectId</p>
+        <p>@item.ProjectName</p>
+        <p>@item.ProjectManagerId</p>
+        <br />
+    }
+</p>
+}
+<hr />
+<h3>End Test</h3>
+

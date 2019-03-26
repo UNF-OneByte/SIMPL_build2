@@ -9,6 +9,10 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" type="text/css" href="~/Datatables/datatables.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/datatables.min.css" />
+
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/datatables.min.js"></script>
+
 
     </environment>
     <environment exclude="Development">
@@ -20,7 +24,48 @@
 </head>
 <body>
 
+
+
     <script type="text/javascript" class="init">
+
+        $(document).ready(function () {
+            $('#home').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        title: 'My Projects ' + today
+                    },
+                    {
+                        extend: 'print',
+                        title: 'My Projects- ' + today
+                    }
+                ]
+            });
+
+            $('#reports').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        title: 'Tasks By Budget- ' + today
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Tasks By Budge- ' + today
+                    }
+                ]
+            });
+
+            $('#projects').DataTable({
+
+            });
+
+            $('#tasks').DataTable({
+
+            });
+        });
+
         //Gets todays date
         var today = new Date();
         var dd = today.getDate();
@@ -71,7 +116,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Index">Home</a></li>
                     <li><a asp-page="./projects/Index">Projects</a></li>
-                    <li><a asp-page="/Contact">Contact</a></li>
+                    <li><a asp-page="./reports/Index">Reports</a></li>                    
                 </ul>
                 <partial name="_LoginPartial" />
                 <p class="nav navbar-text navbar-right" id="time"></p>
