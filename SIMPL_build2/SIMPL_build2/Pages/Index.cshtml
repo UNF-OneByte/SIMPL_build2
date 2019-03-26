@@ -56,23 +56,3 @@
         </div>
     </div>
 </div>
-
-<h3>LINQ Test</h3>
-<hr />
-@{
-    IEnumerable<SIMPL.Models.Projects> pro =
-        Model.Projects.Where(p => !p.ProjectId.Equals(1)).ToList();
-
-<p>
-    @foreach (var item in pro)
-    {
-        <p>@item.ProjectId</p>
-        <p>@item.ProjectName</p>
-        <p>@item.ProjectManagerId</p>
-        <br />
-    }
-</p>
-}
-<hr />
-<h3>End Test</h3>
-
