@@ -63,7 +63,7 @@
     IEnumerable<SIMPL.Models.Projects> pro =
         Model.Projects.Where(p => !p.ProjectId.Equals(1)).ToList();
 
-<p>
+<div>
     @foreach (var item in pro)
     {
         <p>@item.ProjectId</p>
@@ -71,8 +71,7 @@
         <p>@item.ProjectManagerId</p>
         <br />
     }
-</p>
+</div>
 }
 <hr />
 <h3>End Test</h3>
-

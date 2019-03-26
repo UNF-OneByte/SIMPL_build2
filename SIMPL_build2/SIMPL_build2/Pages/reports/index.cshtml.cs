@@ -15,16 +15,17 @@ namespace SIMPL.Pages.reports
 
         public indexModel(SIMPL.Models.project_trackerContext context)
         {
-            _context = context;
+            _context = context;            
         }
 
         public IList<Projects> Projects { get;set; }
-        public IList<Tasks> Tasks { get; set; }
+        public IList<Tasks> Tasks { get; set; }       
 
         public async Task OnGetAsync()
         {
             Projects = await _context.Projects
-                .Include(p => p.ProjectManager).ToListAsync();                
-        }
+                .Include(p => p.ProjectManager).ToListAsync();   
+            
+        }     
     }
 }
