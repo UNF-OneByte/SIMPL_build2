@@ -5,54 +5,110 @@
     ViewData["Title"] = "Home page";
 }
 
+@section Scripts {
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js "></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
+    <script>   
+        //Gets todays date
+        var today = new Date();
+        var dd = today.getDate();
 
-<div class="row">
-    <div class="col-md-6">
-        <img src="~/images/5starlogo.png" alt="Smiley face" height="325" width="770" style="padding:100px">
-    </div>
-    <div class="col-md-5" id="info" style="padding:100px">
-        <div class="thumbnail">
-            <h4><strong>My Projects:</strong></h4>
-            <hr />
-            @{
-                var pCount = Model.Projects.Count;
-                <h5>Total projects opened: <strong>@pCount</strong> </h5>
-            }
-            <hr />
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = mm + '-' + dd + '-' + yyyy;
+        console.log(today);
+
+        $(document).ready(function () {
+            $('#home').DataTable({
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        title: 'My Projects ' + today
+                    },
+                    {
+                        extend: 'print',
+                        title: 'My Projects ' + today
+                    }
+                ]           
+            });
+        });
+    </script>
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src="~/images/5starlogo.png" alt="Smiley face" height="325" width="770" style="padding:100px">
         </div>
-    </div>
-</div>
-<div class="row">
-    @*start*@
-    <div class="col-sm-11">
-        <div class="thumbnail">
-            <h2><strong>My Projects:</strong></h2>
-            <hr />
-            @*start*@
-            <div id="example_wrapper" class="dataTables_wrapper">
-                <table id="home" class="display dataTable table" role="grid">
-                    <thead>
-                        <tr role="row">
-                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Project ID activate to sort column descending">Project ID</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Start Date: activate to sort column ascending">Start Date</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending">Project Mgr.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Projects)
-                        {
-                            <tr role="row" class="odd">
-                                <td class="sorting_1">@Html.DisplayFor(x => item.ProjectId)</td>
-                                <td>@Html.DisplayFor(x => item.ProjectName)</td>
-                                <td>@Html.DisplayFor(x => item.ActualStartDate)</td>
-                                <td>@Html.DisplayFor(x => item.ProjectManagerId)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <div class="col-md-5" id="info" style="padding:100px">
+            <div class="thumbnail">
+                <h4><strong>My Projects:</strong></h4>
+                <hr />
+                @{
+                    var pCount = Model.Projects.Count;
+                    <h5>Total projects opened: <strong>@pCount</strong> </h5>
+                }
+                <hr />
             </div>
-            @*end*@
         </div>
     </div>
-</div>
+    <div class="row">
+        @*start*@
+        <div class="col-sm-11">
+            <div class="thumbnail">
+                <h2><strong>My Projects:</strong></h2>
+                <hr />
+                @*start*@
+                <div id="example_wrapper" class="dataTables_wrapper">
+                    <table id="home" class="display dataTable table" role="grid">
+                        <thead>
+                            <tr role="row">
+                                <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Project ID activate to sort column descending">Project ID</th>
+                                <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
+                                <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Start Date: activate to sort column ascending">Start Date</th>
+                                <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending">Project Mgr.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Projects)
+                            {
+                                <tr role="row" class="odd">
+                                    <td class="sorting_1">@Html.DisplayFor(x => item.ProjectId)</td>
+                                    <td>@Html.DisplayFor(x => item.ProjectName)</td>
+                                    <td>@Html.DisplayFor(x => item.ActualStartDate)</td>
+                                    <td>@Html.DisplayFor(x => item.ProjectManagerId)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @*end*@
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+

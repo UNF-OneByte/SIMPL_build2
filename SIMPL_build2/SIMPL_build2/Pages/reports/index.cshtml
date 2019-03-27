@@ -12,7 +12,7 @@
 <div class="row">
     <div class="col-md-12 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Projects Opened:</strong></h4>
+            <h4><strong>Projects Overview:</strong></h4>
             <hr />
             <h5>Total projects opened: <strong>9</strong> </h5>
             <h5>Longest opened project: <strong>3</strong> days</h5>
@@ -21,7 +21,7 @@
 
     <div class="col-md-12 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Tasks Opened:</strong></h4>
+            <h4><strong>Tasks Overview:</strong></h4>
             <hr />
             <h5>Total tasks opened: <strong>10</strong> </h5>
             <h5>Longest tasks project: <strong>3</strong> days</h5>
@@ -95,17 +95,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr role="row" class="odd">
-                            @{
-                                    @foreach (var item in Model.Tasks)
-                                    {
-                                        <td>@item.TaskId</td>
-                                        <td>@item.EstimatedCost</td>
-                                        <td>@item.ActualCost</td>
-                                        <td>WIP</td>
-                                    }
-                                }
-                        </tr>
+                        @{
+                            @foreach (var item in Model.Tasks)
+                            {
+                                <tr role="row" class="odd">
+
+                                    <td>@item.TaskId</td>
+                                    <td>@item.EstimatedCost</td>
+                                    <td>@item.ActualCost</td>
+                                    <td>
+                                        @{
+                                            var net = @item.EstimatedCost - @item.ActualCost;
+                                        }
+                                        @if (net <= 0)
+                                        {
+                                            <p><font color="red">@net</font></p>
+                                        }
+
+                                        else if (net == 0)
+                                        {
+                                            <p><font color="yellow"> @net </font></p>
+                                        }
+
+                                        else
+                                        {
+                                            <p><font color="green"> @net </font></p>
+                                        }
+                                    </td>
+
+                                </tr>
+
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -124,6 +145,9 @@
         <p>@x</p>
     }
 </div>
+
+
+
 
 
 <script>
@@ -201,88 +225,3 @@
         }
     });
 </script>
-
-
-
-
-
-
-<!-- Original Page Data
-    <h2>index</h2>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ProjectName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ActualStartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedStartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedEndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ActualEndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedInitialCost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedInitialHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ProjectManager)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Projects) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActualStartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedStartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedEndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActualEndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedInitialCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedInitialHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectManager.Id)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ProjectId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ProjectId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ProjectId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-    -->
