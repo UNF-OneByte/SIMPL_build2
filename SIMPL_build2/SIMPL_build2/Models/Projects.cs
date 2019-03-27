@@ -9,6 +9,7 @@ namespace SIMPL.Models
         public Projects()
         {
             Tasks = new HashSet<Tasks>();
+
         }
 
         public int ProjectId { get; set; }

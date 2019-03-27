@@ -7,15 +7,21 @@
 
   <ItemGroup>
     <Compile Remove="Pages\backups\**" />
+    <Compile Remove="Pages\NewFolder\**" />
     <Content Remove="Pages\backups\**" />
+    <Content Remove="Pages\NewFolder\**" />
     <EmbeddedResource Remove="Pages\backups\**" />
+    <EmbeddedResource Remove="Pages\NewFolder\**" />
     <None Remove="Pages\backups\**" />
+    <None Remove="Pages\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DataTables.AspNet.Mvc5" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>

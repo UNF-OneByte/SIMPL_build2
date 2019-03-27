@@ -5,13 +5,14 @@
     ViewData["Title"] = "index";
 }
 
+
 <h2>Reporting</h2>
 <hr />
 
 <div class="row">
     <div class="col-md-12 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Projects Opened:</strong></h4>
+            <h4><strong>Projects Overview:</strong></h4>
             <hr />
             <h5>Total projects opened: <strong>9</strong> </h5>
             <h5>Longest opened project: <strong>3</strong> days</h5>
@@ -20,7 +21,7 @@
 
     <div class="col-md-12 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Tasks Opened:</strong></h4>
+            <h4><strong>Tasks Overview:</strong></h4>
             <hr />
             <h5>Total tasks opened: <strong>10</strong> </h5>
             <h5>Longest tasks project: <strong>3</strong> days</h5>
@@ -30,19 +31,53 @@
 <div class="row">
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Projects Assigned:</strong></h4>
+            <h4><strong>Project Details:</strong></h4>
             <hr />
-            <canvas id="pAssinged" width="50" height="50"></canvas>
+            <div id="example_wrapper" class="table">
+                <table id="reports" class="table" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Project ID</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Project Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            //IEnumerable<SIMPL.Models.Projects> pro =
+                            //Model.Projects.Where(p => !p.ProjectId.Equals(-1)).ToList();
+                            var pro = Model.Projects;
+
+                            @foreach (var item in pro)
+                            {
+                                <tr>
+                                    <td role="row" class="odd">
+                                        @item.ProjectId
+                                    </td>
+                                    <td role="row" class="odd">
+                                        @item.ProjectName
+                                    </td>
+                                    <td role="row" class="odd">
+                                        @item.Description
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    @*<div class="col-md-12 col-md-6">
+
+
+    <div class="col-md-12 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Tasks Assigned:</strong></h4>
+            <h4><strong>Tasks Opened:</strong></h4>
             <hr />
             <canvas id="tAssinged" width="50" height="50"></canvas>
         </div>
-    </div>*@
+    </div>
 
     <div class="col-sm-12 col-md-6">
         <div class="thumbnail">
@@ -60,23 +95,55 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr role="row" class="odd">
-                            @*@{
-                                @foreach (var item in Model.Tasks)
-                                {
+                        @{
+                            @foreach (var item in Model.Tasks)
+                            {
+                                <tr role="row" class="odd">
+
                                     <td>@item.TaskId</td>
                                     <td>@item.EstimatedCost</td>
                                     <td>@item.ActualCost</td>
-                                    <td>WIP</td>                                    
-                                }
-                            }*@
-                        </tr>
+                                    <td>
+                                        @{
+                                            var net = @item.EstimatedCost - @item.ActualCost;
+                                        }
+                                        @if (net <= 0)
+                                        {
+                                            <p><font color="red">@net</font></p>
+                                        }
+
+                                        else if (net == 0)
+                                        {
+                                            <p><font color="yellow"> @net </font></p>
+                                        }
+
+                                        else
+                                        {
+                                            <p><font color="green"> @net </font></p>
+                                        }
+                                    </td>
+
+                                </tr>
+
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
             @*end*@
         </div>
     </div>
+</div>
+
+
+
+<div>
+    <h3>Testing:</h3>
+    @{
+        var x = Model.SingleProject?.ProjectName;
+
+        <p>@x</p>
+    }
 </div>
 
 
@@ -158,88 +225,3 @@
         }
     });
 </script>
-
-
-
-
-
-
-<!-- Original Page Data
-    <h2>index</h2>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ProjectName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ActualStartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedStartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedEndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ActualEndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedInitialCost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].EstimatedInitialHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ProjectManager)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Projects) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActualStartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedStartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedEndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActualEndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedInitialCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstimatedInitialHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectManager.Id)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ProjectId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ProjectId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ProjectId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-    -->
