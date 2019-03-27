@@ -23,6 +23,7 @@ namespace SIMPL.Pages.reports
         
         public IList<Projects> ClosedProjects { get; set; }
         public Projects SingleProject  { get; set; }
+        public Projects GroupProject { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -32,10 +33,10 @@ namespace SIMPL.Pages.reports
 
             Tasks = await _context.Tasks.ToListAsync();
 
+            //Example from mentor session
             ClosedProjects = Projects.Where(p => !p.ProjectId.Equals(1)).ToList();
-            //var y = Projects.Where(p => !p.ProjectId.Equals(3));
-            SingleProject = Projects.Where(p => p.ProjectId.Equals(500)).FirstOrDefault();
-
+            SingleProject = Projects.Where(p => p.ProjectId.Equals(1)).FirstOrDefault();
+            
 
         }     
     }
