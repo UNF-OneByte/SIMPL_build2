@@ -89,12 +89,12 @@
                         <tbody>
                             @foreach (var item in Model.Projects)
                             {
-                                <tr role="row" class="odd">
-                                    <td class="sorting_1">@Html.DisplayFor(x => item.ProjectId)</td>
-                                    <td>@Html.DisplayFor(x => item.ProjectName)</td>
-                                    <td>@Html.DisplayFor(x => item.ActualStartDate)</td>
-                                    <td>@Html.DisplayFor(x => item.ProjectManagerId)</td>
-                                </tr>
+                            <tr role="row" class="odd">
+                                <td class="sorting_1">@Html.DisplayFor(x => item.ProjectId)</td>
+                                <td>@Html.DisplayFor(x => item.ProjectName)</td>
+                                <td>@Html.DisplayFor(x => item.ActualStartDate)</td>
+                                <td>@Html.DisplayFor(x => item.ProjectManager.UserName)</td>
+                            </tr>
                             }
                         </tbody>
                     </table>
