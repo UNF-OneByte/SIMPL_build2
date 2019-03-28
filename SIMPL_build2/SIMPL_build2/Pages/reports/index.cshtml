@@ -5,8 +5,14 @@
     ViewData["Title"] = "index";
 }
 
-
-<h2>Reporting</h2>
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Reporting</h2>  
+    </div>
+    <div class="col-sm-6" style="padding:2%">
+        @*<button type="button" class="btn btn-info pull-right"  id="all">Toggle All</button>*@
+    </div>
+</div>
 <hr />
 
 <div class="row">
@@ -41,10 +47,17 @@
 
 <div class="row">
     <div class="col-md-6 col-md-6">
-        <div class="thumbnail">
-            <h4><strong>Projects By User:</strong></h4>
+        <div class="thumbnail">            
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Projects By User:</strong></h4>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_by_user">Toggle</button>
+                </div>
+            </div>
             <hr />
-            <div id="example_wrapper" class="table">
+            <div id="project_by_user" class="table collapse in">
                 <table id="p_by_user" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
@@ -71,12 +84,19 @@
     <form method="post" id="Project_Task_Details_Form">
         <div class="col-md-6 col-lg-6">
             <div class="thumbnail">
-                <h4><strong>Project's Task Details:</strong></h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4><strong>Project's Task Details:</strong></h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
+                    </div>
+                </div>               
                 <hr />
-                <div class="form-group" style="padding-bottom: 30%">
-                    <div class="col-md-12">
+                <div id="project_task_details" class="form-group" style="padding-bottom: 30%">
+                    <div class="col-md-12 collapse in">
                         <label>Choose Project:</label>
-                        <select class="form-control" id="Project_Task_Details">
+                        <select class="form-control" id="Project_Task_Details_Report">
                             @{
                                 @foreach (var item in Model.Projects)
                                 {
@@ -115,15 +135,23 @@
 <div class="row">
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Project Details:</strong></h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Project Details:</strong></h4>
+                </div>     
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_details">Toggle</button>
+                </div>                
+            </div>            
             <hr />
-            <div id="example_wrapper" class="table">
+            <div id="project_details" class="table collapse in">
                 <table id="p_details" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Project Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Project Manager</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Project Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -144,6 +172,18 @@
                                     <td role="row" class="odd">
                                         @item.ProjectManager.UserName
                                     </td>
+
+                                    @if (item.ActualStartDate == null)
+                                    {
+                                        <td role="row" class="odd"><p><font color="SALMON"><strong>Not Started</strong></font></p></td>
+
+                                    }
+                                    else
+                                    {
+                                        <td role="row" class="odd"><p><font color="#239B56"><strong>Started</strong></font></p></td>
+                                    }
+
+
                                 </tr>
                             }
                         }
@@ -155,9 +195,17 @@
 
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Tasks Budgeting:</strong></h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Tasks Budgeting:</strong></h4>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#task_budgeting">Toggle</button>
+                </div>
+            </div>
+            <h4><strong></strong></h4>
             <hr />
-            <div id="example_wrapper" class="table">
+            <div id="task_budgeting" class="table collapse in">
                 <table id="t_budgeting" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
@@ -188,12 +236,12 @@
 
                                         else if (net <= 0)
                                         {
-                                            <p><font color="red"><strong>@net</strong></font></p>
+                                            <p><font color="SALMON"><strong>@net</strong></font></p>
                                         }
 
                                         else
                                         {
-                                            <p><font color="green"><strong>@net</strong></font></p>
+                                            <p><font color="#239B56"><strong>@net</strong></font></p>
                                         }
                                     </td>
 
@@ -412,3 +460,11 @@
             document.getElementById("Project_Task_Details_Form").submit();
         }
     </script>*@
+
+<script>
+    $(document).ready(function () {
+        $("#all").click(function () {
+            $(".collapse").collapse('toggle');
+        });
+    });
+</script>
