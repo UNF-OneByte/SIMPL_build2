@@ -20,9 +20,9 @@ namespace SIMPL.Pages.reports
 
         public IList<Projects> Projects { get; set; }
         public IList<Tasks> Tasks { get; set; }
-
-        //public IList<Projects> OldestProject { get; set; }
+        
         public Projects OldestProject { get; set; }
+        public Tasks OldestTask { get; set; }
 
         public IList<Projects> ClosedProjects { get; set; }
         public Projects SingleProject { get; set; }
@@ -48,9 +48,20 @@ namespace SIMPL.Pages.reports
             //Get the oldest project
             DateTime OldestDate = new DateTime(1776, 01, 01, 12, 00, 00);
             OldestProject = Projects.Where(p => p.ActualStartDate > OldestDate)
-                                    .OrderBy(p => p.ActualStartDate).First();                                    
+                                    .OrderBy(p => p.ActualStartDate).First();
+
+            //Get the oldest task
+            OldestTask = Tasks.Where(t => t.DateCreated > OldestDate)
+                                    .OrderBy(t => t.DateCreated).First();
 
         }
+
+        //public string Project_Task_Details_Selected { get; set; }      
+        //public void OnPost()
+        //{
+        //    ViewData["confirmation"] = $"information will be sent to {Project_Task_Details_Selected}";
+        //}
+
         public class ProjectManagerCountDto
         {
             public string UserName { get; set; }
