@@ -10,75 +10,85 @@
 <h4>Tasks</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Tasks.TaskId" />
-            <div class="form-group">
-                <label asp-for="Tasks.ProjectId" class="control-label"></label>
-                <select asp-for="Tasks.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                <span asp-validation-for="Tasks.ProjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Tasks.Name" class="control-label"></label>
+    
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Tasks.TaskId" />
+        @*<div class="form-group">
+            <label asp-for="Tasks.ProjectId" class="control-label"></label>
+            <select asp-for="Tasks.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+            <span asp-validation-for="Tasks.ProjectId" class="text-danger"></span>
+        </div>*@
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="control-label">Task Name</label>
                 <input asp-for="Tasks.Name" class="form-control" />
                 <span asp-validation-for="Tasks.Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.Description" class="control-label"></label>
-                <input asp-for="Tasks.Description" class="form-control" />
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="control-label">Description</label>
+                <textarea rows="3" class="form-control" asp-for="Tasks.Description"></textarea>
                 <span asp-validation-for="Tasks.Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.VendorId" class="control-label"></label>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="control-label">Vendor Id</label>
                 <select asp-for="Tasks.VendorId" class="form-control" asp-items="ViewBag.VendorId"></select>
                 <span asp-validation-for="Tasks.VendorId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.LocationId" class="control-label"></label>
+            <div class="form-group col-md-4">
+                <label class="control-label">Location</label>
                 <select asp-for="Tasks.LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
                 <span asp-validation-for="Tasks.LocationId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.DateCreated" class="control-label"></label>
+            <div class="form-group col-md-4">
+                <label class="control-label">Date Created</label>
                 <input asp-for="Tasks.DateCreated" class="form-control" />
                 <span asp-validation-for="Tasks.DateCreated" class="text-danger"></span>
             </div>
+        </div>
+        <div class="form-row">
             <div class="form-group">
-                <label asp-for="Tasks.CreatedById" class="control-label"></label>
+                <label class="control-label">Created By</label>
                 <select asp-for="Tasks.CreatedById" class="form-control" asp-items="ViewBag.CreatedById"></select>
                 <span asp-validation-for="Tasks.CreatedById" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Tasks.CostTypeId" class="control-label"></label>
+                <label class="control-label">Cost Type</label>
                 <select asp-for="Tasks.CostTypeId" class="form-control" asp-items="ViewBag.CostTypeId"></select>
                 <span asp-validation-for="Tasks.CostTypeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.EstimatedCost" class="control-label"></label>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label class="control-label">Estimated Cost</label>
                 <input asp-for="Tasks.EstimatedCost" class="form-control" />
                 <span asp-validation-for="Tasks.EstimatedCost" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.ActualCost" class="control-label"></label>
+            <div class="form-group col-md-3">
+                <label class="control-label">Actual Cost</label>
                 <input asp-for="Tasks.ActualCost" class="form-control" />
                 <span asp-validation-for="Tasks.ActualCost" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.EstimatedHours" class="control-label"></label>
+            <div class="form-group col-md-3">
+                <label class="control-label">Estimated Hours</label>
                 <input asp-for="Tasks.EstimatedHours" class="form-control" />
                 <span asp-validation-for="Tasks.EstimatedHours" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Tasks.ActualHours" class="control-label"></label>
+            <div class="form-group col-md-3">
+                <label class="control-label">Actual Hours</label>
                 <input asp-for="Tasks.ActualHours" class="form-control" />
                 <span asp-validation-for="Tasks.ActualHours" class="text-danger"></span>
             </div>
+        </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
-        </form>
-    </div>
+    </form>
+    
 </div>
 
 <div>
