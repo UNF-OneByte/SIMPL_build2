@@ -10,64 +10,76 @@
 <h4>Projects</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Projects.ProjectId" class="control-label"></label>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="control-label">Project Id</label>
                 <input asp-for="Projects.ProjectId" class="form-control" />
                 <span asp-validation-for="Projects.ProjectId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Projects.ProjectManagerId" class="control-label"></label>
+            <div class="form-group col-md-4">
+                <label class="control-label">Project Manager ID</label>
                 @*<select asp-for="Projects.ProjectManagerId" class ="form-control" asp-items="ViewBag.ProjectManagerId"></select>*@
                 <select asp-for="Projects.ProjectManagerId" class="form-control" asp-items="ViewBag.ProjectManagerId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Projects.ProjectName" class="control-label"></label>
+            <div class="form-group col-md-4">
+                <label class="control-label">Project Name</label>
                 <input asp-for="Projects.ProjectName" class="form-control" />
                 <span asp-validation-for="Projects.ProjectName" class="text-danger"></span>
             </div>
+        </div>
+        <div class="form-row">
             <div class="form-group">
-                <label asp-for="Projects.Description" class="control-label"></label>
-                <input asp-for="Projects.Description" class="form-control" />
+                <label class="control-label">Description</label>
+                <textarea rows="5" class="form-control" asp-for="Projects.Description"></textarea>
                 <span asp-validation-for="Projects.Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Projects.ActualStartDate" class="control-label"></label>
+        </div>
+        <div class="form-row">
+            @*<div class="form-group col-md-6">
+                <label class="control-label">Actual Start Date</label>
                 <input asp-for="Projects.ActualStartDate" class="form-control" />
                 <span asp-validation-for="Projects.ActualStartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Projects.EstimatedStartDate" class="control-label"></label>
+            </div>*@
+            <div class="form-group col-md-6">
+                <label class="control-label">Estimated Start Date</label>
                 <input asp-for="Projects.EstimatedStartDate" class="form-control" />
                 <span asp-validation-for="Projects.EstimatedStartDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Projects.EstimatedEndDate" class="control-label"></label>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="control-label">Estimated End Date</label>
                 <input asp-for="Projects.EstimatedEndDate" class="form-control" />
                 <span asp-validation-for="Projects.EstimatedEndDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            @*<div class="form-group col-md-6">
                 <label asp-for="Projects.ActualEndDate" class="control-label"></label>
                 <input asp-for="Projects.ActualEndDate" class="form-control" />
                 <span asp-validation-for="Projects.ActualEndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Projects.EstimatedInitialCost" class="control-label"></label>
+            </div>*@
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="control-label">Estimated Cost</label>
                 <input asp-for="Projects.EstimatedInitialCost" class="form-control" />
                 <span asp-validation-for="Projects.EstimatedInitialCost" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Projects.EstimatedInitialHours" class="control-label"></label>
+            <div class="form-group col-md-6">
+                <label class="control-label">Estimated Hours</label>
                 <input asp-for="Projects.EstimatedInitialHours" class="form-control" />
                 <span asp-validation-for="Projects.EstimatedInitialHours" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
+        </div>
+        
+                <div class="form-group">
+                    <hr />
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+</form>
 </div>
 
 <div>
