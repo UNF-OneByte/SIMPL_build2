@@ -4,7 +4,12 @@
 @inject UserManager<IdentityUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
-{
+{    
+        <ul class="nav navbar-nav">
+            <li><a asp-page="/projects/Index">Projects</a></li>
+            <li><a asp-page="/reports/Index">Reports</a></li>
+        </ul>
+    
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
