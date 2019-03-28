@@ -1,0 +1,48 @@
+﻿@page
+@model SIMPL.Pages.AdminModel
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<h2>Admin</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AspNetUsers[0].NormalizedUserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AspNetUsers[0].NormalizedEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AspNetUsers[0].IdName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.AspNetUsers) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NormalizedUserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NormalizedEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdName)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="/Account/Manage/Index" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
