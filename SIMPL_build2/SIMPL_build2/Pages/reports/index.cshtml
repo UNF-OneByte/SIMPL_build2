@@ -14,8 +14,13 @@
         <div class="thumbnail">
             <h4><strong>Projects Overview:</strong></h4>
             <hr />
-            <h5>Total projects opened: <strong>9</strong> </h5>
-            <h5>Longest opened project: <strong>3</strong> days</h5>
+            @{ 
+                var projectCount = Model.Projects.Count();
+                var oldestProject = Model.OldestProject.ActualStartDate;
+                
+            }
+            <h5>Total projects opened: <strong>@projectCount</strong> </h5>
+            <h5>Longest opened project: <strong>@oldestProject</strong></h5>
         </div>
     </div>
 
@@ -23,7 +28,12 @@
         <div class="thumbnail">
             <h4><strong>Tasks Overview:</strong></h4>
             <hr />
-            <h5>Total tasks opened: <strong>10</strong> </h5>
+            @{
+                var taskCount = Model.Tasks.Count();
+                //var oldestProject = Model.OldestProject.ActualStartDate;
+
+            }
+            <h5>Total tasks opened: <strong>@taskCount</strong> </h5>
             <h5>Longest tasks project: <strong>3</strong> days</h5>
         </div>
     </div>
@@ -39,7 +49,7 @@
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Project Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Project Description</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Project Manager</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,15 +89,20 @@
                 <table id="p_by_user" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
-                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Task Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending">Est. Cost</th>
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Username</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending"># of Projects</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Test</td>
-                            <td>Test</td>
-                        </tr>
+                        @{
+                            @foreach(var project in Model.ProjectManagerCount)
+                            {
+                                <tr>
+                                    <td>@project.UserName</td>
+                                    <td>@project.ProjectCount</td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -103,9 +118,9 @@
                     <thead>
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Task Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending">Est. Cost</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Act. Cost: activate to sort column ascending">Act. Cost</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Net Budget: activate to sort column ascending">Net Budget</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending">Est. Cost ($)</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Act. Cost: activate to sort column ascending">Act. Cost ($)</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Net Budget: activate to sort column ascending">Net Budget ($)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,8 +130,8 @@
                                 <tr role="row" class="odd">
 
                                     <td>@item.Name</td>
-                                    <td>$@item.EstimatedCost</td>
-                                    <td>$@item.ActualCost</td>
+                                    <td>@item.EstimatedCost</td>
+                                    <td>@item.ActualCost</td>
                                     <td>
                                         @{
                                             var net = @item.EstimatedCost - @item.ActualCost;
@@ -124,17 +139,17 @@
 
                                         @if (net == 0)
                                         {
-                                            <p><font color="orange"> @net </font></p>
+                                            <p><font color="orange"><strong>@net</strong></font></p>
                                         }
 
                                         else if (net <= 0)
                                         {
-                                            <p><font color="red">@net</font></p>
+                                            <p><font color="red"><strong>@net</strong></font></p>
                                         }
 
                                         else
                                         {
-                                            <p><font color="green"> @net </font></p>
+                                            <p><font color="green"><strong>@net</strong></font></p>
                                         }
                                     </td>
 
@@ -151,14 +166,14 @@
 
 
 
-<div>
+@*<div>
     <h3>Testing:</h3>
     @{
         var x = Model.SingleProject?.ProjectName;
 
         <p>@x</p>
     }
-</div>
+</div>*@
 
 
 
@@ -203,7 +218,8 @@
                         extend: 'excel',
                         title: 'Task Budgeting ' + today
                     }
-                ]
+                ],
+                "order": [[3, "asc"]]
             });
         });
 
@@ -238,7 +254,8 @@
                         extend: 'excel',
                         title: 'Task Budgeting ' + today
                     }
-                ]
+                ],
+                "order": [[1, "desc"]]
             });
         });
     </script>
