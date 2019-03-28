@@ -14,16 +14,16 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-2">
                     <label class="control-label">Task Id</label>
                     <input asp-for="Tasks.TaskId" class="form-control" />
                     <span asp-validation-for="Tasks.TaskId" class="text-danger"></span>
-                </div>
-                @*<div class="form-group"> This needs to directly pull the project associated to the tasks
-                <label asp-for="Tasks.ProjectId" class="control-label"></label>
-                <select asp-for="Tasks.ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
-            </div>*@
-                <div class="form-group col-md-6">
+                </div>                
+                    <div class="form-group col-md-5">                        
+                        <label asp-for="Tasks.ProjectId" class="control-label"></label>
+                        <select asp-for="Tasks.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                    </div>                
+                <div class="form-group col-md-5">
                     <label class="control-label">Task Name</label>
                     <input asp-for="Tasks.Name" class="form-control" />
                     <span asp-validation-for="Tasks.Name" class="text-danger"></span>
