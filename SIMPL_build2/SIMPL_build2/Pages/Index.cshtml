@@ -1,40 +1,86 @@
 ﻿@page
 @*@model IndexModel*@
-@model SIMPL.Pages.projects.IndexModel
+@*@model SIMPL.Pages.projects.IndexModel*@
+@model SIMPL.Pages.reports.indexModel
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Home page";
 }
 
-<!--<body>-->
+@section Scripts {
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js "></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
+    <script>
+        //Gets todays date
+        var today = new Date();
+        var dd = today.getDate();
+
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = mm + '-' + dd + '-' + yyyy;
+        console.log(today);
+
+        $(document).ready(function () {
+            $('#home').DataTable({
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        title: 'My Projects ' + today
+                    },
+                    {
+                        extend: 'print',
+                        title: 'My Projects ' + today
+                    }
+                ]
+            });
+        });
+    </script>
+}
+
+@*Gets data for only user that is signed in*@
+@{
+    var you = UserManager.GetUserName(User);
+
+    IEnumerable<SIMPL.Models.Projects>
+    MyP = Model.Projects.Where(p => p.ProjectManager.UserName.Equals(@you)).ToList();
+}
+
 <div class="row">
-    <div class="col-lg-7">
-        <img src="~/images/5starlogo.png" alt="Smiley face" height="350" width="800" style="padding:100px">
+    <div class="col-md-6">
+        <img src="~/images/5starlogo.png" alt="Smiley face" height="325" width="770" style="padding:100px">
     </div>
-    <br />
-    <div class="col-md-4" id="info">
+    <div class="col-md-5" id="info" style="padding:100px">
         <div class="thumbnail">
             <h4><strong>My Projects:</strong></h4>
-            <hr />           
-            @{
-                var pCount = Model.Projects.Count;
-                <h5>Total projects opened: <strong>@pCount</strong> </h5>                
-            }
-            <hr />
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="thumbnail" id="info">
-            <h4><strong>My Tasks:</strong></h4>
             <hr />
             @{
-                var tCount = "Im running into an issue where I cannot ref two models in one page.. How can I grab both project model data AND task model data at once?";
-                <h5>Total tasks opened: <strong>@tCount</strong> </h5>                
+                //var pCount = Model.Projects.Count;
+                var pCount = MyP.Count();
+                <h5>Total projects opened: <strong>@pCount</strong> </h5>
             }
             <hr />
         </div>
     </div>
 </div>
+
 <div class="row">
     @*start*@
     <div class="col-sm-11">
@@ -52,14 +98,14 @@
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending">Project Mgr.</th>
                         </tr>
                     </thead>
-                    <tbody>                     
-                        @foreach(var item in Model.Projects)
+                    <tbody>
+                        @foreach (var item in MyP)
                         {
                             <tr role="row" class="odd">
                                 <td class="sorting_1">@Html.DisplayFor(x => item.ProjectId)</td>
                                 <td>@Html.DisplayFor(x => item.ProjectName)</td>
-                                <td>@Html.DisplayFor(x => item.ActualStartDate)</td>
-                                <td>@Html.DisplayFor(x => item.ProjectManagerId)</td>
+                                <td>@Html.DisplayFor(x => item.EstimatedStartDate)</td>
+                                <td>@Html.DisplayFor(x => item.ProjectManager.UserName)</td>
                             </tr>
                         }
                     </tbody>
@@ -69,4 +115,12 @@
         </div>
     </div>
 </div>
-@*end*@
+
+
+
+
+
+
+
+
+

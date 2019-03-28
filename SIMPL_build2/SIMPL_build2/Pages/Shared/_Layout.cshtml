@@ -7,54 +7,56 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" type="text/css" href="~/Datatables/datatables.css" />
-
+        <link rel="stylesheet" href="~/css/site.css" />    
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
     </environment>
+
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
+    </environment>      
+   
 </head>
 <body>
+    @section Scripts{
+        <script type="text/javascript" class="init">
+            //Gets todays date
+            var today = new Date();
+            var dd = today.getDate();
 
-    <script type="text/javascript" class="init">
-        //Gets todays date
-        var today = new Date();
-        var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
 
-        var mm = today.getMonth() + 1;
-        var yyyy = today.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            today = mm + '-' + dd + '-' + yyyy;
+            console.log(today);
 
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        today = mm + '-' + dd + '-' + yyyy;
-        console.log(today);
-
-        //Get live time
-        function startTime() {
-            var tday = new Date();
-            var h = tday.getHours();
-            var m = tday.getMinutes();
-            var s = tday.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-            document.getElementById('time').innerHTML =
-                h + ":" + m + ":" + s;
-            var t = setTimeout(startTime, 500);
-            document.getElementById('date').innerHTML = today
-        }
-        function checkTime(i) {
-            if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
-            return i;
-        }
-    </script>
+            //Get live time
+            function startTime() {
+                var tday = new Date();
+                var h = tday.getHours();
+                var m = tday.getMinutes();
+                var s = tday.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('time').innerHTML =
+                    h + ":" + m + ":" + s;
+                var t = setTimeout(startTime, 500);
+                document.getElementById('date').innerHTML = today
+            }
+            function checkTime(i) {
+                if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+                return i;
+            }
+        </script>
+    }
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -70,8 +72,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="./projects/Index">Projects</a></li>
-                    <li><a asp-page="/Contact">Contact</a></li>
+                    @*<li><a asp-page="/projects/Index">Projects</a></li>
+                    <li><a asp-page="/reports/Index">Reports</a></li>*@
                 </ul>
                 <partial name="_LoginPartial" />
                 <p class="nav navbar-text navbar-right" id="time"></p>

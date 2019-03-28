@@ -20,7 +20,8 @@ namespace SIMPL.Pages.projects
 
         public IActionResult OnGet()
         {
-        ViewData["ProjectManagerId"] = new SelectList(_context.AspNetUsers, "Id", "Id");
+            ViewData["ProjectManagerId"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
+            
             return Page();
         }
 

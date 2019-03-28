@@ -21,7 +21,7 @@ namespace SIMPL.Pages.tasks
         public IActionResult OnGet()
         {
         ViewData["CostTypeId"] = new SelectList(_context.CostTypes, "CostTypeId", "Name");
-        ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "Id");
+        ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
         ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationId");
         ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Description");
         ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");

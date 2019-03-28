@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SIMPL.Models
 {
@@ -8,6 +9,7 @@ namespace SIMPL.Models
         public Projects()
         {
             Tasks = new HashSet<Tasks>();
+
         }
 
         public int ProjectId { get; set; }
@@ -27,5 +29,12 @@ namespace SIMPL.Models
         public AspNetUsers ProjectManager { get; set; }
         //public AspNetUsers IdName { get; set; }
         public ICollection<Tasks> Tasks { get; set; }
+
+        public void getProjects()
+        {
+            var proj = from pro in ProjectName
+                       where ProjectId == 1
+                       select pro;
+        }
     }
 }
