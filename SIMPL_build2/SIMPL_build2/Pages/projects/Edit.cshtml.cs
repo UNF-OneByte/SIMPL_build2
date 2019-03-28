@@ -36,7 +36,7 @@ namespace SIMPL.Pages.projects
             {
                 return NotFound();
             }
-           ViewData["ProjectManagerId"] = new SelectList(_context.AspNetUsers, "Id", "Id");
+           ViewData["ProjectManagerId"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
             return Page();
         }
 
