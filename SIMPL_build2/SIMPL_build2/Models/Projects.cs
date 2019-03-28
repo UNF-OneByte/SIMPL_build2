@@ -12,6 +12,7 @@ namespace SIMPL.Models
 
         public int ProjectId { get; set; }
         public string ProjectManagerId { get; set; }
+        public string ProjectManagerName { get; set; }
         public string ProjectName { get; set; }
         public string Description { get; set; }
         public DateTime? ActualStartDate { get; set; }
@@ -21,6 +22,7 @@ namespace SIMPL.Models
         public decimal? EstimatedInitialCost { get; set; }
         public decimal? EstimatedInitialHours { get; set; }
         public string Notes { get; set; }
+        //public int Status { get; set; }
 
         public AspNetUsers ProjectManager { get; set; }
         //public AspNetUsers IdName { get; set; }
