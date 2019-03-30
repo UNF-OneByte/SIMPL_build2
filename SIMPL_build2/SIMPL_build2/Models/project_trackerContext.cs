@@ -167,6 +167,9 @@ namespace SIMPL.Models
 
                 entity.Property(e => e.ProjectName).IsRequired();
 
+//                entity.HasOne(d => d.IdName)
+//                    .WithOne(p => p.ProjectManagerName)
+
                 entity.HasOne(d => d.ProjectManager)
                     .WithMany(p => p.Projects)
                     .HasForeignKey(d => d.ProjectManagerId)

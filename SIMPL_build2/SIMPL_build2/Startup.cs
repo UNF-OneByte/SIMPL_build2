@@ -13,6 +13,8 @@ using SIMPL.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SIMPL.Models;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SIMPL
 {
@@ -42,17 +44,24 @@ namespace SIMPL
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDbContext<project_trackerContext>(options =>
-    options.UseSqlServer(
-        Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
     //        services.AddDefaultIdentity<IdentityUser>()
     //            .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                    .RequireAuthenticatedUser()
+                                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddHttpContextAccessor();
         }
 
