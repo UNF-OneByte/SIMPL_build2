@@ -255,16 +255,42 @@
     </div>
 </div>
 
-@*<div class="row">
+<div class="row">
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
-            <h4><strong>Projects Assigned:</strong></h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Tasks By Project:</strong></h4>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#task_by_project">Toggle</button>
+                </div>
+            </div>
             <hr />
-            <canvas id="pAssinged" width="50" height="50"></canvas>
+            <div id="project_by_user" class="table collapse in">
+                <table id="p_by_user" class="display dataTable table" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Project Name</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            @foreach (var task in Model.TaskProjectCount)
+                            {
+                                <tr>
+                                    <td>@task.ProjectId</td>
+                                    <td>@task.TaskCount</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>*@
-
+</div>
 
 @*<div>
         <h3>Testing:</h3>
