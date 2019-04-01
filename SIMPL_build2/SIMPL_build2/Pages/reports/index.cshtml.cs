@@ -27,6 +27,8 @@ namespace SIMPL.Pages.reports
         public IList<Projects> ClosedProjects { get; set; }
         public Projects SingleProject { get; set; }
 
+        public IList<Tasks> TasksToProjects { get; set; }
+
         public IList<ProjectManagerCountDto> ProjectManagerCount { get; set; }
         public IList<TaskCountDto> TaskProjectCount { get; set; }
 
@@ -52,6 +54,11 @@ namespace SIMPL.Pages.reports
                 .Select(group => new TaskCountDto { ProjectId = group.Key, TaskCount = group.Count() })
                 .ToList();
 
+            //joins Tasks.project.id on project id                                          
+            TasksToProjects = Tasks.Join(Projects,
+                                    pro => pro.ProjectId,
+                                    tas => tas.ProjectId,
+                                    (pro, tas) => pro).ToList();
 
             //Get the oldest project
             try
