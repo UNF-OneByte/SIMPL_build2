@@ -5,7 +5,7 @@
 }
 
 <h4>@ViewData["Title"]</h4>
-@Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+<!--@Html.PartialAsync("_StatusMessage", Model.StatusMessage)-->
 <div class="row">
     <div class="col-md-6">
         <form id="profile-form" method="post">
@@ -15,19 +15,21 @@
                 <input asp-for="Username" class="form-control" disabled />
             </div>
             <div class="form-group">
+                <label>First and Last Name</label>
+
+                    <div class="input-group">
+                        <input asp-for="Input.IdName" class="form-control" />
+                        
+                    </div>
+            </div>
+            <div class="form-group">
                 <label asp-for="Input.Email"></label>
-                @if (Model.IsEmailConfirmed)
-                {
+                
                     <div class="input-group">
                         <input asp-for="Input.Email" class="form-control" />
-                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                        <span class="input-group-addon" aria-hidden="true"></span>
                     </div>
-                }
-                else
-                {
-                    <input asp-for="Input.Email" class="form-control" />
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                }
+                
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
