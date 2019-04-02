@@ -22,6 +22,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.AspNetUsers[0].IdName)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AspNetUsers[0].LockoutEnd)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -37,10 +40,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IdName)
             </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.LockoutEnd)
+            </th>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="/Account/Manage/Index" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-area="Identity" asp-page="/Account/Manage/index" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Archive User</a>
             </td>
         </tr>
 }

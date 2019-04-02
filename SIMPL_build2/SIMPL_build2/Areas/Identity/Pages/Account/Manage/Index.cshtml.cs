@@ -16,7 +16,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
-
+                
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
@@ -33,12 +33,17 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
 
         [TempData]
         public string StatusMessage { get; set; }
+        public string ID { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
         public class InputModel
         {
+            [Required]
+            [Display(Name = "IdName")]
+            public string IdName { get; set; }
+
             [Required]
             [EmailAddress]
             public string Email { get; set; }
@@ -48,9 +53,10 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            //var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -59,6 +65,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            //var IdName = await Models.AspNetUsers.;
 
             Username = userName;
 
@@ -66,6 +73,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             {
                 Email = email,
                 PhoneNumber = phoneNumber
+                //IdName = IdName     /**See block below**/
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -96,7 +104,18 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
                 }
             }
-
+/**New block for IDName (Plaintext User Name)
+            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            if (Input.IdName != IdName)
+            {
+                var setIdName = await _userManager.SetPhoneNumberAsync(user, Input.IdName);
+                if (!setPhoneResult.Succeeded)
+                {
+                    var userId = await _userManager.GetUserIdAsync(user);
+                    throw new InvalidOperationException($"Unexpected error occurred setting Plaintext Name for user with ID '{userId}'.");
+                }
+            }
+**/
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
