@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Identity
 
+
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
@@ -8,12 +9,13 @@
         <ul class="nav navbar-nav">
             <li><a asp-page="/projects/Index">Projects</a></li>
             <li><a asp-page="/reports/Index">Reports</a></li>
+            <li><a asp-page="/admin/Admin">Administration</a></li>
         </ul>
     
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" asp-route-id="@UserManager.GetUserId(User)">Hello @UserManager.GetUserName(User)!</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
