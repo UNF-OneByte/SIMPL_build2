@@ -30,7 +30,7 @@ namespace SIMPL.Pages.reports
         public IList<Tasks> TasksToProjects { get; set; }
 
         public IList<ProjectManagerCountDto> ProjectManagerCount { get; set; }
-        public IList<TaskCountDto> TaskProjectCount { get; set; }
+        public IList<TaskCountDto> TaskProjectCount { get; set; }        
 
         public async Task OnGetAsync()
         {
@@ -50,8 +50,8 @@ namespace SIMPL.Pages.reports
                 .ToList();
 
             //How many tasks does one project have
-            TaskProjectCount = Tasks.GroupBy(t => t.ProjectId.ToString())            
-                .Select(group => new TaskCountDto { ProjectId = group.Key, TaskCount = group.Count() })
+            TaskProjectCount = Tasks.GroupBy(t => t.ProjectId.ToString())          
+                .Select(group => new TaskCountDto { ProjectId = group.Key, TaskCount = group.Count() })                
                 .ToList();
 
             //joins Tasks.project.id on project id                                          
