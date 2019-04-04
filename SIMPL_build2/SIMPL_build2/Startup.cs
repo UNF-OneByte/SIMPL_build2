@@ -53,7 +53,10 @@ namespace SIMPL
     //        services.AddDefaultIdentity<IdentityUser>()
     //            .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+            services.AddMemoryCache();
+            services.AddHttpContextAccessor();
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -62,7 +65,7 @@ namespace SIMPL
                 config.Filters.Add(new AuthorizeFilter(policy));
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddHttpContextAccessor();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,13 +81,13 @@ namespace SIMPL
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseSession();
             app.UseMvc();
         }
     }

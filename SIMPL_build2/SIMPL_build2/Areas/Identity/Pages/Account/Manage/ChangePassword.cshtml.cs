@@ -33,7 +33,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
+            //[Required]
             [DataType(DataType.Password)]
             [Display(Name = "Current password")]
             public string OldPassword { get; set; }
@@ -80,7 +80,13 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            if (token == null)
+            {
+                return NotFound($"Unable to generate Token for User with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var changePasswordResult = await _userManager.ResetPasswordAsync(user, token, Input.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
                 foreach (var error in changePasswordResult.Errors)
@@ -94,6 +100,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
 
+            
             return RedirectToPage();
         }
     }

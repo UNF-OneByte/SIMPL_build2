@@ -14,6 +14,7 @@ namespace SIMPL
     {
         public static void Main(string[] args)
         {
+
             CreateWebHostBuilder(args).Build().Run();
         }
 
