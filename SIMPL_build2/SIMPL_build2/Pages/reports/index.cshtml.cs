@@ -26,7 +26,11 @@ namespace SIMPL.Pages.reports
 
         public IList<Projects> ClosedProjects { get; set; }
         public Projects SingleProject { get; set; }
+
+        public IList<Tasks> TasksToProjects { get; set; }
+
         public IList<ProjectManagerCountDto> ProjectManagerCount { get; set; }
+        public IList<TaskCountDto> TaskProjectCount { get; set; }        
 
         public async Task OnGetAsync()
         {
@@ -45,15 +49,32 @@ namespace SIMPL.Pages.reports
                 .Select(group => new ProjectManagerCountDto { UserName = group.Key, ProjectCount = group.Count() })
                 .ToList();
 
+            //How many tasks does one project have
+            TaskProjectCount = Tasks.GroupBy(t => t.ProjectId.ToString())          
+                .Select(group => new TaskCountDto { ProjectId = group.Key, TaskCount = group.Count() })                
+                .ToList();
+
+            //joins Tasks.project.id on project id                                          
+            TasksToProjects = Tasks.Join(Projects,
+                                    pro => pro.ProjectId,
+                                    tas => tas.ProjectId,
+                                    (pro, tas) => pro).ToList();
+
             //Get the oldest project
-            DateTime OldestDate = new DateTime(1776, 01, 01, 12, 00, 00);
-            OldestProject = Projects.Where(p => p.ActualStartDate > OldestDate)
-                                    .OrderBy(p => p.ActualStartDate).First();
+            try
+            {
+                DateTime OldestDate = new DateTime(1776, 01, 01, 12, 00, 00);
+                OldestProject = Projects?.Where(p => p?.ActualStartDate > OldestDate)
+                                        .OrderBy(p => p?.ActualStartDate).First();
 
-            //Get the oldest task
-            OldestTask = Tasks.Where(t => t.DateCreated > OldestDate)
-                                    .OrderBy(t => t.DateCreated).First();
-
+                //Get the oldest task
+                OldestTask = Tasks?.Where(t => t?.DateCreated > OldestDate)
+                                        .OrderBy(t => t?.DateCreated).First();
+            }
+            catch
+            {
+                //blank
+            }                                   
         }
 
         //public string Project_Task_Details_Selected { get; set; }      
@@ -66,7 +87,12 @@ namespace SIMPL.Pages.reports
         {
             public string UserName { get; set; }
             public int ProjectCount { get; set; }
-            public int Date { get; set; }
+        }
+
+        public class TaskCountDto
+        {
+            public string ProjectId { get; set; }
+            public int TaskCount { get; set; }
         }
     }
 }
