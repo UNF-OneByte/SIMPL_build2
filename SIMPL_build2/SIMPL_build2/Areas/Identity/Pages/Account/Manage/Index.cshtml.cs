@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using SIMPL.Models;
 
 namespace SIMPL.Areas.Identity.Pages.Account.Manage
 {
@@ -20,7 +22,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
         private readonly IEmailSender _emailSender;
         private readonly ILogger<IndexModel> _logger;
         private string userID;
-           private IdentityUser userObj;
+        private IdentityUser userObj;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
@@ -41,7 +43,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
 
         [TempData]
         public string StatusMessage { get; set; }
-        public string ID { get; set; }
+        
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -50,16 +52,19 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
         {
             
             [Display(Name = "IdName")]
-            public string IdName { get; set; }
+            public string LastName { get; set; }
+            public string FirstName { get; set; }
 
+            public string ID { get; set; }
             [Required]
             [EmailAddress]
             public string Email { get; set; }
 
+            
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
-
+            
             
             [Display(Name ="ID")]
             public IdentityUser userObj { get; set; }
@@ -70,7 +75,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Current password")]
             public string OldPassword { get; set; }
 
-            [Required]
+            //[Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "New password")]
@@ -86,7 +91,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync(string ID)
         {
-            //
+            
 
             //var user = await _userManager.GetUserAsync(User);
             if ((ID != null)) //&& (userObj == null))
@@ -98,9 +103,12 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             {
                 userID = HttpContext.Session.GetString("ID");
             }
-            
-            
-            
+
+           
+
+            var user = await _userManager.FindByIdAsync(userID);
+            //string userName = user.LastName;
+
             userObj = await _userManager.FindByIdAsync(userID);
             if ((userID == null)) //&& (userObj == null))
             {
@@ -113,33 +121,43 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                 return RedirectToPage("./SetPassword");
             }
 
-            var userName = await _userManager.GetUserNameAsync(userObj);
-            var email = await _userManager.GetEmailAsync(userObj);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(userObj);
-            
+            string userName = await _userManager.GetUserNameAsync(userObj);
+            String pattern = "[.]";
+            String[] elements = Regex.Split(userName, pattern);
+           
 
+            var email = await _userManager.GetEmailAsync(userObj);
+           
             Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
-                
+                ID = userID
             };
-
+            
+            if (elements.Length > 0)
+            {
+                Input.FirstName = elements[0];
+                Input.LastName = elements[1];
+            }
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userObj);
-
+            
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string ID)
         {
-            HttpContext.Session.SetString("ID", ID);
-
+            
             if (ID != null)
             {
+                HttpContext.Session.SetString("ID", ID);
+
                 userID = HttpContext.Session.GetString("ID");
+                
             }
+
+            
 
 
             if (!ModelState.IsValid)
@@ -165,7 +183,10 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
                 }
             }
-
+            if (await _userManager.GetUserNameAsync(userObj) != (Input.FirstName + "." + Input.LastName)){
+                await _userManager.SetUserNameAsync(userObj, (Input.FirstName + "." + Input.LastName));
+            }
+            
             var phoneNumber = await _userManager.GetPhoneNumberAsync(userObj);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -176,23 +197,29 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
-            string token = await _userManager.GeneratePasswordResetTokenAsync(userObj);
-            if (token == null)
+          
+            if (Input.ConfirmPassword != null)
             {
-                return NotFound($"Unable to generate Token for User with ID '{_userManager.GetUserIdAsync(userObj)}'.");
-            }
-
-            var changePasswordResult = await _userManager.ResetPasswordAsync(userObj, token, Input.NewPassword);
-            if (!changePasswordResult.Succeeded)
-            {
-                foreach (var error in changePasswordResult.Errors)
+                string token = await _userManager.GeneratePasswordResetTokenAsync(userObj);
+                if (token == null)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    return NotFound($"Unable to generate Token for User with ID '{_userManager.GetUserIdAsync(userObj)}'.");
                 }
-                
-                return Page();
+
+                var changePasswordResult = await _userManager.ResetPasswordAsync(userObj, token, Input.NewPassword);
+
+                if (!changePasswordResult.Succeeded)
+                {
+                    foreach (var error in changePasswordResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+
+                    return Page();
+                }
             }
-                await _signInManager.RefreshSignInAsync(userObj);
+            Input.userID = HttpContext.Session.GetString("ID");
+            //await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }

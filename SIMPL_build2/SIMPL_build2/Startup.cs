@@ -47,6 +47,8 @@ namespace SIMPL
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<IUserClaimsPrincipalFactory<AspNetUsers>, AppClaimsPrincipalFactory>();
+
             services.AddDbContext<project_trackerContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));

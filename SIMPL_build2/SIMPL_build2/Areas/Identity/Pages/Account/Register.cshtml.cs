@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using SIMPL.Models;
 
 namespace SIMPL.Areas.Identity.Pages.Account
 {
@@ -19,6 +20,7 @@ namespace SIMPL.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -27,6 +29,7 @@ namespace SIMPL.Areas.Identity.Pages.Account
             IEmailSender emailSender)
         {
             _userManager = userManager;
+           
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
@@ -43,6 +46,10 @@ namespace SIMPL.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required]
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -66,7 +73,7 @@ namespace SIMPL.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new IdentityUser { UserName = (Input.FirstName+"."+Input.LastName), Email = Input.Email};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
