@@ -102,7 +102,7 @@
                                     </form>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                                        <a asp-page="../tasks/Index">Tasks</a>
+                                        <a asp-page="../tasks/Index" asp-route-QueryProjectId="@item.ProjectId">Tasks</a>                                        
                                     </div>
                                 </div>
                             </div>

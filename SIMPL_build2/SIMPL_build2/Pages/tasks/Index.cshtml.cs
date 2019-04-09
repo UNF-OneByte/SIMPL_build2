@@ -18,6 +18,11 @@ namespace SIMPL.Pages.tasks
             _context = context;
         }
 
+        //This allows for a query sting named QueryProjectId 
+        //?QueryProjectId= <Project ID>
+        [BindProperty(SupportsGet = true)]
+        public string QueryProjectId { get; set; }
+
         public IList<Tasks> Tasks { get;set; }
 
         public async Task OnGetAsync()
@@ -28,6 +33,14 @@ namespace SIMPL.Pages.tasks
                 .Include(t => t.Location)
                 .Include(t => t.Project)
                 .Include(t => t.Vendor).ToListAsync();
+
+            if(QueryProjectId != null)
+            {
+                if(int.TryParse(QueryProjectId, out var ParsedProjectId))
+                {
+                    Tasks = Tasks.Where(i => i.ProjectId == ParsedProjectId).ToList();
+                }
+            }
         }
     }
 }
