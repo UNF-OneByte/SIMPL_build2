@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SIMPL.Models
 {
@@ -30,6 +34,8 @@ namespace SIMPL.Models
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
         public string IdName { get; set; }
 
         public ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
@@ -38,5 +44,50 @@ namespace SIMPL.Models
         public ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
         public ICollection<Projects> Projects { get; set; }
         public ICollection<Tasks> Tasks { get; set; }
+
+        public static implicit operator AspNetUsers(IdentityUser v)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class AppClaimsPrincipalFactory : UserClaimsPrincipalFactory<AspNetUsers, IdentityRole>
+    {
+        public AppClaimsPrincipalFactory(
+            UserManager<AspNetUsers> userManager
+            , RoleManager<IdentityRole> roleManager
+            , IOptions<IdentityOptions> optionsAccessor)
+        : base(userManager, roleManager, optionsAccessor)
+        { }
+        /**
+        public async Task<string> GetFNameAsync(IdentityUser user)
+        {
+            var User = await UserManager.GetUserAsync(user);
+            return User.FirstName;
+        }
+        **/
+
+        public async override Task<ClaimsPrincipal> CreateAsync(AspNetUsers user)
+        {
+            var principal = await base.CreateAsync(user);
+
+            if (!string.IsNullOrWhiteSpace(user.FirstName))
+            {
+                ((ClaimsIdentity)principal.Identity).AddClaims(new[] {
+        new Claim(ClaimTypes.GivenName, user.FirstName)
+    });
+            }
+
+            if (!string.IsNullOrWhiteSpace(user.LastName))
+            {
+                ((ClaimsIdentity)principal.Identity).AddClaims(new[] {
+         new Claim(ClaimTypes.Surname, user.LastName),
+    });
+            }
+
+            return principal;
+        }
+
+        
     }
 }

@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Pages\Account\Manage\AppClaimsPrincipalFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Areas\Identity\Pages\Account\flag.jpg" />
   </ItemGroup>
 

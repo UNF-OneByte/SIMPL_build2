@@ -1,5 +1,7 @@
 ﻿@page
 @model SIMPL.Pages.AdminModel
+@inject UserManager<AspNetUsers>
+
 
 @{
     ViewData["Title"] = "Admin";
@@ -14,13 +16,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].NormalizedUserName)
+                @Html.DisplayNameFor(model => model.AspNetUsers[0].UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].NormalizedEmail)
+                @Html.DisplayNameFor(model => model.AspNetUsers[0].Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AspNetUsers[0].IdName)
+                @Html.DisplayNameFor(model => model.AspNetUsers[0].LastName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AspNetUsers[0].LockoutEnd)
@@ -32,10 +34,10 @@
 @foreach (var item in Model.AspNetUsers) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NormalizedUserName)
+                @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NormalizedEmail)
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdName)
@@ -44,9 +46,8 @@
                 @Html.DisplayFor(modelItem => item.LockoutEnd)
             </th>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-area="Identity" asp-page="/Account/Manage/index" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Archive User</a>
+                <a asp-page="admin/Admin" onclick="item.Id.SetLockoutEndDateAsync(await _userManager.FindByIdAsync(user), DateTime.UtcNow.AddMinutes(42));">Archive User</a>
             </td>
         </tr>
 }
