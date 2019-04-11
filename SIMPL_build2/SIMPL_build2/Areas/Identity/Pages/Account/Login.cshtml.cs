@@ -68,14 +68,21 @@ namespace SIMPL.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-
+            String user;
             if (ModelState.IsValid)
             {
-                
+
+                if (await _signInManager.UserManager.FindByEmailAsync(Input.userName)!=null) {
+                    user=await _signInManager.UserManager.GetUserNameAsync(await _signInManager.UserManager.FindByEmailAsync(Input.userName));
+                }
+                else
+                {
+                    user = Input.userName;
+                }
                 
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.userName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

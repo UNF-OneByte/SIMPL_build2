@@ -27,6 +27,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.AspNetUsers[0].LockoutEnd)
             </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -47,7 +48,45 @@
             </th>
             <td>
                 <a asp-area="Identity" asp-page="/Account/Manage/index" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="admin/Admin" onclick="item.Id.SetLockoutEndDateAsync(await _userManager.FindByIdAsync(user), DateTime.UtcNow.AddMinutes(42));">Archive User</a>
+                <a asp-page="admin/Admin" onclick="item.Id.SetLockoutEndDateAsync(await _userManager.FindByIdAsync(user), DateTime.UtcNow.AddMinutes(42));">Archive User</a> |
+                <asp:DropDownList id="UserOptions"
+                                  AutoPostBack="True"
+                                  OnSelectedIndexChanged="Selection_Change"
+                                  runat="server">
+
+                    <asp:ListItem Selected="True" TextValue="Select"></asp:ListItem>
+                    <asp:ListItem NavigateURL="/Account/Manage/index" asp-route-id="@item.Id"> Edit User </asp:ListItem>
+                    <asp:ListItem Value="DarkGray"> Dark Gray </asp:ListItem>
+                    <asp:ListItem Value="Khaki"> Khaki </asp:ListItem>
+                    <asp:ListItem Value="DarkKhaki"> Dark Khaki </asp:ListItem>
+
+                </asp:DropDownList> |
+                <!--https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.rendering.ihtmlhelper-1.dropdownlistfor?view=aspnetcore-2.2-->
+                <!--https://demos.telerik.com/aspnet-core/dropdownlist/index-->
+                <!-- Needs at symbol for razor syntax-->
+                <!--(Html.Kendo().DropDownList()
+      .Name("color")
+      .DataTextField("Text")
+      .DataValueField("Value")
+      .Events(e => e.Change("change"))
+      .BindTo(new List<SelectListItem>() {
+      new SelectListItem() {
+          Text = "Black",
+          Value = "1"
+      },
+      new SelectListItem() {
+          Text = "Orange",
+          Value = "2"
+      },
+      new SelectListItem() {
+          Text = "Grey",
+          Value = "3"
+      }
+      })
+      .Value("1")
+      .HtmlAttributes(new { style = "width: 100%" })
+    )-->
+
             </td>
         </tr>
 }
