@@ -40,18 +40,27 @@ namespace SIMPL
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+/**
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+**/
+            services.AddDbContext<project_trackerContext>(options =>
+          options.UseSqlServer(
+             Configuration.GetConnectionString("DefaultConnection")));
+            services
+                .AddIdentityCore<AspNetUsers>()
+                .AddRoles<AspNetRoles>()
+                .AddEntityFrameworkStores<project_trackerContext>();
+
 
             services.AddScoped<IUserClaimsPrincipalFactory<AspNetUsers>, AppClaimsPrincipalFactory>();
 
-            services.AddDbContext<project_trackerContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+    //        services.AddDbContext<project_trackerContext>(options =>
+    //            options.UseSqlServer(
+    //                Configuration.GetConnectionString("DefaultConnection")));
     //        services.AddDefaultIdentity<IdentityUser>()
     //            .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -69,9 +78,28 @@ namespace SIMPL
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
            
         }
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<AspNetRoles>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<AspNetUsers>>();
+
+            IdentityResult roleResult;
+            //Adding Admin Role 
+            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database 
+                roleResult = await RoleManager.CreateAsync(new AspNetRoles("Admin"));
+            }
+            //Assign Admin role to the main User here we have given our newly registered  
+            //login id for Admin management 
+            AspNetUsers user = await UserManager.FindByEmailAsync("syedshanumcain@gmail.com");
+            var User = new AspNetUsers();
+            await UserManager.AddToRoleAsync(user, "Admin");
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -91,6 +119,9 @@ namespace SIMPL
             app.UseAuthentication();
             app.UseSession();
             app.UseMvc();
+
+            CreateUserRoles(services).Wait();
         }
+
     }
 }

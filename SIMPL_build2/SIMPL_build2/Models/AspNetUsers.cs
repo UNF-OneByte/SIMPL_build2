@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SIMPL.Models
 {
-    public partial class AspNetUsers
+    public class AspNetUsers : IdentityUser<string>
     {
         public AspNetUsers()
         {
@@ -18,7 +18,7 @@ namespace SIMPL.Models
             Projects = new HashSet<Projects>();
             Tasks = new HashSet<Tasks>();
         }
-
+        
         public string Id { get; set; }
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
@@ -34,6 +34,7 @@ namespace SIMPL.Models
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string IdName { get; set; }
@@ -45,17 +46,14 @@ namespace SIMPL.Models
         public ICollection<Projects> Projects { get; set; }
         public ICollection<Tasks> Tasks { get; set; }
 
-        public static implicit operator AspNetUsers(IdentityUser v)
-        {
-            throw new NotImplementedException();
-        }
+        //public static implicit operator AspNetUsers(IdentityUser v) => throw new NotImplementedException();
     }
 
-    public class AppClaimsPrincipalFactory : UserClaimsPrincipalFactory<AspNetUsers, IdentityRole>
+    public class AppClaimsPrincipalFactory : UserClaimsPrincipalFactory<AspNetUsers, AspNetRoles>
     {
         public AppClaimsPrincipalFactory(
             UserManager<AspNetUsers> userManager
-            , RoleManager<IdentityRole> roleManager
+            , RoleManager<AspNetRoles> roleManager
             , IOptions<IdentityOptions> optionsAccessor)
         : base(userManager, roleManager, optionsAccessor)
         { }

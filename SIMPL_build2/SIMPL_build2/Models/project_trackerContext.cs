@@ -1,11 +1,13 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel;
 
 namespace SIMPL.Models
 {
-    public class project_trackerContext : DbContext //used to say public partial class
+    public class project_trackerContext : IdentityDbContext //used to say public partial class
     {
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
@@ -35,6 +37,8 @@ namespace SIMPL.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+        
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
             {
                 entity.HasIndex(e => e.RoleId);
@@ -45,7 +49,7 @@ namespace SIMPL.Models
                     .WithMany(p => p.AspNetRoleClaims)
                     .HasForeignKey(d => d.RoleId);
             });
-
+            modelBuilder.Entity<IdentityRole>().ToTable("AspNetRoles");
             modelBuilder.Entity<AspNetRoles>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedName)
@@ -102,8 +106,8 @@ namespace SIMPL.Models
                     .WithMany(p => p.AspNetUserRoles)
                     .HasForeignKey(d => d.UserId);
             });
-
-            modelBuilder.Entity<AspNetUsers>(entity =>
+            modelBuilder.Entity<IdentityUser>().ToTable("AspNetUsers");
+          /**modelBuilder.Entity<AspNetUsers>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedEmail)
                     .HasName("EmailIndex");
@@ -122,8 +126,8 @@ namespace SIMPL.Models
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
-            });
-
+            });**/
+    
             modelBuilder.Entity<AspNetUserTokens>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
@@ -141,7 +145,7 @@ namespace SIMPL.Models
             {
                 entity.HasKey(e => e.CostTypeId);
 
-                entity.Property(e => e.CostTypeId).ValueGeneratedNever();
+                entity.Property(e => e.CostTypeId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name).IsRequired();
             });
@@ -150,7 +154,7 @@ namespace SIMPL.Models
             {
                 entity.HasKey(e => e.LocationId);
 
-                entity.Property(e => e.LocationId).ValueGeneratedNever();
+                entity.Property(e => e.LocationId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.RoomNumber).HasColumnType("nchar(10)");
             });
@@ -159,7 +163,7 @@ namespace SIMPL.Models
             {
                 entity.HasKey(e => e.ProjectId);
 
-                entity.Property(e => e.ProjectId).ValueGeneratedNever();
+                entity.Property(e => e.ProjectId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Description).IsRequired();
 
@@ -180,7 +184,7 @@ namespace SIMPL.Models
             {
                 entity.HasKey(e => e.TaskId);
 
-                entity.Property(e => e.TaskId).ValueGeneratedNever();
+                entity.Property(e => e.TaskId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CreatedById)
                     .IsRequired()
@@ -222,7 +226,7 @@ namespace SIMPL.Models
             {
                 entity.HasKey(e => e.VendorId);
 
-                entity.Property(e => e.VendorId).ValueGeneratedNever();
+                entity.Property(e => e.VendorId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.City).HasMaxLength(50);
 
