@@ -23,7 +23,7 @@ namespace SIMPL.Pages.tasks
         ViewData["CostTypeId"] = new SelectList(_context.CostTypes, "CostTypeId", "Name");
         ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
         ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationId");
-        ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Description");
+        ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectName");
         ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");
             return Page();
         }
