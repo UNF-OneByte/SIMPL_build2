@@ -117,7 +117,7 @@
                                 <h2 class="modal-title">WIP</h2>
                             </div>
                             @*start*@
-                            <div id="task_budgeting" class="table collapse in" style="padding:5%">
+                            <div id="task_budgeting1" class="table collapse in" style="padding:5%">
                                 <table id="t_budgeting" class="display dataTable table" role="grid">
                                     <thead>
                                         <tr role="row">
@@ -307,7 +307,7 @@
                 </div>
             </div>
             <hr />
-            <div id="project_by_user" class="table collapse in">
+            <div id="task_by_project" class="table collapse in">
                 <table id="p_by_user" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
@@ -568,7 +568,7 @@
 </script>
 
 <script>
-    function TaskDetails() {
+    function TaskDetails_() {
         var option = document.getElementById("Project_Task_Details_Report");
         var selTask = option.options[option.selectedIndex].text;
         alert("You selected--->" + selTask);       
