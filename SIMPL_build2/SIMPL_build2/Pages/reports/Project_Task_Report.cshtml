@@ -31,12 +31,13 @@
         console.log(today);
 
         $(document).ready(function () {
-            $('#tasks_home').DataTable({            
-            "bPaginate": false,
-            "bFilter": false,
-            "bInfo": false,});
+            $('#tasks_home').DataTable({
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+            });
         });
-        
+
         $(document).ready(function () {
             $('#tasks').DataTable({
                 "bPaginate": false,
@@ -52,14 +53,14 @@
                     {
                         extend: 'excel',
                         footer: true,
-                        title: 'Project Details Report: Tasks Details ' + today                        
+                        title: 'Project Details Report: Tasks Details ' + today
                     },
                     {
                         extend: 'print',
                         footer: true,
                         title: 'Project Details Report: Tasks Details ' + today
                     }
-                ]                
+                ]
             });
         });
 
@@ -88,23 +89,93 @@
                 ]
             });
         });
+
+        $(document).ready(function () {
+            $('#hours').DataTable({
+                "bPaginate": false,
+                "bInfo": false,
+                "bFilter": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        footer: true,
+                        title: 'Project Details Report: Hours Worked ' + today
+                    },
+                    {
+                        extend: 'excel',
+                        footer: true,
+                        title: 'Project Details Report: Hours Worked ' + today
+                    },
+                    {
+                        extend: 'print',
+                        footer: true,
+                        title: 'Project Details Report: Hours Worked ' + today
+                    }
+                ]
+            });
+        });
     </script>
+}
+
+@{
+    decimal? Etot = 0;
+    @foreach (var item in Model.Tasks)
+    {
+        @if (item.EstimatedCost == null)
+        {
+            Etot += 0;
+        }
+        else
+        {
+            Etot += item?.EstimatedCost;
+        }
+    }
+
+    decimal? Atot = 0;
+    @foreach (var item in Model.Tasks)
+    {
+        @if (item.ActualCost == null)
+        {
+            Atot += 0;
+        }
+        else
+        {
+            Atot += item?.ActualCost;
+        }
+    }   
 }
 
 
 
-<body class="wide comments example">
-    <div class="content">
+
+    <body>
         <h1 class="page_title">Project Detail Report</h1>
         <hr />
-        @foreach (var name in Model.TasksToProjects)
-        {
-            <h3>Selected: <strong>@name.Project.ProjectName</strong></h3>            
-            break;
-        }
+        <div class="row">
+            <div class="col-sm-6">
+                @foreach (var name in Model.TasksToProjects)
+                {
+                    <h3 class="pull-left">Selected: <strong>@name.Project.ProjectName</strong></h3>
+                    break;
+                }
+            </div>
+
+            <div class="col-sm-6">
+
+                @if (Etot <= Atot)
+                {
+                    <h3 class="pull-right"><font color="green"><strong>In Budget</strong></font></h3>
+                }
+                else
+                {
+                    <h3 class="pull-right"><font color="red"><strong>Over Budget</strong></font></h3>
+
+                }
+            </div>
+        </div>
         <hr />
-    </div>
-        
+
         <div class="row">
             <div class="col-md-12">
                 <div class="thumbnail">
@@ -112,7 +183,7 @@
                     <div id="example_wrapper" class="dataTables_wrapper">
                         <div class="dataTables_length" id="example_length">
                             <!--<label>Show Entries<select name="example_length" aria-controls="example" class=""><option value="10">10</option><option value="25">25</option><option value="50">50
-                </option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
+                        </option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
                             <table id="tasks_home" class="table table-striped table-bordered" style="width: 100%;" role="grid" aria-describedby="example_info">
                                 <thead>
                                     <tr role="row">
@@ -164,9 +235,9 @@
                 </div>
             </div>
         </div>
-        
 
-        @*<div class="row">            
+
+        @*<div class="row">
             <div class="col-md-6">
                 <div class="thumbnail">
                     <p>Put Data Here</p>
@@ -176,7 +247,7 @@
                 <div class="thumbnail">
                     <p>Put Data Here</p>
                 </div>
-            </div>            
+            </div>
         </div>*@
 
         <div class="row">
@@ -216,46 +287,16 @@
                                 <tr>
                                     <td>TOTAL:</td>
                                     <td>
-                                        @{
-                                            decimal? EST_Total = 0;
-                                            @foreach (var item in Model.Tasks)
-                                            {
-                                                @if (item.EstimatedCost == null)
-                                                {
-                                                    EST_Total += 0;
-                                                }
-                                                else
-                                                {
-                                                    EST_Total += item?.EstimatedCost;
-                                                }
-                                            }
-
-                                            <p>@EST_Total</p>
-                                        }
+                                        <p>@Etot</p>
                                     </td>
                                     <td>
-                                        @{
-                                            decimal? ACT_Total = 0;
-                                            @foreach (var item in Model.Tasks)
-                                            {
-                                                @if (item.ActualCost == null)
-                                                {
-                                                    ACT_Total += 0;
-                                                }
-                                                else
-                                                {
-                                                    ACT_Total += item?.ActualCost;
-                                                }
-                                            }
-
-                                            <p>@ACT_Total</p>
-                                        }
+                                        <p>@Atot</p>
                                     </td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -267,7 +308,7 @@
                         <table id="vendor" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Vendor Name</th>                                    
+                                    <th>Vendor Name</th>
                                     <th>Amount Spent ($)</th>
                                 </tr>
                             </thead>
@@ -304,6 +345,58 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
 
-</body>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="thumbnail">
+                    <h4><strong>Hours Worked:</strong></h4>
+                    <hr />
+                    <div class="dataTables_length" id="example_length">
+                        <table id="hours" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Hours Wokred</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+
+
+                                    @foreach (var item in Model.HoursWorked)
+                                    {
+                                        <tr>
+                                            <th>@item.Task</th>
+                                            <th>@item.HoursWorked</th>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>TOTAL:</td>
+                                    @{
+                                        decimal Temp_Hours = 0;
+                                        foreach (var item in Model.HoursWorked)
+                                        {
+                                            decimal temp = decimal.Parse(item.HoursWorked);
+                                            Temp_Hours += temp;
+                                        }
+                                        <td>
+                                            @Temp_Hours
+                                        </td>
+                                    }
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-6">
+                <div class="thumbnail">
+                    <p>Put Data Here</p>
+                </div>
+            </div>*@
+        </div>
+    </body>
