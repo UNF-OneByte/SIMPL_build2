@@ -96,17 +96,17 @@
                 <div id="project_task_details" class="form-group" style="padding-bottom: 30%">
                     <div class="col-md-12 collapse in">
                         <label>Choose Project:</label>
+                        @{
                         <select class="form-control" id="Project_Task_Details_Report">
-                            @{
-                                @foreach (var item in Model.Projects)
-                                {
-                                    <option>@item.ProjectName.ToString()</option>
-                                }
-                            }
-                        </select>
-                        <div style="padding-top: 10%">
-                            <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#projectInformation" onclick="TaskDetails()">Run</button>
-                        </div>
+                            @foreach (var item in Model.Projects)
+                            {
+                                <option id="reportSelected">@item.ProjectName.ToString()</option>
+                            }                            
+                        </select>                           
+                            <div style="padding-top: 10%">
+                                <a class="btn btn-success pull-right" onclick="TaskDetails()" asp-page="../Reports/Project_Task_Report" asp-route-id="2">Run</a>
+                            </div>
+                        }
                     </div>
                 </div>
                 <!--Modal -->
@@ -193,7 +193,6 @@
                     <thead>
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Project Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Project Manager</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Project Status</th>
                         </tr>
@@ -209,9 +208,6 @@
                                 <tr>
                                     <td role="row" class="odd">
                                         @item.ProjectName
-                                    </td>
-                                    <td role="row" class="odd">
-                                        @item.Description
                                     </td>
                                     <td role="row" class="odd">
                                         @item.ProjectManager.UserName
@@ -490,7 +486,7 @@
                 $(".collapse").collapse('toggle');
             });
         });
-    </script>    
+    </script>
 }
 
 
@@ -571,9 +567,11 @@
     });
 </script>
 
-@*<script>
-        function TaskDetails() {
-            document.getElementById("Project_Task_Details_Form").submit();
-        }
-    </script>*@
+<script>
+    function TaskDetails() {
+        var option = document.getElementById("Project_Task_Details_Report");
+        var selTask = option.options[option.selectedIndex].text;
+        alert("You selected--->" + selTask);       
 
+    }
+</script>

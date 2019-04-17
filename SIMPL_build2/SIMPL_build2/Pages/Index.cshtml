@@ -92,7 +92,7 @@
                 <table id="home" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
-                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Project ID activate to sort column descending">Project ID</th>
+                            @*<th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Project ID activate to sort column descending">Project ID</th>*@
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Start Date: activate to sort column ascending">Start Date</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending">Project Mgr.</th>
@@ -102,7 +102,7 @@
                         @foreach (var item in MyP)
                         {
                             <tr role="row" class="odd">
-                                <td class="sorting_1">@Html.DisplayFor(x => item.ProjectId)</td>
+                                @*<td class="sorting_1">@Html.DisplayFor(x => item.ProjectManager.IdName)</td>*@
                                 <td>@Html.DisplayFor(x => item.ProjectName)</td>
                                 <td>@Html.DisplayFor(x => item.EstimatedStartDate)</td>
                                 <td>@Html.DisplayFor(x => item.ProjectManager.UserName)</td>

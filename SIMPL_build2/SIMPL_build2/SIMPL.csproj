@@ -17,6 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Pages\Account\Manage\AppClaimsPrincipalFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\RoleAdmin\Index.cshtml" />
+    <Content Remove="Views\RoleAdmin\Index1.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Areas\Identity\Pages\Account\flag.jpg" />
   </ItemGroup>
 
@@ -24,7 +33,8 @@
     <PackageReference Include="DataTables.AspNet.Mvc5" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
@@ -32,6 +42,7 @@
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="Areas\Test\" />
     <Folder Include="Pages\projects_partial\" />
+    <Folder Include="Views\RoleAdmin\" />
   </ItemGroup>
 
 </Project>

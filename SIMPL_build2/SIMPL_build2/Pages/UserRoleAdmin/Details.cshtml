@@ -1,0 +1,31 @@
+﻿@page
+@model SIMPL.Pages.UserRoleAdmin.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AspNetUserRoles</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetUserRoles.Role)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUserRoles.Role.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetUserRoles.User)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUserRoles.User.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-page="./Index">Back to List</a>
+</div>

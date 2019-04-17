@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SIMPL.Models;
 
-namespace SIMPL.Pages.tasks
+namespace SIMPL.Pages.RoleAdmin
 {
     public class EditModel : PageModel
     {
@@ -20,31 +20,21 @@ namespace SIMPL.Pages.tasks
         }
 
         [BindProperty]
-        public Tasks Tasks { get; set; }
+        public AspNetRoles AspNetRoles { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Tasks = await _context.Tasks
-                .Include(t => t.CostType)
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Location)
-                .Include(t => t.Project)
-                .Include(t => t.Vendor).FirstOrDefaultAsync(m => m.TaskId == id);
+            AspNetRoles = await _context.AspNetRoles.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (Tasks == null)
+            if (AspNetRoles == null)
             {
                 return NotFound();
             }
-           ViewData["CostTypeId"] = new SelectList(_context.CostTypes, "CostTypeId", "Name");
-           ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
-           ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationId");
-           ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId");
-           ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");
             return Page();
         }
 
@@ -55,7 +45,7 @@ namespace SIMPL.Pages.tasks
                 return Page();
             }
 
-            _context.Attach(Tasks).State = EntityState.Modified;
+            _context.Attach(AspNetRoles).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +53,7 @@ namespace SIMPL.Pages.tasks
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TasksExists(Tasks.TaskId))
+                if (!AspNetRolesExists(AspNetRoles.Id))
                 {
                     return NotFound();
                 }
@@ -76,9 +66,9 @@ namespace SIMPL.Pages.tasks
             return RedirectToPage("./Index");
         }
 
-        private bool TasksExists(int id)
+        private bool AspNetRolesExists(string id)
         {
-            return _context.Tasks.Any(e => e.TaskId == id);
+            return _context.AspNetRoles.Any(e => e.Id == id);
         }
     }
 }

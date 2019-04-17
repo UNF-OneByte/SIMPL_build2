@@ -32,9 +32,9 @@
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="form-control" />
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    <label>User Name</label>
+                    <input asp-for="Input.userName" class="form-control" />
+                    <span asp-validation-for="Input.userName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Input.Password"></label>
@@ -53,9 +53,9 @@
                     <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
                 <div class="form-group">
-                    <p>
+                    <!--p>
                         <a asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
+                    </p-->
                     <p>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                     </p>
