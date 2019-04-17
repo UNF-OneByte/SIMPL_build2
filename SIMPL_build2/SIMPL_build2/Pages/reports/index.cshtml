@@ -70,7 +70,7 @@
                             @foreach (var project in Model.ProjectManagerCount)
                             {
                                 <tr>
-                                    <td>@project?.UserName</td>
+                                    <td>@project?.UserName-</td>
                                     <td>@project?.ProjectCount</td>
                                 </tr>
                             }
@@ -81,99 +81,73 @@
         </div>
     </div>
 
-    <form method="post" id="Project_Task_Details_Form">
-        <div class="col-md-6 col-lg-6">
-            <div class="thumbnail">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h4><strong>Project's Task Details:</strong></h4>
+    @*<form method="post" id="Project_Task_Details_Form">
+            <div class="col-md-6 col-lg-6">
+                <div class="thumbnail">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4><strong>Project's Task Details:</strong></h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
+                        </div>
                     </div>
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
-                    </div>
-                </div>
-                <hr />
-                <div id="project_task_details" class="form-group" style="padding-bottom: 30%">
-                    <div class="col-md-12 collapse in">
-                        <label>Choose Project:</label>
-                        @{
-                        <select class="form-control" id="Project_Task_Details_Report">
-                            @foreach (var item in Model.Projects)
-                            {
-                                <option id="reportSelected">@item.ProjectName.ToString()</option>
-                            }                            
-                        </select>                           
-                            <div style="padding-top: 10%">
-                                <a class="btn btn-success pull-right" onclick="TaskDetails()" asp-page="../Reports/Project_Task_Report" asp-route-id="2">Run</a>
-                            </div>
-                        }
-                    </div>
-                </div>
-                <!--Modal -->
-                <div class="modal" id="projectInformation" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title">WIP</h2>
-                            </div>
-                            @*start*@
-                            <div id="task_budgeting" class="table collapse in" style="padding:5%">
-                                <table id="t_budgeting" class="display dataTable table" role="grid">
-                                    <thead>
-                                        <tr role="row">
-                                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Task Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending">Est. Cost ($)</th>
-                                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Act. Cost: activate to sort column ascending">Act. Cost ($)</th>
-                                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Net Budget: activate to sort column ascending">Net Budget ($)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-                                            @foreach (var item in Model.Tasks)
-                                            {
-                                                <tr role="row" class="odd">
-
-                                                    <td>@item.Name</td>
-                                                    <td>@item.EstimatedCost</td>
-                                                    <td>@item.ActualCost</td>
-                                                    <td>
-                                                        @{
-                                                            var net = @item.EstimatedCost - @item.ActualCost;
-                                                        }
-
-                                                        @if (net == 0)
-                                                        {
-                                                            <p><font color="orange"><strong>@net</strong></font></p>
-                                                        }
-
-                                                        else if (net <= 0)
-                                                        {
-                                                            <p><font color="SALMON"><strong>@net</strong></font></p>
-                                                        }
-
-                                                        else
-                                                        {
-                                                            <p><font color="#239B56"><strong>@net</strong></font></p>
-                                                        }
-                                                    </td>
-
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            @*end*@
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                            </div>
+                    <hr />
+                    <div id="project_task_details" class="form-group" style="padding-bottom: 30%">
+                        <div class="col-md-12 collapse in">
+                            <label>Choose Project:</label>
+                            @{
+                            <select class="form-control" id="Project_Task_Details_Report">
+                                @foreach (var item in Model.Projects)
+                                {
+                                    <option id="reportSelected">@item.ProjectName.ToString()</option>
+                                }
+                            </select>
+                                <div style="padding-top: 10%">
+                                    <a class="btn btn-success pull-right" onclick="TaskDetails()" asp-page="../Reports/Project_Task_Report" asp-route-id="2">Run</a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
-                <!--Modal -->
             </div>
-        </div>
-    </form>
+        </form>*@
+        <form method="post" id="Project_Task_Details_Form">
+            <div class="col-md-6 col-lg-6">
+                <div class="thumbnail">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h4><strong>Project's Task Details:</strong></h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
+                        </div>
+                    </div>
+                    <hr />
+                    <div id="project_task_details" class="table collapse in">
+                        <table id="p_by_user" class="display dataTable table" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Project Name</th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Run Report</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    @foreach (var item in Model.Projects)
+                                    {
+                                        <tr>
+                                            <td>@item.ProjectName</td>                                               
+                                            <td><a class="btn btn-primary btn-xs" asp-page="../Reports/Project_Task_Report" asp-route-id="@item.ProjectId">Run</a></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
 </div>
 
 <div class="row">
@@ -295,7 +269,7 @@
     </div>
 </div>
 
-<div class="row">
+@*<div class="row">
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
             <div class="row">
@@ -307,7 +281,7 @@
                 </div>
             </div>
             <hr />
-            <div id="project_by_user" class="table collapse in">
+            <div id="task_by_project" class="table collapse in">
                 <table id="p_by_user" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
@@ -367,7 +341,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 
 @*<div>
@@ -568,7 +542,7 @@
 </script>
 
 <script>
-    function TaskDetails() {
+    function TaskDetails_() {
         var option = document.getElementById("Project_Task_Details_Report");
         var selTask = option.options[option.selectedIndex].text;
         alert("You selected--->" + selTask);       
