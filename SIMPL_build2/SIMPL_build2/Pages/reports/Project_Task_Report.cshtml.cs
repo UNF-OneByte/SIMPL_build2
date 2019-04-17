@@ -28,6 +28,8 @@ namespace SIMPL.Pages.reports
         public IList<Tasks> Tasks { get;set; }   
         public IList<Tasks> TasksToProjects { get; set; }
         public Task ProjectName { get; set; }
+        public IList<VendorCostDto> VendorCost { get; set; }
+        public IList<HoursWokredDto> HoursWorked { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -56,6 +58,29 @@ namespace SIMPL.Pages.reports
                                     pro => pro.ProjectId,
                                     tas => tas.ProjectId,
                                     (pro, tas) => pro).ToList();
+
+            //How many projects one user is assigned
+            VendorCost = Tasks.GroupBy(v => v.Vendor.Name)
+                .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
+                .ToList();
+
+            //How many projects one user is assigned
+            HoursWorked = Tasks.GroupBy(v => v.Name)
+                .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
+                .ToList();
+        }
+
+        public class VendorCostDto
+        {
+            public string Vendor { get; set; }
+            public int Count { get; set; }
+            public string Cost { get; set; }
+        }
+
+        public class HoursWokredDto
+        {
+            public string Task { get; set; }            
+            public string HoursWorked { get; set; }
         }
     }
 }
