@@ -70,7 +70,7 @@
                             @foreach (var project in Model.ProjectManagerCount)
                             {
                                 <tr>
-                                    <td>@project?.UserName-</td>
+                                    <td>@project?.UserName</td>
                                     <td>@project?.ProjectCount</td>
                                 </tr>
                             }
@@ -80,77 +80,7 @@
             </div>
         </div>
     </div>
-
-    @*<form method="post" id="Project_Task_Details_Form">
-            <div class="col-md-6 col-lg-6">
-                <div class="thumbnail">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h4><strong>Project's Task Details:</strong></h4>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
-                        </div>
-                    </div>
-                    <hr />
-                    <div id="project_task_details" class="form-group" style="padding-bottom: 30%">
-                        <div class="col-md-12 collapse in">
-                            <label>Choose Project:</label>
-                            @{
-                            <select class="form-control" id="Project_Task_Details_Report">
-                                @foreach (var item in Model.Projects)
-                                {
-                                    <option id="reportSelected">@item.ProjectName.ToString()</option>
-                                }
-                            </select>
-                                <div style="padding-top: 10%">
-                                    <a class="btn btn-success pull-right" onclick="TaskDetails()" asp-page="../Reports/Project_Task_Report" asp-route-id="2">Run</a>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>*@
-        <form method="post" id="Project_Task_Details_Form">
-            <div class="col-md-6 col-lg-6">
-                <div class="thumbnail">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h4><strong>Project's Task Details:</strong></h4>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
-                        </div>
-                    </div>
-                    <hr />
-                    <div id="project_task_details" class="table collapse in">
-                        <table id="p_by_user" class="display dataTable table" role="grid">
-                            <thead>
-                                <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Project Name</th>
-                                    <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Run Report</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    @foreach (var item in Model.Projects)
-                                    {
-                                        <tr>
-                                            <td>@item.ProjectName</td>                                               
-                                            <td><a class="btn btn-primary btn-xs" asp-page="../Reports/Project_Task_Report" asp-route-id="@item.ProjectId">Run</a></td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </form>
-</div>
-
-<div class="row">
+   
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
             <div class="row">
@@ -181,7 +111,7 @@
                             {
                                 <tr>
                                     <td role="row" class="odd">
-                                        @item.ProjectName
+                                        <a asp-page="../Reports/Project_Task_Report" asp-route-id="@item.ProjectId">@item.ProjectName</a>
                                     </td>
                                     <td role="row" class="odd">
                                         @item.ProjectManager.UserName
@@ -198,6 +128,70 @@
                                     }
 
 
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-md-6">
+        <div class="thumbnail">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Location Data:</strong></h4>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#location_details">Toggle</button>
+                </div>
+            </div>
+            <hr />
+            <div id="location_details" class="table collapse in">
+                <table id="Project_Location" class="display dataTable table" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Location Name</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Room #</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Occurrence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            @foreach (var item in Model.LocationCount)
+                            {
+                                var TheID = 0;
+
+                                @foreach (var ID in Model.Tasks)
+                                {
+                                    if (ID.Location.Name == item.Location)
+                                    {
+                                        TheID = ID.Location.LocationId;
+                                        break;
+                                    }
+
+                                }
+
+                                <tr>
+                                    <td role="row" class="odd">
+                                        <a asp-page="../Reports/Project_Task_Report" asp-route-id="@TheID">@item.Location</a>
+                                    </td>
+                                    <td role="row" class="odd">
+                                        @foreach (var SubItem in Model.Tasks)
+                                        {
+                                            if (SubItem.Location.Name == item.Location)
+                                            {
+                                                @SubItem.Location.RoomNumber
+                                                break;
+                                            }
+                                        }
+                                    </td>
+                                    <td role="row" class="odd">
+                                        @item.LocationCount
+                                    </td>
                                 </tr>
                             }
                         }
@@ -435,23 +429,23 @@
             });
         });
 
-        //$(document).ready(function () {
-        //    $('#Project_Task_Details').DataTable({
-        //        "bInfo": false,
-        //        dom: 'Bfrtip',
-        //        buttons: [
-        //            {
-        //                extend: 'pdf',
-        //                title: 'Task Budgeting ' + today
-        //            },
-        //            {
-        //                extend: 'excel',
-        //                title: 'Task Budgeting ' + today
-        //            }
-        //        ],
-        //        "order": [[1, "desc"]]
-        //    });
-        //});
+        $(document).ready(function () {
+            $('#Project_Location').DataTable({
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Task Budgeting ' + today
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Task Budgeting ' + today
+                    }
+                ],
+                "order": [[1, "desc"]]
+            });
+        });
     </script>
 
     <script>
