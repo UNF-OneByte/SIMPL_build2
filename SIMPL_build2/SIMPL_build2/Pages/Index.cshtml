@@ -103,8 +103,17 @@
                         {
                             <tr role="row" class="odd">
                                 @*<td class="sorting_1">@Html.DisplayFor(x => item.ProjectManager.IdName)</td>*@
-                                <td>@Html.DisplayFor(x => item.ProjectName)</td>
-                                <td>@Html.DisplayFor(x => item.EstimatedStartDate)</td>
+                                <td><a asp-page="/Reports/Project_Task_Report" asp-route-id="@item.ProjectId">@item.ProjectName</a></td>
+                                <td>
+                                    @if (item.EstimatedStartDate != null)
+                                    {
+                                        @item.EstimatedStartDate
+                                    }
+                                    else
+                                    {
+                                        <p><font color="SALMON"><strong>Not Started</strong></font></p>
+                                    }
+                                </td>
                                 <td>@Html.DisplayFor(x => item.ProjectManager.UserName)</td>
                             </tr>
                         }

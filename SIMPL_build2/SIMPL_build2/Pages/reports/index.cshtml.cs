@@ -36,7 +36,7 @@ namespace SIMPL.Pages.reports
         public async Task OnGetAsync()
         {
             Projects = await _context.Projects
-                .Include(p => p.ProjectManager)
+                .Include(p => p.ProjectManager)                
                 .ToListAsync();
 
             //Tasks = await _context.Tasks.ToListAsync();

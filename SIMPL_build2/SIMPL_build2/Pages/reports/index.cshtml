@@ -40,7 +40,7 @@
 
             }
             <h5>Total tasks opened: <strong>@taskCount</strong> </h5>
-            <h5>Longest tasks project: <strong>@oldestTask</strong></h5>
+            <h5>Longest task: <strong>@oldestTask</strong></h5>
         </div>
     </div>
 </div>
@@ -154,8 +154,8 @@
                 <table id="Project_Location" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
-                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Location Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Room #</th>
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Room #</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Location Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Occurrence</th>
                         </tr>
                     </thead>
@@ -175,19 +175,19 @@
 
                                 }
 
-                                <tr>
-                                    <td role="row" class="odd">
-                                        <a asp-page="../Reports/Project_Task_Report" asp-route-id="@TheID">@item.Location</a>
-                                    </td>
+                                <tr>                                   
                                     <td role="row" class="odd">
                                         @foreach (var SubItem in Model.Tasks)
                                         {
                                             if (SubItem.Location.Name == item.Location)
                                             {
-                                                @SubItem.Location.RoomNumber
+                                                <a asp-page="../Reports/Project_Task_Report" asp-route-id="@TheID">@SubItem.Location.RoomNumber</a>                                                
                                                 break;
                                             }
                                         }
+                                    </td>
+                                     <td role="row" class="odd">
+                                        @item.Location
                                     </td>
                                     <td role="row" class="odd">
                                         @item.LocationCount
@@ -436,14 +436,13 @@
                 buttons: [
                     {
                         extend: 'pdf',
-                        title: 'Task Budgeting ' + today
+                        title: 'Location Data ' + today
                     },
                     {
                         extend: 'excel',
-                        title: 'Task Budgeting ' + today
+                        title: 'Location ' + today
                     }
-                ],
-                "order": [[1, "desc"]]
+                ]                
             });
         });
     </script>
