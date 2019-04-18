@@ -19,9 +19,11 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Identity\Pages\Account\Manage\AppClaimsPrincipalFactory.cs" />
+    <Compile Remove="Pages\vendors\Delete.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\vendors\Delete.cshtml" />
     <Content Remove="Views\RoleAdmin\Index.cshtml" />
     <Content Remove="Views\RoleAdmin\Index1.cshtml" />
   </ItemGroup>
