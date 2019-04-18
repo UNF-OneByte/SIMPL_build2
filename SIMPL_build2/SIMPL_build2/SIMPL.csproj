@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>aspnet-SIMPL_build2-CB8B3740-7319-40D6-9FC4-E45281FCFFFC</UserSecretsId>
+    <Company>OneByteUNF</Company>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,7 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DataTables.AspNet.Mvc5" Version="2.0.2" />
+    <PackageReference Include="DataTables.AspNet.AspNetCore" Version="2.0.2" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
