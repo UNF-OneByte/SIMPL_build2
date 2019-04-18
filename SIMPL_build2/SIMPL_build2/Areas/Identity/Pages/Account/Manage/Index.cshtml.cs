@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using SIMPL.Models;
 
@@ -17,6 +18,8 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
 {
    public partial class IndexModel : PageModel
     {
+        private readonly SIMPL.Models.project_trackerContext _context;
+        private readonly RoleManager<AspNetRoles> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -27,13 +30,17 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
+            RoleManager<AspNetRoles> roleManager,
             IEmailSender emailSender,
-            ILogger<IndexModel> logger)
+            ILogger<IndexModel> logger,
+            SIMPL.Models.project_trackerContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context;
         }
 
         
@@ -48,7 +55,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public class InputModel
+        public class InputModel : PageModel
         {
             
             [Display(Name = "IdName")]
@@ -85,14 +92,24 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Confirm new password")]
             [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string LockoutEnd { get; set; }
+            public bool LockedOut { get; set; }
+            public string LockedOutActive { get; set; }
+
+            public List<SelectListItem> Roles { get; } = new List<SelectListItem>
+            {
+
+            };
+
         }
 
-        
+
 
         public async Task<IActionResult> OnGetAsync(string ID)
         {
-            
 
+            ViewData["Roles"] = new SelectList(_context.AspNetRoles, "Id", "Name");
             //var user = await _userManager.GetUserAsync(User);
             if ((ID != null)) //&& (userObj == null))
             {
@@ -135,7 +152,12 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                 Email = email,
                 ID = userID
             };
-            
+
+            if (Input.LockedOut == true)
+            {
+                await _userManager.SetLockoutEndDateAsync(userObj, DateTime.UtcNow.AddYears(20));
+            }
+
             if (elements.Length > 0)
             {
                 Input.FirstName = elements[0];
@@ -186,7 +208,18 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             if (await _userManager.GetUserNameAsync(userObj) != (Input.FirstName + "." + Input.LastName)){
                 await _userManager.SetUserNameAsync(userObj, (Input.FirstName + "." + Input.LastName));
             }
-            
+
+            Input.LockedOutActive = "checked";
+            if (await _userManager.GetLockoutEndDateAsync(userObj) < DateTime.UtcNow)
+            {
+                Input.LockedOutActive = "checked";
+            }
+
+            if (Input.LockedOut == true)
+            {
+                await _userManager.SetLockoutEndDateAsync(userObj, DateTime.UtcNow.AddYears(20));
+            }
+
             var phoneNumber = await _userManager.GetPhoneNumberAsync(userObj);
             if (Input.PhoneNumber != phoneNumber)
             {
