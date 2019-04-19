@@ -32,7 +32,8 @@ namespace SIMPL.Pages.reports
         public IList<ProjectManagerCountDto> ProjectManagerCount { get; set; }
         public IList<TaskCountDto> TaskProjectCount { get; set; }
         public IList<LocationCountDto> LocationCount { get; set; }
-        public IList<CostTypeCountDto> CostTypeCount { get; set; }        
+        public IList<CostTypeCountDto> CostTypeCount { get; set; }
+        public IList<VendorCountDto> VendorCount { get; set; }        
 
         public async Task OnGetAsync()
         {
@@ -70,6 +71,11 @@ namespace SIMPL.Pages.reports
             //How many cost types are assinged to a task
             CostTypeCount = Tasks.GroupBy(t => t.CostType.Name.ToString())
                 .Select(group => new CostTypeCountDto { CostType = group.Key, CostTypeCount = group.Count() })
+                .ToList();
+
+            //How many vendor types are assinged to a task
+            VendorCount = Tasks.GroupBy(t => t.Vendor.Name.ToString())
+                .Select(group => new VendorCountDto { Vendor = group.Key, VendorCount = group.Count() })
                 .ToList();            
 
             //joins Tasks.project.id on project id                                          
@@ -123,6 +129,12 @@ namespace SIMPL.Pages.reports
         {
             public string CostType { get; set; }            
             public int CostTypeCount { get; set; }
+        }
+
+        public class VendorCountDto
+        {
+            public string Vendor { get; set; }
+            public int VendorCount { get; set; }
         }
     }
 }
