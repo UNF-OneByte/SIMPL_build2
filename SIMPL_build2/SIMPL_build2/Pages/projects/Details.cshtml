@@ -1,74 +1,290 @@
 ﻿@page
 @model SIMPL.Pages.projects.DetailsModel
-
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+@{
+    decimal? Etot = 0;
+    @foreach (var item in Model.Tasks)
+    {
+        @if (item.EstimatedCost == null)
+        {
+            Etot += 0;
+        }
+        else
+        {
+            Etot += item?.EstimatedCost;
+        }
+    }
 
-<div>
-    <h4>Projects</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.ProjectName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.ProjectName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.ActualStartDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.ActualStartDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.EstimatedStartDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.EstimatedStartDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.EstimatedEndDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.EstimatedEndDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.ActualEndDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.ActualEndDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.EstimatedInitialCost)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.EstimatedInitialCost)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.EstimatedInitialHours)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.EstimatedInitialHours)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Projects.ProjectManager)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Projects.ProjectManager.Id)
-        </dd>
-    </dl>
-</div>
-<!--partial name="/tasks_partial/Index" /--><!--Doesn't Work, trying to get the tasks to display on the project details page-->
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Projects.ProjectId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+    decimal? Atot = 0;
+    @foreach (var item in Model.Tasks)
+    {
+        @if (item.ActualCost == null)
+        {
+            Atot += 0;
+        }
+        else
+        {
+            Atot += item?.ActualCost;
+        }
+    }
+}
+
+<body>
+    @foreach (var x in Model.TasksToProjects)
+    {
+        <h2>Selected: <strong>@x.Project.ProjectName</strong></h2>
+        break;
+    }
+
+    <div>
+        <a asp-page="./Edit" asp-route-id="@Model">Edit</a> |
+        <a asp-page="./Index">Back to List</a>
+    </div>
+    <div class="container">
+        <form class="form-horizontal" onload="test()">
+            @foreach (var i in Model.TasksToProjects)
+            {
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-sm-4 form-spacing">Project Name:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-static">@i.Project.ProjectName</p>
+                        </div>
+                        <label class="control-label col-sm-4 form-spacing" for="email">Project Manager:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-static">@i.Project.ProjectManager.UserName</p>
+                        </div>
+                        <label class="control-label col-sm-4 form-spacing" for="email">Project Id:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-static">@i.ProjectId</p>
+                        </div>
+                        <label class="control-label col-sm-4 form-spacing">Start Date:</label>
+                        <div class="col-sm-8 form-spacing">
+                            <p class="form-control-static">@i.Project.EstimatedStartDate</p>
+                        </div>
+
+                        <label class="control-label col-sm-4 form-spacing">Estimated End Date:</label>
+                        <div class="col-sm-8 form-spacing">
+                            <p class="form-control-static">@i.Project.EstimatedEndDate</p>
+                        </div>
+
+                        <label class="control-label col-sm-4 form-spacing">Project Description:</label>
+                        <div class="col-sm-8 form-spacing">
+                            <p class="form-control-static">@i.Project.Description</p>
+                        </div>
+                        <div class="form-row">
+                            <label class="control-label col-md-4 form-spacing">Project Costs:</label>
+
+                            <div class="form-group col-md-4 form-spacing">
+                                <label for="inputPassword4">Estimated Costs:</label>
+                                <p class="form-control-static" id="estCost" value="@i.Project.EstimatedInitialCost">$ @i.Project.EstimatedInitialCost</p>
+                            </div>
+                            <div class="form-group col-md-4 form-spacing">
+                                <label for="inputPassword4">Estimated Hours:</label>
+                                <p class="form-control-static">$ @i.Project.EstimatedInitialHours</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <div class="thumbnail" style="width:320px;height:360px">
+                            <h4><strong>Project Cost Breakdown:                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#costBreakdownDetails">Details</button></strong></h4>
+
+                            <canvas id="myChart" width="220" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                break;
+            }
+        </form>
+    </div>
+
+    <div class="content">
+        <h1 class="page_title">Tasks Queue</h1>
+    </div>
+
+    <p>
+        <a asp-page="./tasks/Create">Create New Task</a> 
+    </p>
+    <div class="row">
+
+        <div id="example_wrapper" class="dataTables_wrapper">
+            <div class="dataTables_length" id="example_length">
+                <!--<label>Show Entries<select name="example_length" aria-controls="example" class=""><option value="10">10</option><option value="25">25</option><option value="50">50
+                    </option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
+                <table id="tasks" class="table table-striped table-bordered dt-responsive nowrap dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 131px;" aria-sort="ascending" aria-label="Name: activate to sort column descending">Name</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 211px;" aria-label="Position: activate to sort column ascending">Description</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 99px;" aria-label="Office: activate to sort column ascending">Created By</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 80px;" aria-label="Vendor: activate to sort column ascending">Vendor</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 80px;" aria-label="Location: activate to sort column ascending">Location</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 80px;" aria-label="Cost Type: activate to sort column ascending">Cost Type</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 90px;" aria-label="Start date: activate to sort column ascending">Date Created</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 90px;" aria-label="Cost Type: activate to sort column ascending">Estimated Cost</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 41px;" aria-label="Cost Type: activate to sort column ascending">Actual Cost</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.Tasks)
+                        {
+                            <tr role="row" class="odd">
+                                <td class="sorting_1">
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedBy.UserName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Vendor.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Location.LocationId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CostType.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateCreated)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EstimatedCost)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ActualCost)
+                                </td>
+                                <td>
+                                    <a asp-page="./Edit" asp-route-id="@item.TaskId">Edit</a> |
+                                    <a asp-page="./Delete" asp-route-id="@item.TaskId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="costBreakdownDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" id="editModal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cost Breakdown</h5>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="thumbnail">
+                            <h4><strong>Cost Breakdown:</strong></h4>
+                            <hr />
+                            <div class="dataTables_length" id="example_length">
+                                <table id="tasks" class="table table-bordered" width="200px">
+                                    <thead>
+                                        <tr>
+                                            <th>Task Name</th>
+                                            <th>Est. Cost</th>
+                                            <th>Act. Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Tasks)
+                                        {
+                                            <tr>
+                                                <th>@item.Name</th>
+                                                <th>@item.EstimatedCost</th>
+                                                <th>
+                                                    @if (@item.ActualCost == null)
+                                                    {
+                                                        <p>-</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.ActualCost
+                                                    }
+                                                </th>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>TOTAL:</td>
+                                            <td>
+                                                <p id="taskEstCost" value="@Etot">@Etot</p>
+                                            </td>
+                                            <td>
+                                                <p id="actCost" value="@Atot">@Atot</p>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    $('#costBreakdownDetails').on('shown.bs.modal', function () {
+    });
+</script>
+<script type="text/javascript">
+
+    var estCost = @Etot;
+    var actCost = @Atot;
+
+
+    var ctx = document.getElementById("myChart").getContext('2d');
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Estimated Costs", "Actual Costs"],
+            datasets: [{
+                data: [estCost, actCost],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        return tooltipItem.yLabel;
+                    }
+                }
+            }
+        }
+    });
+</script>
+
