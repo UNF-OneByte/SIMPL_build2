@@ -4,7 +4,38 @@
     ViewData["Title"] = "Locked out";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+@*<header>
+        <h1 class="text-danger">@ViewData["Title"]</h1>
+        <p class="text-danger">This account has been locked out, please try again later.</p>
+    </header>*@
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+
+    .bg {
+        /* The image used */
+        background-image: url("/images/flag.jpg");
+        /* Full height */
+        height: 100%;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+
+<body class="bg" style="padding:10%">
+    <div class="row well">
+        <div class="col-lg-12">
+            <section>
+                <div class="jumbotron">
+                    <h1><strong>Account locked</strong></h1>
+                    <h2>Please see system admin to unlock account...</h2>
+                </div>
+            </section>
+        </div>       
+    </div>
+</body>
