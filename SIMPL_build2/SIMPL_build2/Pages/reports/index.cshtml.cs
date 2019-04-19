@@ -31,7 +31,8 @@ namespace SIMPL.Pages.reports
 
         public IList<ProjectManagerCountDto> ProjectManagerCount { get; set; }
         public IList<TaskCountDto> TaskProjectCount { get; set; }
-        public IList<LocationCountDto> LocationCount { get; set; }        
+        public IList<LocationCountDto> LocationCount { get; set; }
+        public IList<CostTypeCountDto> CostTypeCount { get; set; }        
 
         public async Task OnGetAsync()
         {
@@ -64,6 +65,11 @@ namespace SIMPL.Pages.reports
             //How many tasks are assinged to a location
             LocationCount = Tasks.GroupBy(t => t.Location.Name.ToString())
                 .Select(group => new LocationCountDto { Location = group.Key, LocationCount = group.Count() })
+                .ToList();
+
+            //How many cost types are assinged to a task
+            CostTypeCount = Tasks.GroupBy(t => t.CostType.Name.ToString())
+                .Select(group => new CostTypeCountDto { CostType = group.Key, CostTypeCount = group.Count() })
                 .ToList();            
 
             //joins Tasks.project.id on project id                                          
@@ -109,9 +115,14 @@ namespace SIMPL.Pages.reports
 
         public class LocationCountDto
         {
-            public string Location { get; set; }
-            public string LocationID { get; set; }
+            public string Location { get; set; }            
             public int LocationCount { get; set; }
+        }
+
+        public class CostTypeCountDto
+        {
+            public string CostType { get; set; }            
+            public int CostTypeCount { get; set; }
         }
     }
 }
