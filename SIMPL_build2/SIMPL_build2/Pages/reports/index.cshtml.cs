@@ -30,15 +30,23 @@ namespace SIMPL.Pages.reports
         public IList<Tasks> TasksToProjects { get; set; }
 
         public IList<ProjectManagerCountDto> ProjectManagerCount { get; set; }
-        public IList<TaskCountDto> TaskProjectCount { get; set; }        
+        public IList<TaskCountDto> TaskProjectCount { get; set; }
+        public IList<LocationCountDto> LocationCount { get; set; }
+        public IList<CostTypeCountDto> CostTypeCount { get; set; }        
 
         public async Task OnGetAsync()
         {
             Projects = await _context.Projects
-                .Include(p => p.ProjectManager)
+                .Include(p => p.ProjectManager)                
                 .ToListAsync();
 
-            Tasks = await _context.Tasks.ToListAsync();
+            //Tasks = await _context.Tasks.ToListAsync();
+            Tasks = await _context.Tasks
+             .Include(t => t.CostType)
+             .Include(t => t.CreatedBy)
+             .Include(t => t.Location)
+             .Include(t => t.Project)
+             .Include(t => t.Vendor).ToListAsync();
 
             //Example from mentor session
             ClosedProjects = Projects.Where(p => !p.ProjectId.Equals(1)).ToList();
@@ -53,6 +61,16 @@ namespace SIMPL.Pages.reports
             TaskProjectCount = Tasks.GroupBy(t => t.ProjectId.ToString())          
                 .Select(group => new TaskCountDto { ProjectId = group.Key, TaskCount = group.Count() })                
                 .ToList();
+
+            //How many tasks are assinged to a location
+            LocationCount = Tasks.GroupBy(t => t.Location.Name.ToString())
+                .Select(group => new LocationCountDto { Location = group.Key, LocationCount = group.Count() })
+                .ToList();
+
+            //How many cost types are assinged to a task
+            CostTypeCount = Tasks.GroupBy(t => t.CostType.Name.ToString())
+                .Select(group => new CostTypeCountDto { CostType = group.Key, CostTypeCount = group.Count() })
+                .ToList();            
 
             //joins Tasks.project.id on project id                                          
             TasksToProjects = Tasks.Join(Projects,
@@ -93,6 +111,18 @@ namespace SIMPL.Pages.reports
         {
             public string ProjectId { get; set; }
             public int TaskCount { get; set; }
+        }
+
+        public class LocationCountDto
+        {
+            public string Location { get; set; }            
+            public int LocationCount { get; set; }
+        }
+
+        public class CostTypeCountDto
+        {
+            public string CostType { get; set; }            
+            public int CostTypeCount { get; set; }
         }
     }
 }
