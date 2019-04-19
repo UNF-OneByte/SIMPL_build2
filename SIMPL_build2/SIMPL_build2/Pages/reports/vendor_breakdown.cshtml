@@ -166,8 +166,18 @@
     <div class="row">
         <div class="col-sm-6">
             @foreach (var name in Model.Tasks)
-            {
-                <h3 class="pull-left">Selected: <strong>@name.Vendor.Name</strong></h3>
+            {                
+                <div class="row">
+                    <h2 class="col-sm-12">Selected: <strong>@name.Vendor.Name</strong></h2>
+                </div>
+                <div class="row">
+                    <h4 class="col-sm-6"><strong>Organization DBA:</strong>@name.Vendor.Organization</h4>
+                    <h4 class="col-sm-6"><strong>Phone #:</strong>@name.Vendor.Phone</h4>
+                    <h4 class="col-sm-12"><strong>Address:</strong> @name.Vendor.StreetAddress 
+                    <br />
+                    @name.Vendor.City @name.Vendor.State @name.Vendor.Zipcode</h4>
+                    
+                </div>
                 break;
             }
         </div>
