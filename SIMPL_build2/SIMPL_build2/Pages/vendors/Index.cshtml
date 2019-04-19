@@ -1,0 +1,72 @@
+﻿@page
+@model SIMPL.Pages.vendors.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].Zipcode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].StreetAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vendors[0].Organization)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Vendors) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Zipcode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Organization)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.VendorId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.VendorId">Details</a> |
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

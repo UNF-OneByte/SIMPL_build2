@@ -1,0 +1,69 @@
+﻿@page
+@model SIMPL.Pages.vendors.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Vendors</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Vendors.VendorId" class="control-label"></label>
+                <input asp-for="Vendors.VendorId" class="form-control" />
+                <span asp-validation-for="Vendors.VendorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendors.Name" class="control-label"></label>
+                <input asp-for="Vendors.Name" class="form-control" />
+                <span asp-validation-for="Vendors.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendors.Phone" class="control-label"></label>
+                <input asp-for="Vendors.Phone" class="form-control" />
+                <span asp-validation-for="Vendors.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendors.Zipcode" class="control-label"></label>
+                <input asp-for="Vendors.Zipcode" class="form-control" />
+                <span asp-validation-for="Vendors.Zipcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendors.StreetAddress" class="control-label"></label>
+                <input asp-for="Vendors.StreetAddress" class="form-control" />
+                <span asp-validation-for="Vendors.StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendors.City" class="control-label"></label>
+                <input asp-for="Vendors.City" class="form-control" />
+                <span asp-validation-for="Vendors.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendors.State" class="control-label"></label>
+                <input asp-for="Vendors.State" class="form-control" />
+                <span asp-validation-for="Vendors.State" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vendors.Organization" class="control-label"></label>
+                <input asp-for="Vendors.Organization" class="form-control" />
+                <span asp-validation-for="Vendors.Organization" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

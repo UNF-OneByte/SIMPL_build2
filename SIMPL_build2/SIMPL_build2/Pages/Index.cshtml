@@ -1,96 +1,180 @@
 ﻿@page
-@model IndexModel
+@*@model IndexModel*@
+@*@model SIMPL.Pages.projects.IndexModel*@
+@model SIMPL.Pages.reports.indexModel
+@inject UserManager<IdentityUser> UserManager
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
+@section Scripts {
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js "></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/cr-1.5.0/fc-3.2.5/fh-3.1.4/kt-2.5.0/r-2.2.2/rg-1.1.0/rr-1.2.4/sc-2.0.0/sl-1.3.0/datatables.min.js"></script>
+    <script>
+        //Gets todays date
+        var today = new Date();
+        var dd = today.getDate();
+
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = mm + '-' + dd + '-' + yyyy;
+        console.log(today);
+
+        $(document).ready(function () {
+            $('#home').DataTable({
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: [0, 2, 3] //Your Colume value those you want
+                        },
+                        title: 'My Projects ' + today
+                     
+                    },
+                    {                        
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: [0, 2, 3] //Your Colume value those you want
+                        },
+                        title: 'My Projects ' + today
+                    },
+                    {
+                        extend: 'print',                        
+                        exportOptions: {
+                            columns: [0, 2, 3] //Your Colume value those you want
+                        },
+                        title: 'My Projects ' + today
+                    }
+                ]
+            });
+        });
+    </script>
+}
+
+@*Gets data for only user that is signed in*@
+@{
+    var you = UserManager.GetUserName(User);
+
+    IEnumerable<SIMPL.Models.Projects>
+    MyP = Model.Projects.Where(p => p.ProjectManager.UserName.Equals(@you)).ToList();
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="~/images/5starlogo.png" alt="Smiley face" height="325" width="770" style="padding:100px">
+    </div>
+    <div class="col-md-5" id="info" style="padding:100px">
+        <div class="thumbnail">
+            <h4><strong>My Projects:</strong></h4>
+            <hr />
+            @{
+                //var pCount = Model.Projects.Count;
+                var pCount = MyP.Count();
+                <h5>Total projects opened: <strong>@pCount</strong> </h5>
+            }
+            <hr />
         </div>
     </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
 </div>
 
 <div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core Razor Pages</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?linkid=852130">Working with Razor Pages.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure App Service</a></li>
-        </ul>
+    @*start*@
+    <div class="col-sm-11">
+        <div class="thumbnail">
+            <h2><strong>My Projects:</strong></h2>
+            <hr />
+            @*start*@
+            <div id="example_wrapper" class="dataTables_wrapper">
+                <table id="home" class="display dataTable table" role="grid">
+                    <thead>
+                        <tr role="row">
+                            @*<th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Project ID activate to sort column descending">Project ID</th>*@
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Discription</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Start Date: activate to sort column ascending">Start Date</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Location: activate to sort column ascending">Project Mgr.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var theProjectID = 0;
+                        }
+                        @foreach (var item in MyP)
+                        {
+                            <tr role="row" class="odd">
+                                @*<td class="sorting_1">@Html.DisplayFor(x => item.ProjectManager.IdName)</td>*@
+                                <td><a asp-page="/Reports/Project_Task_Report" asp-route-id="@item.ProjectId">@item.ProjectName</a></td>
+                                <td>
+                                    @{
+                                        var theID = item.ProjectId;
+                                        theProjectID = theID;
+                                    }
+                                    <button type="button" class="btn btn-info btn-sm" id="@theID" data-target="#@theProjectID" data-toggle="modal">View</button>                                    
+                                </td>
+                                <td>
+                                    @if (item.EstimatedStartDate != null)
+                                    {
+                                        @item.EstimatedStartDate
+                                    }
+                                    else
+                                    {
+                                        <p><font color="SALMON"><strong>Not Started</strong></font></p>
+                                    }
+                                </td>
+                                <td>@Html.DisplayFor(x => item.ProjectManager.UserName)</td>
+                            </tr>
+
+                            <!-- Description Modal -->
+                            <div class="modal fade" id="@theProjectID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="modal-title">Project Description</h2>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form>                                            
+                                            <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>@item.Description</textarea>                                            
+                                        </form>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-danger" type="button" data-dismiss="modal">Close</button>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*end*@
+        </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
