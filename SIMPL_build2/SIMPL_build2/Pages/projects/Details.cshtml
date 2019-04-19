@@ -92,7 +92,8 @@
 
                     <div class="form-group col-md-6">
                         <div class="thumbnail" style="width:320px;height:360px">
-                            <h4><strong>Project Cost Breakdown:</strong></h4>
+                            <h4><strong>Project Cost Breakdown:                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#costBreakdownDetails">Details</button></strong></h4>
+
                             <canvas id="myChart" width="220" height="200"></canvas>
                         </div>
                     </div>
@@ -107,7 +108,7 @@
     </div>
 
     <p>
-        @*<a asp-page="./Create" asp-route-id="@item.TaskId">Create New Task</a> |*@
+        <a asp-page="./tasks/Create">Create New Task</a> 
     </p>
     <div class="row">
 
@@ -174,79 +175,87 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="thumbnail">
-                <h4><strong>Cost Breakdown:</strong></h4>
-                <hr />
-                <div class="dataTables_length" id="example_length">
-                    <table id="tasks" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Task Name</th>
-                                <th>Est. Cost</th>
-                                <th>Act. Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Tasks)
-                            {
-                                <tr>
-                                    <th>@item.Name</th>
-                                    <th>@item.EstimatedCost</th>
-                                    <th>
-                                        @if (@item.ActualCost == null)
+    <div class="modal fade" id="costBreakdownDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" id="editModal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cost Breakdown</h5>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="thumbnail">
+                            <h4><strong>Cost Breakdown:</strong></h4>
+                            <hr />
+                            <div class="dataTables_length" id="example_length">
+                                <table id="tasks" class="table table-bordered" width="200px">
+                                    <thead>
+                                        <tr>
+                                            <th>Task Name</th>
+                                            <th>Est. Cost</th>
+                                            <th>Act. Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Tasks)
                                         {
-                                            <p>-</p>
+                                            <tr>
+                                                <th>@item.Name</th>
+                                                <th>@item.EstimatedCost</th>
+                                                <th>
+                                                    @if (@item.ActualCost == null)
+                                                    {
+                                                        <p>-</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.ActualCost
+                                                    }
+                                                </th>
+                                            </tr>
                                         }
-                                        else
-                                        {
-                                            @item.ActualCost
-                                        }
-                                    </th>
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>TOTAL:</td>
-                                <td>
-                                    <p id="taskEstCost" value="@Etot">@Etot</p>
-                                </td>
-                                <td>
-                                    <p id="actCost" value="@Atot>@Atot</p>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>TOTAL:</td>
+                                            <td>
+                                                <p id="taskEstCost" value="@Etot">@Etot</p>
+                                            </td>
+                                            <td>
+                                                <p id="actCost" value="@Atot">@Atot</p>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
 
-<script type="text/javascript">
-    function test() {
-        alert(hello);
-        var estCost = document.getElementById("estCost").value;
-        alert(estCost);
-    }
-</script>
 <script>
+    $('#costBreakdownDetails').on('shown.bs.modal', function () {
+    });
+</script>
+<script type="text/javascript">
+
+    var estCost = @Etot;
+    var actCost = @Atot;
+
 
     var ctx = document.getElementById("myChart").getContext('2d');
 
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Labor Costs", "Volunteer Hrs ", "Material Costs", "Actual Costs"],
+            labels: ["Estimated Costs", "Actual Costs"],
             datasets: [{
-                data: [12, 19, 3, 5, 2, 3],
+                data: [estCost, actCost],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
+                    'rgba(54, 162, 235, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
