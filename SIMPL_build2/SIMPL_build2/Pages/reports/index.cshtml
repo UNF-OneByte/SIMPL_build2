@@ -309,9 +309,67 @@
                                                 break;
                                             }
                                         }
-                                    </td>   
+                                    </td>
                                     <td>
                                         @item.CostTypeCount
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="thumbnail">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Vendor Breakdown Report:</strong></h4>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#vendor_report">Toggle</button>
+                </div>
+            </div>
+            <hr />
+            <div id="vendor_report" class="table collapse in">
+                <table id="vendor_report_table" class="display dataTable table" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Vendor Name</th>
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Occurrence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            @foreach (var item in Model.VendorCount)
+                            {
+                                var TheID = 0;
+
+                                @foreach (var ID in Model.Tasks)
+                                {
+                                    if (ID.Vendor.Name == item.Vendor)
+                                    {
+                                        TheID = ID.Vendor.VendorId;
+                                        break;
+                                    }
+
+                                }
+
+                                <tr>
+                                    <td role="row" class="odd">
+                                        @foreach (var SubItem in Model.Tasks)
+                                        {
+                                            if (SubItem.Vendor.Name == item.Vendor)
+                                            {
+                                                <a asp-page="../Reports/vendor_breakdown" asp-route-id="@TheID">@SubItem.Vendor.Name</a>
+                                                break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.VendorCount
                                     </td>
                                 </tr>
                             }
@@ -428,6 +486,26 @@
 
         $(document).ready(function () {
             $('#cost_type_report').DataTable({
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Cost Type ' + today
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Cost Type ' + today
+                    }
+                ],
+                "aoColumnDefs": [
+                    { "bSearchable": false, "aTargets": [1] }
+                ]
+            });
+        });
+        
+        $(document).ready(function () {
+            $('#vendor_report_table').DataTable({
                 "bInfo": false,
                 dom: 'Bfrtip',
                 buttons: [

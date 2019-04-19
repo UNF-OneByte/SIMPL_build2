@@ -1,5 +1,5 @@
 ﻿@page
-@model SIMPL.Pages.reports.Location_Details_ReportModel
+@model SIMPL.Pages.reports.vendor_breakdownModel
 
 @section Scripts{
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" rel="stylesheet" />
@@ -48,17 +48,17 @@
                     {
                         extend: 'pdf',
                         footer: true,
-                        title: 'Location Details Report: Tasks Details ' + today
+                        title: 'Vendor Details Report: Tasks Details ' + today
                     },
                     {
                         extend: 'excel',
                         footer: true,
-                        title: 'Location Details Report: Tasks Details ' + today
+                        title: 'Vendor Details Report: Tasks Details ' + today
                     },
                     {
                         extend: 'print',
                         footer: true,
-                        title: 'Location Details Report: Tasks Details ' + today
+                        title: 'Vendor Details Report: Tasks Details ' + today
                     }
                 ]
             });
@@ -74,17 +74,17 @@
                     {
                         extend: 'pdf',
                         footer: true,
-                        title: 'Location Details Report: Tasks Details ' + today
+                        title: 'Vendor Details Report: Tasks Details ' + today
                     },
                     {
                         extend: 'excel',
                         footer: true,
-                        title: 'Location Details Report: Vendor Cost Details ' + today
+                        title: 'Vendor Details Report: Vendor Cost Details ' + today
                     },
                     {
                         extend: 'print',
                         footer: true,
-                        title: 'Location Details Report: Vendor Cost Details ' + today
+                        title: 'Vendor Details Report: Vendor Cost Details ' + today
                     }
                 ]
             });
@@ -100,17 +100,17 @@
                     {
                         extend: 'pdf',
                         footer: true,
-                        title: 'Location Details Report: Hours Worked ' + today
+                        title: 'Vendor Details Report: Hours Worked ' + today
                     },
                     {
                         extend: 'excel',
                         footer: true,
-                        title: 'Location Details Report: Hours Worked ' + today
+                        title: 'Vendor Details Report: Hours Worked ' + today
                     },
                     {
                         extend: 'print',
                         footer: true,
-                        title: 'Location Details Report: Hours Worked ' + today
+                        title: 'Vendor Details Report: Hours Worked ' + today
                     }
                 ]
             });
@@ -126,17 +126,17 @@
                     {
                         extend: 'pdf',
                         footer: true,
-                        title: 'Location Details Report: Hours Worked ' + today
+                        title: 'Vendor Details Report: Hours Worked ' + today
                     },
                     {
                         extend: 'excel',
                         footer: true,
-                        title: 'Location Details Report: Hours Worked ' + today
+                        title: 'Vendor Details Report: Hours Worked ' + today
                     },
                     {
                         extend: 'print',
                         footer: true,
-                        title: 'Location Details Report: Hours Worked ' + today
+                        title: 'Vendor Details Report: Hours Worked ' + today
                     }
                 ]
             });
@@ -182,10 +182,10 @@
         <div class="col-sm-6">
             @foreach (var name in Model.Tasks)
             {
-                <h3 class="pull-left">Selected: <strong>@name.Location.Name</strong></h3>
+                <h3 class="pull-left">Selected: <strong>@name.Vendor.Name</strong></h3>
                 break;
             }
-        </div>  
+        </div>
         <div class="col-lg-6" id="date_filter">
 
         </div>
@@ -289,7 +289,7 @@
                                     <th>
                                         @if (@item.ActualCost == null)
                                         {
-                                            <p>-</p>                                            
+                                            <p>-</p>
                                         }
                                         else
                                         {
@@ -316,52 +316,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="thumbnail">
-                <h4><strong>Vendor Cost Breakdown:</strong></h4>
-                <hr />
-                <div class="dataTables_length" id="example_length">
-                    <table id="vendor" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Vendor Name</th>
-                                <th>Amount Spent ($)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
 
-
-                                @foreach (var item in Model.VendorCost)
-                                {
-                                    <tr>
-                                        <th>@item.Vendor</th>
-                                        <th>@item.Cost</th>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>TOTAL:</td>
-                                @{
-                                    decimal? Vendor_Total = 0;
-                                    foreach (var item in Model.VendorCost)
-                                    {
-                                        decimal temp = decimal.Parse(item.Cost);
-                                        Vendor_Total += temp;
-                                    }
-                                    <td>
-                                        @Vendor_Total
-                                    </td>
-                                }
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-6">
@@ -437,7 +392,7 @@
                         <tfoot>
                             <tr>
                                 <td>TOTAL ($): </td>
-                                @{               
+                                @{
                                     decimal? Temp_Cost_Type = 0;
                                     foreach (var item in Model.CostType)
                                     {
@@ -453,7 +408,7 @@
                     </table>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
 
 </body>
