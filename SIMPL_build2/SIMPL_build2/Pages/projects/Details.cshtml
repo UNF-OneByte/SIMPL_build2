@@ -92,7 +92,7 @@
 
                     <div class="form-group col-md-6">
                         <div class="thumbnail" style="width:320px;height:360px">
-                            <h4><strong>Project Cost Breakdown:                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#costBreakdownDetails">Details</button></strong></h4>
+                            <h4><strong>Project Cost Breakdown:<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#costBreakdownDetails">Details</button></strong></h4>
 
                             <canvas id="myChart" width="220" height="200"></canvas>
                         </div>
@@ -108,7 +108,7 @@
     </div>
 
     <p>
-        <a asp-page="./tasks/Create">Create New Task</a> 
+        <a asp-page="../tasks/Create">Create New Task</a> 
     </p>
     <div class="row">
 
@@ -177,7 +177,7 @@
 
     <div class="modal fade" id="costBreakdownDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" id="editModal" role="document">
-            <div class="modal-content">
+            <div class="modal-content"width="30px">
                 <div class="modal-header">
                     <h5 class="modal-title">Cost Breakdown</h5>
                 </div>
@@ -187,7 +187,7 @@
                             <h4><strong>Cost Breakdown:</strong></h4>
                             <hr />
                             <div class="dataTables_length" id="example_length">
-                                <table id="tasks" class="table table-bordered" width="200px">
+                                <table id="tasks" class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>Task Name</th>
