@@ -31,17 +31,15 @@
         console.log(today);
 
         $(document).ready(function () {
-            $('#tasks_home').DataTable({
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
+            $('#tasks_home').DataTable({                
+                               
             });
         });
 
         $(document).ready(function () {
-            $('#tasks').DataTable({
-                "bPaginate": false,
-                "bInfo": false,
+            $('#tasks').DataTable({   
+                "bPaginate": true,
+                "bInfo": true,
                 "bFilter": false,
                 dom: 'Bfrtip',
                 buttons: [
@@ -66,8 +64,8 @@
 
         $(document).ready(function () {
             $('#vendor').DataTable({
-                "bPaginate": false,
-                "bInfo": false,
+                "bPaginate": true,
+                "bInfo": true,
                 "bFilter": false,
                 dom: 'Bfrtip',
                 buttons: [
@@ -92,8 +90,8 @@
 
         $(document).ready(function () {
             $('#hours').DataTable({
-                "bPaginate": false,
-                "bInfo": false,
+                "bPaginate": true,
+                "bInfo": true,
                 "bFilter": false,
                 dom: 'Bfrtip',
                 buttons: [
@@ -399,4 +397,5 @@
                 </div>
             </div>*@
         </div>
+
     </body>

@@ -37,12 +37,12 @@
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label class="control-label">Vendor     </label><a asp-page="/Vendors/index" style="font-size:x-small;">Manage Vendors</a>
+                <label class="control-label">Vendor     </label><a asp-page="/Vendors/index" style="font-size:x-small;">     Manage Vendors</a>
                 <select asp-for="Tasks.VendorId" class="form-control" asp-items="ViewBag.VendorId"></select>
                 <span asp-validation-for="Tasks.VendorId" class="text-danger"></span>
             </div>
             <div class="form-group col-md-4">
-                <label class="control-label">Location     </label><a asp-page="/Locations/index" style="font-size:x-small;">Manage Locations</a>
+                <label class="control-label">Location     </label><a asp-page="/Locations/index" style="font-size:x-small;">     Manage Locations</a>
                 <select asp-for="Tasks.LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
                 <span asp-validation-for="Tasks.LocationId" class="text-danger"></span>
             </div>
