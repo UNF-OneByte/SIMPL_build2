@@ -24,5 +24,10 @@ namespace SIMPL.Models
         public Locations Location { get; set; }
         public Projects Project { get; set; }
         public Vendors Vendor { get; set; }
+
+        public static implicit operator Tasks(List<Tasks> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
