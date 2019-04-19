@@ -15,7 +15,7 @@
         margin: 0;
     }
 
-    .bg {
+    .bg1 {
         /* The image used */
         background-image: url("/images/flag.jpg");
         /* Full height */
@@ -25,9 +25,68 @@
         background-repeat: no-repeat;
         background-size: cover;
     }
+
+    .bg2 {
+        /* The image used */
+        background-image: url("/images/mt rush.jpg");
+        /* Full height */
+        height: 100%;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .bg3 {
+        /* The image used */
+        background-image: url("/images/liberty.jpg");
+        /* Full height */
+        height: 100%;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .bg4 {
+        /* The image used */
+        background-image: url("/images/sol flag.jpg");
+        /* Full height */
+        height: 100%;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 </style>
 
-<body class="bg" style="padding:10%">
+@{
+    var bg = "";
+
+    Random rand = new Random();
+    int x = rand.Next(1, 5);
+
+    if (x == 1)
+    {
+        bg = "bg1";
+    }
+    else if (x == 3)
+    {
+        bg = "bg3";
+    }
+    else if (x == 4)
+    {
+        bg = "bg4";
+    }
+    else
+    {
+        bg = "bg2";
+    }
+
+}
+
+
+<body class="@bg" style="padding:13%">
     <div class="row well">
         <div class="col-lg-12">
             <section>
@@ -36,6 +95,6 @@
                     <h2>Please see system admin to unlock account...</h2>
                 </div>
             </section>
-        </div>       
+        </div>
     </div>
 </body>

@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Sign in";
 }
 
 <style>
@@ -11,9 +11,42 @@
         margin: 0;
     }
 
-    .bg {
+    .bg1 {
         /* The image used */
-        background-image: url("/images/flag.jpg");
+        background-image: url("/images/flag.jpg");                        
+        /* Full height */
+        height: 100%;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .bg2 {
+        /* The image used */        
+        background-image: url("/images/mt rush.jpg");
+        /* Full height */
+        height: 100%;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .bg3 {
+        /* The image used */
+        background-image: url("/images/liberty.jpg");
+        /* Full height */
+        height: 100%;
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .bg4 {
+        /* The image used */
+        background-image: url("/images/sol flag.jpg");
         /* Full height */
         height: 100%;
         /* Center and scale the image nicely */
@@ -23,10 +56,35 @@
     }
 </style>
 
-<body class="bg" style="padding:10%">
-<div class="row well">
-    <div class="col-md-4 col-md-offset-4">
-        <section>
+@{ 
+    var bg = "";
+
+    Random rand = new Random();
+    int x = rand.Next(1, 5);
+
+    if(x == 1)
+    {
+        bg = "bg1";
+    }
+    else if (x == 3)
+    {
+        bg = "bg3";
+    }
+    else if (x == 4)
+    {
+        bg = "bg4";
+    }
+    else
+    {
+        bg = "bg2";
+    }
+
+}
+
+<body class="@bg" style="padding:13%">
+<div class="row">
+    <div class="col-md-5 col-md-offset-3">
+        <section class="well">
             <form method="post">
                 <h3>SIMPL Login</h3>
                 <hr />
@@ -63,36 +121,7 @@
             </form>
         </section>        
     </div>
-    @*<div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to log in.</h4>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>*@
+  
 </div>    
 </body>
 

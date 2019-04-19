@@ -26,6 +26,7 @@
     <Content Remove="Pages\vendors\Delete.cshtml" />
     <Content Remove="Views\RoleAdmin\Index.cshtml" />
     <Content Remove="Views\RoleAdmin\Index1.cshtml" />
+    <Content Remove="wwwroot\images\new york.jpg" />
   </ItemGroup>
 
   <ItemGroup>
