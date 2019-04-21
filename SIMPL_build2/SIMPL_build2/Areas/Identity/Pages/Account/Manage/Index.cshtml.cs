@@ -10,13 +10,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using SIMPL.Models;
 
 namespace SIMPL.Areas.Identity.Pages.Account.Manage
 {
-   public partial class IndexModel : PageModel
+    public partial class IndexModel : PageModel
     {
+        private readonly SIMPL.Models.project_trackerContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -27,30 +30,34 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
-            ILogger<IndexModel> logger)
+            ILogger<IndexModel> logger,
+            SIMPL.Models.project_trackerContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context;
         }
 
-        
+
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
-        
+
 
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public class InputModel
+        public class InputModel : PageModel
         {
-            
+
             [Display(Name = "IdName")]
             public string LastName { get; set; }
             public string FirstName { get; set; }
@@ -60,13 +67,13 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             [EmailAddress]
             public string Email { get; set; }
 
-            
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
-            
-            
-            [Display(Name ="ID")]
+
+
+            [Display(Name = "ID")]
             public IdentityUser userObj { get; set; }
             public string userID { get; set; }
 
@@ -85,13 +92,26 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Confirm new password")]
             [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public DateTimeOffset? LockoutEnd { get; set; }
+            public bool LockedOut { get; set; }
+            public string LockedOutActive { get; set; }
+
+            public List<SelectListItem> Roles { get; } = new List<SelectListItem>
+            {
+
+            };
+
         }
 
-        
+
 
         public async Task<IActionResult> OnGetAsync(string ID)
         {
+
             
+            ViewData["Roles"] = new SelectList(_context.AspNetRoles, "Id", "Name");
+
 
             //var user = await _userManager.GetUserAsync(User);
             if ((ID != null)) //&& (userObj == null))
@@ -104,7 +124,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                 userID = HttpContext.Session.GetString("ID");
             }
 
-           
+
 
             var user = await _userManager.FindByIdAsync(userID);
             //string userName = user.LastName;
@@ -124,50 +144,66 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             string userName = await _userManager.GetUserNameAsync(userObj);
             String pattern = "[.]";
             String[] elements = Regex.Split(userName, pattern);
-           
+
 
             var email = await _userManager.GetEmailAsync(userObj);
-           
+            var lockoutEnd = await _userManager.GetLockoutEndDateAsync(userObj);
             Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                ID = userID
+                ID = userID,
+                LockoutEnd = lockoutEnd 
+                
             };
-            
+
+            if (await _userManager.GetLockoutEndDateAsync(userObj) < DateTime.UtcNow)
+            {
+                Input.LockedOutActive = "checked";
+            }
+
+            if (Input.LockedOut == true)
+            {
+                await _userManager.SetLockoutEnabledAsync(userObj, true);
+                await _userManager.SetLockoutEndDateAsync(userObj, DateTime.UtcNow.AddYears(20));
+            } else {
+                await _userManager.SetLockoutEndDateAsync(userObj, DateTime.UtcNow);
+                await _userManager.SetLockoutEnabledAsync(userObj, false);
+            }
+
             if (elements.Length > 0)
             {
                 Input.FirstName = elements[0];
                 Input.LastName = elements[1];
             }
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userObj);
-            
+            HttpContext.Session.GetString("ID");
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string ID)
         {
-            
+
             if (ID != null)
             {
                 HttpContext.Session.SetString("ID", ID);
 
                 userID = HttpContext.Session.GetString("ID");
-                
+
             }
 
-            
+
 
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-           
+
 
             IdentityUser userObj = await _userManager.FindByIdAsync(ID);
-            
+
             if (userObj == null)
             {
                 return NotFound($"POST ID Value is NULL");
@@ -183,10 +219,26 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
                 }
             }
-            if (await _userManager.GetUserNameAsync(userObj) != (Input.FirstName + "." + Input.LastName)){
+            if (await _userManager.GetUserNameAsync(userObj) != (Input.FirstName + "." + Input.LastName))
+            {
                 await _userManager.SetUserNameAsync(userObj, (Input.FirstName + "." + Input.LastName));
             }
-            
+
+            Input.LockedOutActive = "checked";
+            if (await _userManager.GetLockoutEndDateAsync(userObj) < DateTime.UtcNow)
+            {
+                Input.LockedOutActive = "checked";
+            }
+
+            if (Input.LockedOut == true)
+            {
+                await _userManager.SetLockoutEnabledAsync(userObj, true);
+                await _userManager.SetLockoutEndDateAsync(userObj, DateTime.UtcNow.AddYears(20));
+            } else {
+                await _userManager.SetLockoutEndDateAsync(userObj, DateTime.UtcNow);
+                await _userManager.SetLockoutEnabledAsync(userObj, false);
+            }
+
             var phoneNumber = await _userManager.GetPhoneNumberAsync(userObj);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -197,7 +249,7 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
-          
+
             if (Input.ConfirmPassword != null)
             {
                 string token = await _userManager.GeneratePasswordResetTokenAsync(userObj);
@@ -224,6 +276,5 @@ namespace SIMPL.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
 
-        
     }
 }

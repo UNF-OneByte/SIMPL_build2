@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SIMPL.Models;
 
 namespace SIMPL.Pages.tasks
@@ -22,7 +23,7 @@ namespace SIMPL.Pages.tasks
         {
         ViewData["CostTypeId"] = new SelectList(_context.CostTypes, "CostTypeId", "Name");
         ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
-        ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationId");
+        ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "Name");
         ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectName");
         ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");
             return Page();
@@ -31,13 +32,31 @@ namespace SIMPL.Pages.tasks
         [BindProperty]
         public Tasks Tasks { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+
+        [BindProperty(SupportsGet = true)]
+        public string QueryProjectId { get; set; }
+
+        /*public async Task OnGetAsync()
+        {
+            Tasks = await _context.Tasks
+            Include(t => t.ProjectId).ToListAsync();
+
+            if (QueryProjectId != null)
+            {
+                if (int.TryParse(QueryProjectId, out var ParsedProjectId))
+                {
+                    Tasks = Tasks.Where(i => i.ProjectId == ParsedProjectId).ToList();
+                }
+            }
+        }*/
+
+
+       public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
-            }
-
+            }        
             _context.Tasks.Add(Tasks);
             await _context.SaveChangesAsync();
 
