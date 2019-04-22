@@ -40,7 +40,7 @@
 
             }
             <h5>Total tasks opened: <strong>@taskCount</strong> </h5>
-            <h5>Longest tasks project: <strong>@oldestTask</strong></h5>
+            <h5>Longest task: <strong>@oldestTask</strong></h5>
         </div>
     </div>
 </div>
@@ -70,7 +70,7 @@
                             @foreach (var project in Model.ProjectManagerCount)
                             {
                                 <tr>
-                                    <td>@project?.UserName-</td>
+                                    <td>@project?.UserName</td>
                                     <td>@project?.ProjectCount</td>
                                 </tr>
                             }
@@ -80,77 +80,7 @@
             </div>
         </div>
     </div>
-
-    @*<form method="post" id="Project_Task_Details_Form">
-            <div class="col-md-6 col-lg-6">
-                <div class="thumbnail">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h4><strong>Project's Task Details:</strong></h4>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
-                        </div>
-                    </div>
-                    <hr />
-                    <div id="project_task_details" class="form-group" style="padding-bottom: 30%">
-                        <div class="col-md-12 collapse in">
-                            <label>Choose Project:</label>
-                            @{
-                            <select class="form-control" id="Project_Task_Details_Report">
-                                @foreach (var item in Model.Projects)
-                                {
-                                    <option id="reportSelected">@item.ProjectName.ToString()</option>
-                                }
-                            </select>
-                                <div style="padding-top: 10%">
-                                    <a class="btn btn-success pull-right" onclick="TaskDetails()" asp-page="../Reports/Project_Task_Report" asp-route-id="2">Run</a>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>*@
-        <form method="post" id="Project_Task_Details_Form">
-            <div class="col-md-6 col-lg-6">
-                <div class="thumbnail">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h4><strong>Project's Task Details:</strong></h4>
-                        </div>
-                        <div class="col-sm-6">
-                            <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#project_task_details">Toggle</button>
-                        </div>
-                    </div>
-                    <hr />
-                    <div id="project_task_details" class="table collapse in">
-                        <table id="p_by_user" class="display dataTable table" role="grid">
-                            <thead>
-                                <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Project Name</th>
-                                    <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Run Report</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    @foreach (var item in Model.Projects)
-                                    {
-                                        <tr>
-                                            <td>@item.ProjectName</td>                                               
-                                            <td><a class="btn btn-primary btn-xs" asp-page="../Reports/Project_Task_Report" asp-route-id="@item.ProjectId">Run</a></td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </form>
-</div>
-
-<div class="row">
+   
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
             <div class="row">
@@ -181,7 +111,7 @@
                             {
                                 <tr>
                                     <td role="row" class="odd">
-                                        @item.ProjectName
+                                        <a asp-page="../Reports/Project_Task_Report" asp-route-id="@item.ProjectId">@item.ProjectName</a>
                                     </td>
                                     <td role="row" class="odd">
                                         @item.ProjectManager.UserName
@@ -198,6 +128,70 @@
                                     }
 
 
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-md-6">
+        <div class="thumbnail">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Location Data:</strong></h4>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#location_details">Toggle</button>
+                </div>
+            </div>
+            <hr />
+            <div id="location_details" class="table collapse in">
+                <table id="Project_Location" class="display dataTable table" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Room #</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Location Name</th>
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Manager: activate to sort column ascending">Occurrence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            @foreach (var item in Model.LocationCount)
+                            {
+                                var TheID = 0;
+
+                                @foreach (var ID in Model.Tasks)
+                                {
+                                    if (ID.Location.Name == item.Location)
+                                    {
+                                        TheID = ID.Location.LocationId;
+                                        break;
+                                    }
+
+                                }
+
+                                <tr>                                   
+                                    <td role="row" class="odd">
+                                        @foreach (var SubItem in Model.Tasks)
+                                        {
+                                            if (SubItem.Location.Name == item.Location)
+                                            {
+                                                <a asp-page="../Reports/Location_Details_Report" asp-route-id="@TheID">@SubItem.Location.RoomNumber</a>                                                
+                                                break;
+                                            }
+                                        }
+                                    </td>
+                                     <td role="row" class="odd">
+                                        @item.Location
+                                    </td>
+                                    <td role="row" class="odd">
+                                        @item.LocationCount
+                                    </td>
                                 </tr>
                             }
                         }
@@ -269,33 +263,114 @@
     </div>
 </div>
 
-@*<div class="row">
-    <div class="col-md-6 col-md-6">
+<div class="row">
+    <div class="col-sm-6">
         <div class="thumbnail">
             <div class="row">
                 <div class="col-sm-6">
-                    <h4><strong>Tasks By Project:</strong></h4>
+                    <h4><strong>Cost Type Report:</strong></h4>
                 </div>
                 <div class="col-sm-6">
-                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#task_by_project">Toggle</button>
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#cost_type">Toggle</button>
                 </div>
             </div>
             <hr />
-            <div id="task_by_project" class="table collapse in">
-                <table id="p_by_user" class="display dataTable table" role="grid">
+            <div id="cost_type" class="table collapse in">
+                <table id="cost_type_report" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
-                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Project Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending"># of Tasks</th>
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Cost Type Name</th>
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Occurrence</th>
                         </tr>
                     </thead>
                     <tbody>
                         @{
-                            @foreach (var task in Model.TaskProjectCount)
+                            @foreach (var item in Model.CostTypeCount)
                             {
+                                var TheID = 0;
+
+                                @foreach (var ID in Model.Tasks)
+                                {
+                                    if (ID.CostType.Name == item.CostType)
+                                    {
+                                        TheID = ID.CostType.CostTypeId;
+                                        break;
+                                    }
+
+                                }
+
                                 <tr>
-                                    <td>@task.ProjectId</td>
-                                    <td>@task.TaskCount</td>
+                                    <td role="row" class="odd">
+                                        @foreach (var SubItem in Model.Tasks)
+                                        {
+                                            if (SubItem.CostType.Name == item.CostType)
+                                            {
+                                                <a asp-page="../Reports/cost_type_breakdown" asp-route-id="@TheID">@SubItem.CostType.Name</a>
+                                                break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.CostTypeCount
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="thumbnail">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4><strong>Vendor Breakdown Report:</strong></h4>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#vendor_report">Toggle</button>
+                </div>
+            </div>
+            <hr />
+            <div id="vendor_report" class="table collapse in">
+                <table id="vendor_report_table" class="display dataTable table" role="grid">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Vendor Name</th>
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="projectID">Occurrence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            @foreach (var item in Model.VendorCount)
+                            {
+                                var TheID = 0;
+
+                                @foreach (var ID in Model.Tasks)
+                                {
+                                    if (ID.Vendor.Name == item.Vendor)
+                                    {
+                                        TheID = ID.Vendor.VendorId;
+                                        break;
+                                    }
+
+                                }
+
+                                <tr>
+                                    <td role="row" class="odd">
+                                        @foreach (var SubItem in Model.Tasks)
+                                        {
+                                            if (SubItem.Vendor.Name == item.Vendor)
+                                            {
+                                                <a asp-page="../Reports/vendor_breakdown" asp-route-id="@TheID">@SubItem.Vendor.Name</a>
+                                                break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.VendorCount
+                                    </td>
                                 </tr>
                             }
                         }
@@ -306,52 +381,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6 col-md-6">
-        <div class="thumbnail">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4><strong>Test Table:</strong></h4>
-                </div>
-                <div class="col-sm-6">
-                    <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#task_by_project">Toggle</button>
-                </div>
-            </div>
-            <hr />
-            <div id="project_by_user" class="table collapse in">
-                <table id="p_by_user" class="display dataTable table" role="grid">
-                    <thead>
-                        <tr role="row">
-                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Task ID: activate to sort column descending">Project Name</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Est. Cost: activate to sort column ascending">Task Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            @foreach (var task in Model.TasksToProjects)
-                            {
-                                <tr>
-                                    <td>@task.Project.ProjectName</td>
-                                    <td>@task.Name</td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>*@
-
-
-@*<div>
-        <h3>Testing:</h3>
-        @{
-            var x = Model.SingleProject?.ProjectName;
-
-            <p>@x</p>
-        }
-    </div>*@
 
 
 @section Scripts {
@@ -435,23 +464,65 @@
             });
         });
 
-        //$(document).ready(function () {
-        //    $('#Project_Task_Details').DataTable({
-        //        "bInfo": false,
-        //        dom: 'Bfrtip',
-        //        buttons: [
-        //            {
-        //                extend: 'pdf',
-        //                title: 'Task Budgeting ' + today
-        //            },
-        //            {
-        //                extend: 'excel',
-        //                title: 'Task Budgeting ' + today
-        //            }
-        //        ],
-        //        "order": [[1, "desc"]]
-        //    });
-        //});
+        $(document).ready(function () {
+            $('#Project_Location').DataTable({             
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Location Data ' + today
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Location ' + today
+                    }
+                ],
+                "aoColumnDefs": [
+                    { "bSearchable": false, "aTargets": [1,2] }
+                ]
+            });
+        });
+
+        $(document).ready(function () {
+            $('#cost_type_report').DataTable({
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Cost Type ' + today
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Cost Type ' + today
+                    }
+                ],
+                "aoColumnDefs": [
+                    { "bSearchable": false, "aTargets": [1] }
+                ]
+            });
+        });
+        
+        $(document).ready(function () {
+            $('#vendor_report_table').DataTable({
+                "bInfo": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Cost Type ' + today
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Cost Type ' + today
+                    }
+                ],
+                "aoColumnDefs": [
+                    { "bSearchable": false, "aTargets": [1] }
+                ]
+            });
+        });
     </script>
 
     <script>

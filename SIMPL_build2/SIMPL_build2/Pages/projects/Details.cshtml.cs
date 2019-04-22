@@ -18,23 +18,69 @@ namespace SIMPL.Pages.projects
             _context = context;
         }
 
-        public Projects Projects { get; set; }
+        //This allows for a query sting named QueryProjectId 
+        //?QueryProjectId= <Project ID>
+        [BindProperty(SupportsGet = true)]
+        public string Id { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+
+        public IList<Projects> Projects { get; set; }
+        public IList<Tasks> Tasks { get; set; }
+        public IList<Tasks> TasksToProjects { get; set; }
+        public Task ProjectName { get; set; }
+        public IList<VendorCostDto> VendorCost { get; set; }
+        public IList<HoursWokredDto> HoursWorked { get; set; }
+
+        public async Task OnGetAsync()
         {
-            if (id == null)
+            int Project;
+
+            Tasks = await _context.Tasks
+                .Include(t => t.CostType)
+                .Include(t => t.CreatedBy)
+                .Include(t => t.Location)
+                .Include(t => t.Project)
+                .Include(t => t.Vendor).ToListAsync();
+
+            Projects = await _context.Projects.ToListAsync();
+
+            if (Id != null)
             {
-                return NotFound();
+                if (int.TryParse(Id, out var ParsedProjectId))
+                {
+                    Tasks = Tasks.Where(i => i.ProjectId == ParsedProjectId).ToList();
+                    Project = ParsedProjectId;
+                }
             }
 
-            Projects = await _context.Projects
-                .Include(p => p.ProjectManager).FirstOrDefaultAsync(m => m.ProjectId == id);
+            //joins Tasks.project.id on project id                                          
+            TasksToProjects = Tasks.Join(Projects,
+                                    pro => pro.ProjectId,
+                                    tas => tas.ProjectId,
+                                    (pro, tas) => pro).ToList();
 
-            if (Projects == null)
-            {
-                return NotFound();
-            }
-            return Page();
+            //How many projects one user is assigned
+            VendorCost = Tasks.GroupBy(v => v.Vendor.Name)
+                .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
+                .ToList();
+
+            //How many projects one user is assigned
+            HoursWorked = Tasks.GroupBy(v => v.Name)
+                .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
+                .ToList();
+        }
+
+        public class VendorCostDto
+        {
+            public string Vendor { get; set; }
+            public int Count { get; set; }
+            public string Cost { get; set; }
+        }
+
+        public class HoursWokredDto
+        {
+            public string Task { get; set; }
+            public string HoursWorked { get; set; }
         }
     }
 }
