@@ -29,8 +29,12 @@ namespace SIMPL.Pages.tasks
         ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectName");
         ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");
 
-            TheTask = _context.Tasks
-                 .Include(p => p.TaskId).ToList();
+            TheTask =  _context.Tasks
+             .Include(t => t.CostType)
+             .Include(t => t.CreatedBy)
+             .Include(t => t.Location)
+             .Include(t => t.Project)
+             .Include(t => t.Vendor).ToList();
 
             return Page();
         }
