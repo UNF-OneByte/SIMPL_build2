@@ -39,44 +39,89 @@ namespace SIMPL.Pages.reports
         {
             int Vendor;
 
-            Tasks = await _context.Tasks
-                .Include(t => t.CostType)
-                .Include(t => t.CreatedBy)
-                .Include(t => t.Location)
-                .Include(t => t.Project)
-                .Include(t => t.Vendor).ToListAsync();
-
-            Projects = await _context.Projects.ToListAsync();
-
-            if (Id != null)
+            if (Id != null & Status != null)
             {
+                Tasks = await _context.Tasks
+                      .Include(t => t.CostType)
+                      .Include(t => t.CreatedBy)
+                      .Include(t => t.Location)
+                      .Include(t => t.Project)
+                      .Include(t => t.Vendor)
+                      .ToListAsync();
+
                 if (int.TryParse(Id, out var ParsedVendorID))
                 {
                     Tasks = Tasks.Where(i => i.Vendor.VendorId == ParsedVendorID).ToList();
                     Vendor = ParsedVendorID;
                 }
-            }
 
-            //joins Tasks.project.id on project id                                          
-            TasksToProjects = Tasks.Join(Projects,
-                                    pro => pro.ProjectId,
-                                    tas => tas.ProjectId,
-                                    (pro, tas) => pro).ToList();
+                if ( Status == "open")
+                {
+                    Tasks = await _context.Tasks
+                     .Include(t => t.CostType)
+                     .Include(t => t.CreatedBy)
+                     .Include(t => t.Location)
+                     .Include(t => t.Project)
+                     .Include(t => t.Vendor).Where(t => t.Project.ActualEndDate == null).ToListAsync();
 
-            //How many projects one user is assigned
-            VendorCost = Tasks.GroupBy(v => v.Vendor.Name)
-                .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
-                .ToList();
+                    Projects = await _context.Projects.ToListAsync();
 
-            //How many hours one task was worked
-            HoursWorked = Tasks.GroupBy(v => v.Name)
-                .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
-                .ToList();
+                    //How many projects one user is assigned
+                    VendorCost = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(v => v.Vendor.Name)
+                        .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
 
-            //How many projects one user is assigned
-            CostType = Tasks.GroupBy(v => v.CostType.Name.ToString())
-                .Select(group => new CostTypeDto { TheCostType = group.Key, ActSpent = group.Sum(c => c.ActualCost).ToString() })
-                .ToList();
+                    //How many hours one task was worked
+                    HoursWorked = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(v => v.Name)
+                        .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
+                        .ToList();
+
+                    //How many projects one user is assigned
+                    CostType = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(v => v.CostType.Name.ToString())
+                        .Select(group => new CostTypeDto { TheCostType = group.Key, ActSpent = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
+
+                    //joins Tasks.project.id on project id                                          
+                    TasksToProjects = Tasks.Join(Projects,
+                                            pro => pro.ProjectId,
+                                            tas => tas.ProjectId,
+                                            (pro, tas) => pro).ToList();
+                }
+                else if (Status == "closed")
+                {
+                    Tasks = await _context.Tasks
+                       .Include(t => t.CostType)
+                       .Include(t => t.CreatedBy)
+                       .Include(t => t.Location)
+                       .Include(t => t.Project)
+                       .Include(t => t.Vendor).Where(t => t.Project.ActualEndDate != null).ToListAsync();
+
+                    Projects = await _context.Projects.ToListAsync();
+
+                    //How many projects one user is assigned
+                    VendorCost = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(v => v.Vendor.Name)
+                        .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
+
+                    //How many hours one task was worked
+                    HoursWorked = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(v => v.Name)
+                        .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
+                        .ToList();
+
+                    //How many projects one user is assigned
+                    CostType = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(v => v.CostType.Name.ToString())
+                        .Select(group => new CostTypeDto { TheCostType = group.Key, ActSpent = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
+
+                    //joins Tasks.project.id on project id                                          
+                    TasksToProjects = Tasks.Join(Projects,
+                                            pro => pro.ProjectId,
+                                            tas => tas.ProjectId,
+                                            (pro, tas) => pro).ToList();
+                }
+            }     
+
+                                
         }
 
         public class VendorCostDto

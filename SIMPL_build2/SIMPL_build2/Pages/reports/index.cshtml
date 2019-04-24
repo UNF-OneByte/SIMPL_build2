@@ -15,6 +15,22 @@
         @*<button type="button" class="btn btn-info pull-right"  href="#all">Toggle All</button>*@
         <a class="btn btn-success" asp-page="./Index" asp-route-Status="open">View Open Projects</a>
         <a class="btn btn-danger" asp-page="./Index" asp-route-Status="closed">View Closed Projects</a>
+
+        @{ 
+            var CurrentStatus = " ";
+            @foreach (var x in Model.Projects)
+            {
+                if (x.ActualEndDate == null)
+                {
+                    CurrentStatus = "open";
+                }
+                else
+                {
+                    CurrentStatus = "closed";
+                }
+                break;
+            }
+        }
     </div>
 </div>
 <hr />
@@ -209,7 +225,7 @@
                                         {
                                             if (SubItem.Location.Name == item.Location)
                                             {
-                                                <a asp-page="../Reports/Location_Details_Report" asp-route-id="@TheID">@SubItem.Location.RoomNumber</a>
+                                                <a asp-page="../Reports/Location_Details_Report" asp-route-id="@TheID" asp-route-Status="@CurrentStatus">@SubItem.Location.RoomNumber</a>
                                                 break;
                                             }
                                         }
@@ -324,6 +340,10 @@
                                         TheID = ID.CostType.CostTypeId;
                                         break;
                                     }
+                                    else
+                                    {
+                                        TheID = -100;
+                                    }
 
                                 }
 
@@ -333,7 +353,7 @@
                                         {
                                             if (SubItem.CostType.Name == item.CostType)
                                             {
-                                                <a asp-page="../Reports/cost_type_breakdown" asp-route-id="@TheID">@SubItem.CostType.Name</a>
+                                                <a asp-page="../Reports/cost_type_breakdown" asp-route-id="@TheID" asp-route-Status="@CurrentStatus">@SubItem.CostType.Name</a>
                                                 break;
                                             }
                                         }
@@ -391,7 +411,7 @@
                                         {
                                             if (SubItem.Vendor.Name == item.Vendor)
                                             {
-                                                <a asp-page="../Reports/vendor_breakdown" asp-route-id="@TheID">@SubItem.Vendor.Name</a>
+                                                <a asp-page="../Reports/vendor_breakdown" asp-route-id="@TheID" asp-route-Status="@CurrentStatus">@SubItem.Vendor.Name</a>
                                                 break;
                                             }
                                         }

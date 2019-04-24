@@ -23,6 +23,9 @@ namespace SIMPL.Pages.reports
         [BindProperty(SupportsGet = true)]
         public string Id { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Status { get; set; }
+
 
         public IList<Projects> Projects { get; set; }
         public IList<Tasks> Tasks { get;set; }   
@@ -34,46 +37,90 @@ namespace SIMPL.Pages.reports
 
         public async Task OnGetAsync()
         {
-            int Location;
+            int Location;                        
 
-            Tasks = await _context.Tasks
+            if (Id != null & Status != null)
+            {
+                Tasks = await _context.Tasks
                 .Include(t => t.CostType)
                 .Include(t => t.CreatedBy)
                 .Include(t => t.Location)
                 .Include(t => t.Project)
                 .Include(t => t.Vendor).ToListAsync();
 
-            Projects = await _context.Projects.ToListAsync();
-
-            if (Id != null)
-            {
                 if (int.TryParse(Id, out var ParsedLocationId))
                 {
                     Tasks = Tasks.Where(i => i.Location.LocationId == ParsedLocationId).ToList();
                     Location = ParsedLocationId;
                 }
-            }
 
-            //joins Tasks.project.id on project id                                          
-            TasksToProjects = Tasks.Join(Projects,
-                                    pro => pro.ProjectId,
-                                    tas => tas.ProjectId,
-                                    (pro, tas) => pro).ToList();
+                if (Status == "open")
+                {
+                    Tasks = await _context.Tasks
+                    .Include(t => t.CostType)
+                    .Include(t => t.CreatedBy)
+                    .Include(t => t.Location)
+                    .Include(t => t.Project)
+                    .Include(t => t.Vendor)
+                    .Where(t => t.Project.ActualEndDate == null).ToListAsync();
 
-            //How many projects one user is assigned
-            VendorCost = Tasks.GroupBy(v => v.Vendor.Name)
-                .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
-                .ToList();
+                    Projects = await _context.Projects.ToListAsync();
 
-            //How many hours one task was worked
-            HoursWorked = Tasks.GroupBy(v => v.Name)
-                .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
-                .ToList();
+                    //joins Tasks.project.id on project id                                          
+                    TasksToProjects = Tasks.Join(Projects,
+                                            pro => pro.ProjectId,
+                                            tas => tas.ProjectId,
+                                            (pro, tas) => pro).ToList();
 
-            //How many projects one user is assigned
-            CostType = Tasks.GroupBy(v => v.CostType.Name.ToString())
-                .Select(group => new CostTypeDto { TheCostType = group.Key, ActSpent = group.Sum(c => c.ActualCost).ToString() })
-                .ToList();            
+                    //How many projects one user is assigned
+                    VendorCost = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(v => v.Vendor.Name)
+                        .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
+
+                    //How many hours one task was worked
+                    HoursWorked = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(v => v.Name)
+                        .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
+                        .ToList();
+
+                    //How many projects one user is assigned
+                    CostType = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(v => v.CostType.Name.ToString())
+                        .Select(group => new CostTypeDto { TheCostType = group.Key, ActSpent = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
+                }
+                else if (Status == "closed")
+                {
+                    Tasks = await _context.Tasks
+                    .Include(t => t.CostType)
+                    .Include(t => t.CreatedBy)
+                    .Include(t => t.Location)
+                    .Include(t => t.Project)
+                    .Include(t => t.Vendor)
+                    .Where(t => t.Project.ActualEndDate != null).ToListAsync();
+
+                    Projects = await _context.Projects.ToListAsync();
+
+                    //joins Tasks.project.id on project id                                          
+                    TasksToProjects = Tasks.Join(Projects,
+                                            pro => pro.ProjectId,
+                                            tas => tas.ProjectId,
+                                            (pro, tas) => pro).ToList();
+
+                    //How many projects one user is assigned
+                    VendorCost = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(v => v.Vendor.Name)
+                        .Select(group => new VendorCostDto { Vendor = group.Key, Count = group.Count(), Cost = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
+
+                    //How many hours one task was worked
+                    HoursWorked = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(v => v.Name)
+                        .Select(group => new HoursWokredDto { Task = group.Key, HoursWorked = group.Sum(c => c.ActualHours).ToString() })
+                        .ToList();
+
+                    //How many projects one user is assigned
+                    CostType = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(v => v.CostType.Name.ToString())
+                        .Select(group => new CostTypeDto { TheCostType = group.Key, ActSpent = group.Sum(c => c.ActualCost).ToString() })
+                        .ToList();
+                }
+            }             
         }
 
         public class VendorCostDto

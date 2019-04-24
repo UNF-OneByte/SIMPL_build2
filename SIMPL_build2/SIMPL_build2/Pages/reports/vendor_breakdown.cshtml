@@ -131,7 +131,7 @@
 
 @{
     decimal? Etot = 0;
-    @foreach (var item in Model.Tasks)
+    @foreach (var item in Model?.Tasks)
     {
         @if (item.EstimatedCost == null)
         {
@@ -161,7 +161,7 @@
 
 
 <body>
-    <h1 class="page_title">Location Detail Report</h1>
+    <h1 class="page_title">Vendor Detail Report</h1>
     <hr />
     <div class="row">
         <div class="col-sm-6">
