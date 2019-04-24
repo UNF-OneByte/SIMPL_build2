@@ -66,6 +66,12 @@
                 ]
             });
         });
+
+        $(document).ready(function () {
+
+            $('#memberModal').modal('show');
+
+        });
     </script>
 }
 
@@ -121,7 +127,7 @@
                         {
                             <tr role="row" class="odd">
                                 @*<td class="sorting_1">@Html.DisplayFor(x => item.ProjectManager.IdName)</td>*@
-                                <td><a asp-page="/Reports/Project_Task_Report" asp-route-id="@item.ProjectId">@item.ProjectName</a></td>
+                                <td><a asp-page="/projects/details" asp-route-id="@item.ProjectId">@item.ProjectName</a></td>
                                 <td>
                                     @{
                                         var theID = item.ProjectId;
@@ -170,6 +176,29 @@
     </div>
 </div>
 
+<div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="memberModalLabel">Thank you for signing in!</h4>
+
+            </div>
+            <div class="modal-body">
+                <p>
+                    However the account provided is not known.
+                    <BR>If you just got invited to the group, please wait for a day to have the database synchronized.
+                </p>
+                <p>You will now be shown the Demo site.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

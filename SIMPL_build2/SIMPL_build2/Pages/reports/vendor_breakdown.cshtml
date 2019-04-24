@@ -30,13 +30,13 @@
         console.log(today);
 
         $(document).ready(function () {
-            $('#tasks_home').DataTable({           
+            $('#tasks_home').DataTable({
 
             });
         });
 
         $(document).ready(function () {
-            $('#tasks').DataTable({               
+            $('#tasks').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -59,7 +59,7 @@
         });
 
         $(document).ready(function () {
-            $('#vendor').DataTable({                
+            $('#vendor').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -82,7 +82,7 @@
         });
 
         $(document).ready(function () {
-            $('#hours_by_task').DataTable({              
+            $('#hours_by_task').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -105,7 +105,7 @@
         });
 
         $(document).ready(function () {
-            $('#hours_by_cost_type').DataTable({           
+            $('#hours_by_cost_type').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -125,8 +125,8 @@
                     }
                 ]
             });
-        });
-    </script>
+        });     
+    </script> 
 }
 
 @{
@@ -167,7 +167,19 @@
         <div class="col-sm-6">
             @foreach (var name in Model.Tasks)
             {
-                <h3 class="pull-left">Selected: <strong>@name.Vendor.Name</strong></h3>
+                <div class="row">
+                    <h2 class="col-sm-12">Selected: <strong>@name.Vendor.Name</strong></h2>
+                </div>
+                <div class="row">
+                    <h4 class="col-sm-6"><strong>Organization DBA:</strong>@name.Vendor.Organization</h4>
+                    <h4 class="col-sm-6"><strong>Phone #:</strong>@name.Vendor.Phone</h4>
+                    <h4 class="col-sm-12">
+                        <strong>Address:</strong> @name.Vendor.StreetAddress
+                        <br />
+                        @name.Vendor.City @name.Vendor.State @name.Vendor.Zipcode
+                    </h4>
+
+                </div>
                 break;
             }
         </div>
@@ -303,97 +315,96 @@
 
 
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="thumbnail">
-                <h4><strong>Hours Worked: (by task)</strong></h4>
-                <hr />
-                <div class="dataTables_length" id="example_length">
-                    <table id="hours_by_task" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Task</th>
-                                <th>Hours Wokred</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-
-
-                                @foreach (var item in Model.HoursWorked)
-                                {
-                                    <tr>
-                                        <th>@item.Task</th>
-                                        <th>@item.HoursWorked</th>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>TOTAL (hours): </td>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="thumbnail">
+                    <h4><strong>Hours Worked: (by task)</strong></h4>
+                    <hr />
+                    <div class="dataTables_length" id="example_length">
+                        <table id="hours_by_task" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Hours Wokred</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 @{
-                                    decimal Temp_Hours = 0;
-                                    foreach (var item in Model.HoursWorked)
+
+
+                                    @foreach (var item in Model.HoursWorked)
                                     {
-                                        decimal temp = decimal.Parse(item.HoursWorked);
-                                        Temp_Hours += temp;
+                                        <tr>
+                                            <th>@item.Task</th>
+                                            <th>@item.HoursWorked</th>
+                                        </tr>
                                     }
-                                    <td>
-                                        @Temp_Hours
-                                    </td>
                                 }
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>TOTAL (hours): </td>
+                                    @{
+                                        decimal Temp_Hours = 0;
+                                        foreach (var item in Model.HoursWorked)
+                                        {
+                                            decimal temp = decimal.Parse(item.HoursWorked);
+                                            Temp_Hours += temp;
+                                        }
+                                        <td>
+                                            @Temp_Hours
+                                        </td>
+                                    }
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="thumbnail">
-                <h4><strong>Amount Spent: (by cost type)</strong></h4>
-                <hr />
-                <div class="dataTables_length" id="example_length">
-                    <table id="hours_by_cost_type" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Cost Type</th>
-                                <th>Amount Spent ($)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-
-
-                                @foreach (var item in Model.CostType)
-                                {
-                                    <tr>
-                                        <th>@item.TheCostType</th>
-                                        <th>@item.ActSpent</th>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>TOTAL ($): </td>
+            <div class="col-md-6">
+                <div class="thumbnail">
+                    <h4><strong>Amount Spent: (by cost type)</strong></h4>
+                    <hr />
+                    <div class="dataTables_length" id="example_length">
+                        <table id="hours_by_cost_type" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Cost Type</th>
+                                    <th>Amount Spent ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 @{
-                                    decimal? Temp_Cost_Type = 0;
-                                    foreach (var item in Model.CostType)
+
+
+                                    @foreach (var item in Model.CostType)
                                     {
-                                        decimal temp = decimal.Parse(item.ActSpent);
-                                        Temp_Cost_Type += temp;
+                                        <tr>
+                                            <th>@item.TheCostType</th>
+                                            <th>@item.ActSpent</th>
+                                        </tr>
                                     }
-                                    <td>
-                                        @Temp_Cost_Type
-                                    </td>
                                 }
-                            </tr>
-                        </tfoot>
-                    </table>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>TOTAL ($): </td>
+                                    @{
+                                        decimal? Temp_Cost_Type = 0;
+                                        foreach (var item in Model.CostType)
+                                        {
+                                            decimal temp = decimal.Parse(item.ActSpent);
+                                            Temp_Cost_Type += temp;
+                                        }
+                                        <td>
+                                            @Temp_Cost_Type
+                                        </td>
+                                    }
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
+        </div> 
 </body>
