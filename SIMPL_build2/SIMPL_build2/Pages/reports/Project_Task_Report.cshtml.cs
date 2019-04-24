@@ -22,6 +22,7 @@ namespace SIMPL.Pages.reports
         //?QueryProjectId= <Project ID>
         [BindProperty(SupportsGet = true)]
         public string Id { get; set; }
+   
 
 
         public IList<Projects> Projects { get; set; }

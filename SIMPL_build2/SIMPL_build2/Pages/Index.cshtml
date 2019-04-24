@@ -80,7 +80,7 @@
     var you = UserManager.GetUserName(User);
 
     IEnumerable<SIMPL.Models.Projects>
-    MyP = Model.Projects.Where(p => p.ProjectManager.UserName.Equals(@you)).ToList();
+    MyP = Model.Projects.Where(p => p.ProjectManager.UserName.Equals(@you) && p.ActualEndDate == null).ToList();
 }
 
 <div class="row">
@@ -112,7 +112,7 @@
                 <table id="home" class="display dataTable table" role="grid">
                     <thead>
                         <tr role="row">
-                            @*<th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Project ID activate to sort column descending">Project ID</th>*@
+                            <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Project ID activate to sort column descending">Status</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Project Name: activate to sort column ascending">Project Discription</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Start Date: activate to sort column ascending">Start Date</th>
@@ -125,50 +125,55 @@
                         }
                         @foreach (var item in MyP)
                         {
-                            <tr role="row" class="odd">
-                                @*<td class="sorting_1">@Html.DisplayFor(x => item.ProjectManager.IdName)</td>*@
-                                <td><a asp-page="/projects/details" asp-route-id="@item.ProjectId">@item.ProjectName</a></td>
-                                <td>
-                                    @{
-                                        var theID = item.ProjectId;
-                                        theProjectID = theID;
-                                    }
-                                    <button type="button" class="btn btn-info btn-sm" id="@theID" data-target="#@theProjectID" data-toggle="modal">View</button>                                    
-                                </td>
-                                <td>
-                                    @if (item.EstimatedStartDate != null)
-                                    {
-                                        @item.EstimatedStartDate
-                                    }
-                                    else
-                                    {
-                                        <p><font color="SALMON"><strong>Not Started</strong></font></p>
-                                    }
-                                </td>
-                                <td>@Html.DisplayFor(x => item.ProjectManager.UserName)</td>
-                            </tr>
+                            @if (item.ActualEndDate == null)
+                            {
+                                <tr role="row" class="odd">
 
-                            <!-- Description Modal -->
-                            <div class="modal fade" id="@theProjectID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h2 class="modal-title">Project Description</h2>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form>                                            
-                                            <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>@item.Description</textarea>                                            
-                                        </form>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-danger" type="button" data-dismiss="modal">Close</button>                                            
+
+                                    <td role="row" class="odd"><p><font color="#239B56"><strong>Open</strong></font></p></td>                                    
+                                    <td><a asp-page="/projects/details" asp-route-id="@item.ProjectId">@item.ProjectName</a></td>
+                                    <td>
+                                        @{
+                                            var theID = item.ProjectId;
+                                            theProjectID = theID;
+                                        }
+                                        <button type="button" class="btn btn-info btn-sm" id="@theID" data-target="#@theProjectID" data-toggle="modal">View</button>
+                                    </td>
+                                    <td>
+                                        @if (item.EstimatedStartDate != null)
+                                        {
+                                            @item.EstimatedStartDate
+                                        }
+                                        else
+                                        {
+                                            <p><font color="SALMON"><strong>Not Started</strong></font></p>
+                                        }
+                                    </td>
+                                    <td>@Html.DisplayFor(x => item.ProjectManager.UserName)</td>
+                                </tr>
+
+                                <!-- Description Modal -->
+                                <div class="modal fade" id="@theProjectID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h2 class="modal-title">Project Description</h2>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form>
+                                                <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>@item.Description</textarea>
+                                            </form>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-danger" type="button" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
-                    </tbody>
+                                }
+                            }
+                        </tbody>
                 </table>
             </div>
             @*end*@
