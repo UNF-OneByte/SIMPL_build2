@@ -35,6 +35,7 @@
 <body>
     @{
         var ThisId = 0;
+        bool Open = true;
     }
 
     @foreach (var x in Model.TasksToProjects)
@@ -54,8 +55,9 @@
             }
             else
             {
-                <a asp-page="./Edit" asp-route-id="@ThisId">Edit</a>
-                <a asp-page="./Index">Back to List</a>
+                <text><a asp-page="./Edit" asp-route-id="@ThisId">Edit</a></text>
+                <text>|</text>
+                <text><a asp-page="./Index">Back to List</a></text>             
             }
            
         </div>
@@ -65,18 +67,33 @@
             {
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="control-label col-sm-4 form-spacing">Project Name:</label>
+                        <label class="control-label col-sm-4 form-spacing" for="email">Status:</label>
                         <div class="col-sm-8">
-                            <p class="form-control-static">@i.Project.ProjectName</p>
+                            @if (i.Project.ActualEndDate == null)
+                            {
+                                <p class="form-control-static"><font color="#239B56"><strong>Open</strong></font></p>
+                                Open = true;
+                            }
+                            else
+                            {
+                                <p class="form-control-static"><font color="red"><strong>Closed</strong></font></p>
+                                Open = false;
+                            }
                         </div>
+
+                        <label class="control-label col-sm-4 form-spacing" for="email">Project Id:</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-static">@i.ProjectId</p>
+                            @{ 
+                                var ThisProject = i.ProjectId;
+                            }
+                        </div>
+
                         <label class="control-label col-sm-4 form-spacing" for="email">Project Manager:</label>
                         <div class="col-sm-8">
                             <p class="form-control-static">@i.Project.ProjectManager.UserName</p>
                         </div>
-                        <label class="control-label col-sm-4 form-spacing" for="email">Project Id:</label>
-                        <div class="col-sm-8">
-                            <p class="form-control-static">@i.ProjectId</p>
-                        </div>
+
                         <label class="control-label col-sm-4 form-spacing">Start Date:</label>
                         <div class="col-sm-8 form-spacing">
                             <p class="form-control-static">@i.Project.EstimatedStartDate</p>
@@ -86,6 +103,14 @@
                         <div class="col-sm-8 form-spacing">
                             <p class="form-control-static">@i.Project.EstimatedEndDate</p>
                         </div>
+
+                        @if (i.Project.ActualEndDate != null)
+                        {
+                            <label class="control-label col-sm-4 form-spacing">Actual End Date:</label>
+                            <div class="col-sm-8 form-spacing">
+                                <p class="form-control-static">@i.Project.ActualEndDate</p>
+                            </div>
+                        }
 
                         <label class="control-label col-sm-4 form-spacing">Project Description:</label>
                         <div class="col-sm-8 form-spacing">
@@ -100,7 +125,7 @@
                             </div>
                             <div class="form-group col-md-4 form-spacing">
                                 <label for="inputPassword4">Estimated Hours:</label>
-                                <p class="form-control-static">$ @i.Project.EstimatedInitialHours</p>
+                                <p class="form-control-static">@i.Project.EstimatedInitialHours</p>
                             </div>
                         </div>
 
@@ -108,7 +133,8 @@
 
                     <div class="form-group col-md-6">
                         <div class="thumbnail" style="width:320px;height:360px">
-                            <h4><strong>Project Cost Breakdown:<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#costBreakdownDetails">Details</button></strong></h4>
+                            @*<h4><strong>Project Cost Breakdown:<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#costBreakdownDetails">Details</button></strong></h4>*@
+                            <strong>Project Cost Breakdown: </strong> <a class="btn btn-primary btn-sm pull-right" asp-page="../reports/Project_Task_Report" asp-route-id="@ThisProject">Details</a>                                                        
 
                             <canvas id="myChart" width="220" height="200"></canvas>
                         </div>
@@ -124,7 +150,7 @@
     </div>
 
     <p>
-        <a asp-page="../tasks/Create">Create New Task</a>
+        <a asp-page="../tasks/Create" asp-route-Id="@ThisId">Create New Task</a>
     </p>
     <div class="row">
 
@@ -134,23 +160,26 @@
                     </option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
                 <table id="tasks" class="table table-striped table-bordered dt-responsive nowrap dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
                     <thead>
-                        <tr role="row">                            
+                        <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 131px;" aria-sort="ascending" aria-label="Name: activate to sort column descending">Name</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 211px;" aria-label="Position: activate to sort column ascending">Description</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 99px;" aria-label="Office: activate to sort column ascending">Created By</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 80px;" aria-label="Vendor: activate to sort column ascending">Vendor</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 80px;" aria-label="Location: activate to sort column ascending">Location</th>
-                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 80px;" aria-label="Cost Type: activate to sort column ascending">Cost Type</th>                            
+                            <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 80px;" aria-label="Cost Type: activate to sort column ascending">Cost Type</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 90px;" aria-label="Cost Type: activate to sort column ascending">Estimated Cost</th>
                             <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 41px;" aria-label="Cost Type: activate to sort column ascending">Actual Cost</th>
-                            <th>Actions</th>
+                            @if (Open == true)
+                            {
+                                <th>Actions</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
 
                         @foreach (var item in Model.Tasks)
                         {
-                        <tr role="row" class="odd">                           
+                        <tr role="row" class="odd">
                             <td class="sorting_1">
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
@@ -168,17 +197,20 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CostType.Name)
-                            </td>                        
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.EstimatedCost)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.ActualCost)
                             </td>
-                            <td>
-                                <a asp-page="../Tasks/Edit" asp-route-id="@item.TaskId">Edit</a> |
-                                <a asp-page="../Tasks/Delete" asp-route-id="@item.TaskId">Delete</a>
-                            </td>
+                            @if (Open == true)
+                            {
+                                <td>
+                                    <a asp-page="../Tasks/Edit" asp-route-id="@item.TaskId">Edit</a> |
+                                    <a asp-page="../Tasks/Delete" asp-route-id="@item.TaskId">Delete</a>
+                                </td>
+                            }
                         </tr>
                         }
                     </tbody>

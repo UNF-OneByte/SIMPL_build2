@@ -50,10 +50,56 @@ namespace SIMPL.Pages.reports
               .Where(p => p.ActualEndDate == null)
               .ToListAsync();
 
+                //Tasks = await _context.Tasks.ToListAsync();
+                Tasks = await _context.Tasks
+                 .Include(t => t.CostType)
+                 .Include(t => t.CreatedBy)
+                 .Include(t => t.Location)
+                 .Include(t => t.Project)
+                 .Include(t => t.Vendor)
+                 .Where(t => t.Project.ActualEndDate == null).ToListAsync();
+
                 //How many projects one user is assigned
                 ProjectManagerCount = Projects.Where(p => p.ActualEndDate == null).GroupBy(p => p.ProjectManager.UserName)
                     .Select(group => new ProjectManagerCountDto { UserName = group.Key, ProjectCount = group.Count() })
                     .ToList();
+
+                //How many tasks are assinged to a location
+                LocationCount = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(t => t.Location.Name.ToString())
+                    .Select(group => new LocationCountDto { Location = group.Key, LocationCount = group.Count() })
+                    .ToList();
+
+                //How many cost types are assinged to a task
+                CostTypeCount = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(t => t.CostType.Name.ToString())
+                    .Select(group => new CostTypeCountDto { CostType = group.Key, CostTypeCount = group.Count() })
+                    .ToList();
+
+                //How many vendor types are assinged to a task
+                VendorCount = Tasks.Where(t => t.Project.ActualEndDate == null).GroupBy(t => t.Vendor.Name.ToString())
+                    .Select(group => new VendorCountDto { Vendor = group.Key, VendorCount = group.Count() })
+                    .ToList();
+
+                //joins Tasks.project.id on project id                                          
+                TasksToProjects = Tasks.Join(Projects,
+                                        pro => pro.ProjectId,
+                                        tas => tas.ProjectId,
+                                        (pro, tas) => pro).ToList();
+
+                //Get the oldest project
+                try
+                {
+                    DateTime OldestDate = new DateTime(1776, 01, 01, 12, 00, 00);
+                    OldestProject = Projects?.Where(p => p?.ActualStartDate > OldestDate && p.ActualEndDate == null)
+                                            .OrderBy(p => p?.ActualStartDate).First();
+
+                    //Get the oldest task
+                    OldestTask = Tasks?.Where(t => t?.DateCreated > OldestDate && t.Project.ActualEndDate == null)
+                                            .OrderBy(t => t?.DateCreated).First();
+                }
+                catch
+                {
+                    //blank
+                }
 
             }
             else if(Status == "closed")
@@ -63,12 +109,36 @@ namespace SIMPL.Pages.reports
                  .Where(p => p.ActualEndDate != null)
                  .ToListAsync();
 
+                Tasks = await _context.Tasks
+             .Include(t => t.CostType)
+             .Include(t => t.CreatedBy)
+             .Include(t => t.Location)
+             .Include(t => t.Project)
+             .Include(t => t.Vendor)
+             .Where(t => t.Project.ActualEndDate != null)
+             .ToListAsync();
+
                 //Projects = Projects.Where(i => i.ActualEndDate != null).ToList();
 
                 //How many projects one user is assigned
                 ProjectManagerCount = Projects.Where(p => p.ActualEndDate != null).GroupBy(p => p.ProjectManager.UserName)
                     .Select(group => new ProjectManagerCountDto { UserName = group.Key, ProjectCount = group.Count()})
-                    .ToList();             
+                    .ToList();
+
+                //How many tasks are assinged to a location
+                LocationCount = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(t => t.Location.Name.ToString())
+                    .Select(group => new LocationCountDto { Location = group.Key, LocationCount = group.Count() })
+                    .ToList();
+
+                //How many cost types are assinged to a task
+                CostTypeCount = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(t => t.CostType.Name.ToString())
+                    .Select(group => new CostTypeCountDto { CostType = group.Key, CostTypeCount = group.Count() })
+                    .ToList();
+
+                //How many vendor types are assinged to a task
+                VendorCount = Tasks.Where(t => t.Project.ActualEndDate != null).GroupBy(t => t.Vendor.Name.ToString())
+                    .Select(group => new VendorCountDto { Vendor = group.Key, VendorCount = group.Count() })
+                    .ToList();
 
             }
             else
@@ -77,15 +147,18 @@ namespace SIMPL.Pages.reports
                 .Include(p => p.ProjectManager)
                 .Where(p => p.ActualEndDate == null)
                 .ToListAsync();
-            }
 
-            //Tasks = await _context.Tasks.ToListAsync();
-            Tasks = await _context.Tasks
+
+                Tasks = await _context.Tasks
              .Include(t => t.CostType)
              .Include(t => t.CreatedBy)
              .Include(t => t.Location)
              .Include(t => t.Project)
-             .Include(t => t.Vendor).ToListAsync();
+             .Include(t => t.Vendor)             
+             .ToListAsync();
+            }
+
+      
 
             //Example from mentor session
             ClosedProjects = Projects.Where(p => !p.ProjectId.Equals(1)).ToList();
@@ -97,43 +170,7 @@ namespace SIMPL.Pages.reports
             TaskProjectCount = Tasks.GroupBy(t => t.ProjectId.ToString())          
                 .Select(group => new TaskCountDto { ProjectId = group.Key, TaskCount = group.Count() })                
                 .ToList();
-
-            //How many tasks are assinged to a location
-            LocationCount = Tasks.GroupBy(t => t.Location.Name.ToString())
-                .Select(group => new LocationCountDto { Location = group.Key, LocationCount = group.Count() })
-                .ToList();
-
-            //How many cost types are assinged to a task
-            CostTypeCount = Tasks.GroupBy(t => t.CostType.Name.ToString())
-                .Select(group => new CostTypeCountDto { CostType = group.Key, CostTypeCount = group.Count() })
-                .ToList();
-
-            //How many vendor types are assinged to a task
-            VendorCount = Tasks.GroupBy(t => t.Vendor.Name.ToString())
-                .Select(group => new VendorCountDto { Vendor = group.Key, VendorCount = group.Count() })
-                .ToList();            
-
-            //joins Tasks.project.id on project id                                          
-            TasksToProjects = Tasks.Join(Projects,
-                                    pro => pro.ProjectId,
-                                    tas => tas.ProjectId,
-                                    (pro, tas) => pro).ToList();
-
-            //Get the oldest project
-            try
-            {
-                DateTime OldestDate = new DateTime(1776, 01, 01, 12, 00, 00);
-                OldestProject = Projects?.Where(p => p?.ActualStartDate > OldestDate)
-                                        .OrderBy(p => p?.ActualStartDate).First();
-
-                //Get the oldest task
-                OldestTask = Tasks?.Where(t => t?.DateCreated > OldestDate)
-                                        .OrderBy(t => t?.DateCreated).First();
-            }
-            catch
-            {
-                //blank
-            }                                   
+                             
         }
 
         //public string Project_Task_Details_Selected { get; set; }      

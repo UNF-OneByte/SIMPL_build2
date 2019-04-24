@@ -23,6 +23,9 @@ namespace SIMPL.Pages.reports
         [BindProperty(SupportsGet = true)]
         public string Id { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Status { get; set; }
+
 
         public IList<Projects> Projects { get; set; }
         public IList<Tasks> Tasks { get; set; }
