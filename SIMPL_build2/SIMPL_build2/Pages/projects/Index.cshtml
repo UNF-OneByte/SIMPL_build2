@@ -96,10 +96,7 @@
                                     <form>
                                         <h4 style="padding:2%">Project Description</h4>
                                         <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>@item.Description</textarea>
-                                        <hr />
-                                        <h4 style="padding:2%">Associated Tasks</h4>
-                                        <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>When you click that tasks button in bottom right it will redirect you to the tasks page. What we need to see is only the project you clicked before's tasks.</textarea>
-                                    </form>
+                                       </form>
                                     <div class="modal-footer">
                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
                                         <a asp-page="../tasks/Index" asp-route-QueryProjectId="@item.ProjectId">Tasks</a>                                        

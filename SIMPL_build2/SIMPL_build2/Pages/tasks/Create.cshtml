@@ -5,89 +5,99 @@
     ViewData["Title"] = "Create";
 }
 
+@{
+    var count = 0;
+    foreach (var x in Model.TheTask)
+    {
+        count++;
+    }
+
+    count += 1;
+}
+
 <h2>Create</h2>
 
 <h4>Tasks</h4>
 <hr />
 <div class="row">
-    
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    <label class="control-label">Task Id</label>
-                    <input asp-for="Tasks.TaskId" class="form-control" />
-                    <span asp-validation-for="Tasks.TaskId" class="text-danger"></span>
-                </div>                
-                    <div class="form-group col-md-5">                        
-                        <label asp-for="Tasks.ProjectId" class="control-label"></label>
-                        <select asp-for="Tasks.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                    </div>                
-                <div class="form-group col-md-5">
-                    <label class="control-label">Task Name</label>
-                    <input asp-for="Tasks.Name" class="form-control" />
-                    <span asp-validation-for="Tasks.Name" class="text-danger"></span>
-                </div>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label class="control-label">Task Id</label>
+                <input asp-for="Tasks.TaskId" class="form-control" value="@count" readonly />
+                <span asp-validation-for="Tasks.TaskId" class="text-danger"></span>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="control-label">Description</label>
-                    <textarea rows="5" asp-for="Tasks.Description" class="form-control"></textarea>
-                    <span asp-validation-for="Tasks.Description" class="text-danger"></span>
-                </div>
+            <div class="form-group col-md-5">
+                <label asp-for="Tasks.ProjectId" class="control-label"></label>
+                <select asp-for="Tasks.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label class="control-label">Vendor     </label><a asp-page="/Vendors/index" style="font-size:x-small;">Manage Vendors</a>
-                    <select asp-for="Tasks.VendorId" class="form-control" asp-items="ViewBag.VendorId"></select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="control-label">Location     </label><a asp-page="/Locations/index" style="font-size:x-small;">Manage Locations</a>
-                    <select asp-for="Tasks.LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="control-label">Date Created</label>
-                    <input asp-for="Tasks.DateCreated" class="form-control" />
-                    <span asp-validation-for="Tasks.DateCreated" class="text-danger"></span>
-                </div>
+            <div class="form-group col-md-5">
+                <label class="control-label">Task Name</label>
+                <input asp-for="Tasks.Name" class="form-control" />
+                <span asp-validation-for="Tasks.Name" class="text-danger"></span>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="control-label">Created By</label>
-                    <select asp-for="Tasks.CreatedById" class="form-control" asp-items="ViewBag.CreatedById"></select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label class="control-label">Cost Type</label>
-                    <select asp-for="Tasks.CostTypeId" class="form-control" asp-items="ViewBag.CostTypeId"></select>
-                </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="control-label">Description</label>
+                <textarea rows="5" asp-for="Tasks.Description" class="form-control"></textarea>
+                <span asp-validation-for="Tasks.Description" class="text-danger"></span>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label class="control-label">Estimated Cost</label>
-                    <input asp-for="Tasks.EstimatedCost" class="form-control" />
-                    <span asp-validation-for="Tasks.EstimatedCost" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label">Actual Cost</label>
-                    <input asp-for="Tasks.ActualCost" class="form-control" />
-                    <span asp-validation-for="Tasks.ActualCost" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label">Estimated Hours</label>
-                    <input asp-for="Tasks.EstimatedHours" class="form-control" />
-                    <span asp-validation-for="Tasks.EstimatedHours" class="text-danger"></span>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label">Actual Hours</label>
-                    <input asp-for="Tasks.ActualHours" class="form-control" />
-                    <span asp-validation-for="Tasks.ActualHours" class="text-danger"></span>
-                </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="control-label">Vendor     </label><a asp-page="/Vendors/index" style="font-size:x-small;">Manage Vendors</a>
+                <select asp-for="Tasks.VendorId" class="form-control" asp-items="ViewBag.VendorId"></select>
             </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-        </form>
-    
+            <div class="form-group col-md-4">
+                <label class="control-label">Location     </label><a asp-page="/Locations/index" style="font-size:x-small;">Manage Locations</a>
+                <select asp-for="Tasks.LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
+            </div>
+            <div class="form-group col-md-4">
+                <label class="control-label">Date Created</label>
+                <input asp-for="Tasks.DateCreated" class="form-control" />
+                <span asp-validation-for="Tasks.DateCreated" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="control-label">Created By</label>
+                <select asp-for="Tasks.CreatedById" class="form-control" asp-items="ViewBag.CreatedById"></select>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label">Cost Type</label>
+                <select asp-for="Tasks.CostTypeId" class="form-control" asp-items="ViewBag.CostTypeId"></select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label class="control-label">Estimated Cost</label>
+                <input asp-for="Tasks.EstimatedCost" class="form-control" />
+                <span asp-validation-for="Tasks.EstimatedCost" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="control-label">Actual Cost</label>
+                <input asp-for="Tasks.ActualCost" class="form-control" />
+                <span asp-validation-for="Tasks.ActualCost" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="control-label">Estimated Hours</label>
+                <input asp-for="Tasks.EstimatedHours" class="form-control" />
+                <span asp-validation-for="Tasks.EstimatedHours" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-3">
+                <label class="control-label">Actual Hours</label>
+                <input asp-for="Tasks.ActualHours" class="form-control" />
+                <span asp-validation-for="Tasks.ActualHours" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </form>
+
 </div>
 
 <div>

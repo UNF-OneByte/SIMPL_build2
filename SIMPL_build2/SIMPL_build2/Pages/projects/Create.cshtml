@@ -11,12 +11,22 @@
 <hr />
 <div class="row">
 
+    @{ 
+        var count = 0;
+        foreach (var x in Model.TheProject)
+        {
+            count++;
+        }
+
+        count += 1;
+    }
+
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label class="control-label">Project Id</label>
-                <input asp-for="Projects.ProjectId" class="form-control" />
+                <input asp-for="Projects.ProjectId" class="form-control" value="@count"  readonly/>
                 <span asp-validation-for="Projects.ProjectId" class="text-danger"></span>
             </div>
             <div class="form-group col-md-4">

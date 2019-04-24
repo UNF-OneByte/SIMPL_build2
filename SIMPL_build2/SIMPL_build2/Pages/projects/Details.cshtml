@@ -33,14 +33,19 @@
 }
 
 <body>
+    @{ 
+        var ThisId = 0;
+    }
+
     @foreach (var x in Model.TasksToProjects)
     {
+        ThisId = x.ProjectId;
         <h2>Selected: <strong>@x.Project.ProjectName</strong></h2>
         break;
     }
 
     <div>
-        <a asp-page="./Edit" asp-route-id="@Model">Edit</a> |
+        <a asp-page="./Edit" asp-route-id="@ThisId">Edit</a> |
         <a asp-page="./Index">Back to List</a>
     </div>
     <div class="container">
@@ -149,7 +154,7 @@
                                     @Html.DisplayFor(modelItem => item.Vendor.Name)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Location.LocationId)
+                                    @Html.DisplayFor(modelItem => item.Location.Name)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CostType.Name)
@@ -164,8 +169,8 @@
                                     @Html.DisplayFor(modelItem => item.ActualCost)
                                 </td>
                                 <td>
-                                    <a asp-page="./Edit" asp-route-id="@item.TaskId">Edit</a> |
-                                    <a asp-page="./Delete" asp-route-id="@item.TaskId">Delete</a>
+                                    <a asp-page="../Tasks/Edit" asp-route-id="@item.TaskId">Edit</a> |
+                                    <a asp-page="../Tasks/Delete" asp-route-id="@item.TaskId">Delete</a>
                                 </td>
                             </tr>
                         }
@@ -176,56 +181,58 @@
     </div>
 
     <div class="modal fade" id="costBreakdownDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" id="editModal" role="document">
-            <div class="modal-content"width="30px">
+        <div class="modal-dialog modal-lg" id="editModal" role="document">
+            <div class="modal-content"  width="30px">
                 <div class="modal-header">
-                    <h5 class="modal-title">Cost Breakdown</h5>
+                    <h5 class="modal-title"></h5>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-lg-12">
                         <div class="thumbnail">
                             <h4><strong>Cost Breakdown:</strong></h4>
                             <hr />
-                            <div class="dataTables_length" id="example_length">
-                                <table id="tasks" class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Task Name</th>
-                                            <th>Est. Cost</th>
-                                            <th>Act. Cost</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Tasks)
-                                        {
+                            <div class="col-lg-10">
+                                <div class="dataTables_length" id="">
+                                    <table id="tasks" class="table table-bordered">
+                                        <thead>
                                             <tr>
-                                                <th>@item.Name</th>
-                                                <th>@item.EstimatedCost</th>
-                                                <th>
-                                                    @if (@item.ActualCost == null)
-                                                    {
-                                                        <p>-</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        @item.ActualCost
-                                                    }
-                                                </th>
+                                                <th>Task Name</th>
+                                                <th>Est. Cost</th>
+                                                <th>Act. Cost</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td>TOTAL:</td>
-                                            <td>
-                                                <p id="taskEstCost" value="@Etot">@Etot</p>
-                                            </td>
-                                            <td>
-                                                <p id="actCost" value="@Atot">@Atot</p>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Tasks)
+                                            {
+                                                <tr>
+                                                    <th>@item.Name</th>
+                                                    <th>@item.EstimatedCost</th>
+                                                    <th>
+                                                        @if (@item.ActualCost == null)
+                                                        {
+                                                            <p>-</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.ActualCost
+                                                        }
+                                                    </th>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td>TOTAL:</td>
+                                                <td>
+                                                    <p id="taskEstCost" value="@Etot">@Etot</p>
+                                                </td>
+                                                <td>
+                                                    <p id="actCost" value="@Atot">@Atot</p>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
