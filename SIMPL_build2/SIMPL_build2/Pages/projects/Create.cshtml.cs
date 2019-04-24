@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SIMPL.Models;
 
 namespace SIMPL.Pages.projects
@@ -18,10 +19,15 @@ namespace SIMPL.Pages.projects
             _context = context;
         }
 
+        public IList<Projects> TheProject { get; set; }        
+
         public IActionResult OnGet()
         {
             ViewData["ProjectManagerId"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
-            
+
+            TheProject = _context.Projects
+                 .Include(p => p.ProjectManager).ToList();
+
             return Page();
         }
 
@@ -39,6 +45,6 @@ namespace SIMPL.Pages.projects
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
-        }
+        }      
     }
 }

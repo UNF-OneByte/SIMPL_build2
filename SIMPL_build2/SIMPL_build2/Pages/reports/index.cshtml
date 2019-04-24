@@ -5,12 +5,16 @@
     ViewData["Title"] = "index";
 }
 
+
+
 <div class="row">
     <div class="col-sm-6">
         <h2>Reporting</h2>
     </div>
     <div class="col-sm-6" style="padding:2%">
         @*<button type="button" class="btn btn-info pull-right"  href="#all">Toggle All</button>*@
+        <a class="btn btn-success" asp-page="./Index" asp-route-Status="open">View Open Projects</a>
+        <a class="btn btn-danger" asp-page="./Index" asp-route-Status="closed">View Closed Projects</a>
     </div>
 </div>
 <hr />

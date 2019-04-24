@@ -19,6 +19,11 @@
             $('#projects').DataTable();
 
         });
+
+        $(document).ready(function () {
+            $('#closed_projects').DataTable();
+
+        });
     </script>
 }
 
@@ -29,90 +34,193 @@
         <h1 class="page_title">Projects Queue</h1>
     </div>
     <p>
-        <a asp-page="Create">Create New</a>
+        <h2><a asp-page="Create">Create a Project</a></h2>
     </p>
-    <div id="example_wrapper" class="dataTables_wrapper">
-        <div class="dataTables_length" id="example_length">
-            <!--<label>Show Entries<select name="example_length" aria-controls="example" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
-            @{ 
-                <table id="projects" class="table table-striped table-bordered dt-responsive nowrap dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
-                <thead>
-                    <tr role="row">
-                        <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 120px;" aria-sort="ascending" aria-label="Project Name: activate to sort column descending">Project Name</th>
-                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 130px;" aria-label="Project Manager (Username): activate to sort column ascending">Project Manager</th>
-                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 99px;" aria-label="Start Date: activate to sort column ascending">Start Date</th>
-                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 150px;" aria-label="Estimated End Date: activate to sort column ascending">Estimated End Date</th>
-                        <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 100px;" aria-label="Estimated Cost: activate to sort column ascending">Estimated Cost</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>                    
-                </thead>
-                <tbody>
-                    @{
-                        var theProjectID = 0;
-                    }
+    <div class="thumbnail">    
+        <div class="row">
+            <div class="col-sm-6">
+                <h3><strong>Open Projects</strong></h3>
+            </div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#open_projects_table">Toggle View</button>
+            </div>
+        </div>
+        <hr />
+        <div id="open_projects_table" class="dataTables_wrapper table collapse in">
+            <div class="dataTables_length" id="example_length">
+                <!--<label>Show Entries<select name="example_length" aria-controls="example" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
+                @{
+                    <table id="projects" class="table table-striped table-bordered dt-responsive nowrap dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
+                        <thead>
+                            <tr role="row">
+                                <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 120px;" aria-sort="ascending" aria-label="Project Name: activate to sort column descending">Project Name</th>
+                                <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 130px;" aria-label="Project Manager (Username): activate to sort column ascending">Project Manager</th>
+                                <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 99px;" aria-label="Start Date: activate to sort column ascending">Start Date</th>
+                                <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 150px;" aria-label="Estimated End Date: activate to sort column ascending">Estimated End Date</th>
+                                <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 100px;" aria-label="Estimated Cost: activate to sort column ascending">Estimated Cost</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var theProjectID = 0;
+                            }
 
-                    @foreach (var item in Model.Projects)
-                    {
-                        <tr role="row" class="odd">
-                            <td class="sorting_1">
-                                <a asp-page="./Details" asp-route-id="@item.ProjectId">@Html.DisplayFor(modelItem => item.ProjectName)</a>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ProjectManager.UserName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EstimatedStartDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EstimatedEndDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EstimatedInitialCost)
-                            </td>
-                            <td>
-                                @{
-                                    var theID = item.ProjectId;
-                                    theProjectID = theID;
-                                }
-                                <button type="button" data-toggle="modal" data-target="#@theProjectID" id="@theID">Description</button>
-                            </td>
-                            <td>
-                                <a asp-page="./Edit" asp-route-id="@item.ProjectId">Edit</a> |
-                                <a asp-page="./Delete" asp-route-id="@item.ProjectId">Delete</a>
-                            </td>
-                        </tr>
+                            @foreach (var item in Model.Projects)
+                            {
+                                <tr role="row" class="odd">
+                                    <td class="sorting_1">
+                                        <a asp-page="./Details" asp-route-id="@item.ProjectId">@Html.DisplayFor(modelItem => item.ProjectName)</a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ProjectManager.UserName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EstimatedStartDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EstimatedEndDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EstimatedInitialCost)
+                                    </td>
+                                    <td>
+                                        @{
+                                            var theID = item.ProjectId;
+                                            theProjectID = theID;
+                                        }
+                                        <button type="button" data-toggle="modal" data-target="#@theProjectID" id="@theID">Description</button>
+                                    </td>
+                                    <td>
+                                        <a asp-page="./Edit" asp-route-id="@item.ProjectId">Edit</a> |
+                                        <a asp-page="./Delete" asp-route-id="@item.ProjectId">Delete</a>
+                                    </td>
+                                </tr>
 
-                        <!-- Description Modal -->
-                        <div class="modal fade" id="@theProjectID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h2 class="modal-title">Quick Details</h2>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form>
-                                        <h4 style="padding:2%">Project Description</h4>
-                                        <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>@item.Description</textarea>
-                                        <hr />
-                                        <h4 style="padding:2%">Associated Tasks</h4>
-                                        <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>When you click that tasks button in bottom right it will redirect you to the tasks page. What we need to see is only the project you clicked before's tasks.</textarea>
-                                    </form>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                                        <a asp-page="../tasks/Index" asp-route-QueryProjectId="@item.ProjectId">Tasks</a>                                        
+                                <!-- Description Modal -->
+                                <div class="modal fade" id="@theProjectID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h2 class="modal-title">Quick Details</h2>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form>
+                                                <h4 style="padding:2%">Project Description</h4>
+                                                <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>@item.Description</textarea>
+                                            </form>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                                                <a asp-page="../tasks/Index" asp-route-QueryProjectId="@item.ProjectId">Tasks</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    }
-                </tbody>
-            </table>                    
+                            }
+                        </tbody>
+                    </table>
 
-         
-            }
+
+                }
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="thumbnail">              
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3><strong>Closed Projects:</strong></h3>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-info btn-xs pull-right" data-toggle="collapse" data-target="#closed_projects_table">Toggle View</button>
+                    </div>
+                </div>
+                <hr />
+                <div class="dataTables_length table collapse" id="closed_projects_table">
+                    <!--<label>Show Entries<select name="example_length" aria-controls="example" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
+                    @{
+                        <table id="closed_projects" class="table table-striped table-bordered dt-responsive nowrap dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 120px;" aria-sort="ascending" aria-label="Project Name: activate to sort column descending">Project Name</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 130px;" aria-label="Project Manager (Username): activate to sort column ascending">Project Manager</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 99px;" aria-label="Start Date: activate to sort column ascending">Start Date</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 150px;" aria-label="Estimated End Date: activate to sort column ascending">Estimated End Date</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 100px;" aria-label="Estimated Cost: activate to sort column ascending">Estimated Cost</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var theProjectID1 = 0;
+                                }
+
+                                @foreach (var item in Model.Projects)
+                                {
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">
+                                            <a asp-page="./Details" asp-route-id="@item.ProjectId">@Html.DisplayFor(modelItem => item.ProjectName)</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ProjectManager.UserName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EstimatedStartDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EstimatedEndDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EstimatedInitialCost)
+                                        </td>
+                                        <td>
+                                            @{
+                                                var theID = item.ProjectId;
+                                                theProjectID1 = theID;
+                                            }
+                                            <button type="button" data-toggle="modal" data-target="#@theProjectID1" id="@theID">Description</button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Description Modal -->
+                                    <div class="modal fade" id="@theProjectID1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h2 class="modal-title">Quick Details</h2>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form>
+                                                    <h4 style="padding:2%">Project Description</h4>
+                                                    <textarea class="form-control rounded-0" id="descriptionTextArea" rows="10" readonly>@item.Description</textarea>
+                                                </form>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+                                                    <a asp-page="../tasks/Index" asp-route-QueryProjectId="@item.ProjectId">Tasks</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </tbody>
+                        </table>
+
+
+                    }
+                </div>
+            </div>
+
+
+        </div>
         </div>
     </div>
 </body>
