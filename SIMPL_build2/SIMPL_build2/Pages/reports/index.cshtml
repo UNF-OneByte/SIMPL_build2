@@ -15,39 +15,74 @@
         @*<button type="button" class="btn btn-info pull-right"  href="#all">Toggle All</button>*@
         <a class="btn btn-success" asp-page="./Index" asp-route-Status="open">View Open Projects</a>
         <a class="btn btn-danger" asp-page="./Index" asp-route-Status="closed">View Closed Projects</a>
+
+        @{ 
+            var CurrentStatus = " ";
+            @foreach (var x in Model.Projects)
+            {
+                if (x.ActualEndDate == null)
+                {
+                    CurrentStatus = "open";
+                }
+                else
+                {
+                    CurrentStatus = "closed";
+                }
+                break;
+            }
+        }
     </div>
 </div>
 <hr />
 
-<div class="row">
-    <div class="col-md-12 col-md-6">
-        <div class="thumbnail">
-            <h4><strong>Projects Overview:</strong></h4>
-            <hr />
-            @{
-                var projectCount = Model.Projects?.Count();
-                var oldestProject = Model.OldestProject?.ActualStartDate;
+@{
+    var y = false;
+    foreach (var x in Model.Projects)
+    {
+        if (x.ActualEndDate == null)
+        {
+            y = true;
+        }
+        else
+        {
+            y = false;
+        }
+    }
 
-            }
-            <h5>Total projects opened: <strong>@projectCount</strong> </h5>
-            <h5>Longest opened project: <strong>@oldestProject</strong></h5>
+    if (y == true)
+    {
+        <div class="row">
+            <div class="col-md-12 col-md-6">
+                <div class="thumbnail">
+                    <h4><strong>Projects Overview:</strong></h4>
+                    <hr />
+                    @{
+                        var projectCount = Model.Projects?.Count();
+                        var oldestProject = Model.OldestProject?.ActualStartDate;
+
+                    }
+                    <h5>Total projects opened: <strong>@projectCount</strong> </h5>
+                    <h5>Longest opened project: <strong>@oldestProject</strong></h5>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-md-6">
+                <div class="thumbnail">
+                    <h4><strong>Tasks Overview:</strong></h4>
+                    <hr />
+                    @{
+                        var taskCount = Model.Tasks?.Count();
+                        var oldestTask = Model.OldestTask?.DateCreated;
+
+                    }
+                    <h5>Total tasks opened: <strong>@taskCount</strong> </h5>
+                    <h5>Longest task: <strong>@oldestTask</strong></h5>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="col-md-12 col-md-6">
-        <div class="thumbnail">
-            <h4><strong>Tasks Overview:</strong></h4>
-            <hr />
-            @{
-                var taskCount = Model.Tasks?.Count();
-                var oldestTask = Model.OldestTask?.DateCreated;
-
-            }
-            <h5>Total tasks opened: <strong>@taskCount</strong> </h5>
-            <h5>Longest task: <strong>@oldestTask</strong></h5>
-        </div>
-    </div>
-</div>
+    }
+}
 
 <div class="row">
     <div class="col-md-6 col-md-6">
@@ -84,7 +119,7 @@
             </div>
         </div>
     </div>
-   
+
     <div class="col-md-6 col-md-6">
         <div class="thumbnail">
             <div class="row">
@@ -126,9 +161,14 @@
                                         <td role="row" class="odd"><p><font color="SALMON"><strong>Not Started</strong></font></p></td>
 
                                     }
+                                    else if (item.ActualStartDate != null && item.ActualEndDate == null)
+                                    {
+                                        <td role="row" class="odd"><p><font color="green"><strong>Started</strong></font></p></td>
+
+                                    }
                                     else
                                     {
-                                        <td role="row" class="odd"><p><font color="#239B56"><strong>Started</strong></font></p></td>
+                                        <td role="row" class="odd"><p><font color="red"><strong>Closed</strong></font></p></td>
                                     }
 
 
@@ -179,18 +219,18 @@
 
                                 }
 
-                                <tr>                                   
+                                <tr>
                                     <td role="row" class="odd">
                                         @foreach (var SubItem in Model.Tasks)
                                         {
                                             if (SubItem.Location.Name == item.Location)
                                             {
-                                                <a asp-page="../Reports/Location_Details_Report" asp-route-id="@TheID">@SubItem.Location.RoomNumber</a>                                                
+                                                <a asp-page="../Reports/Location_Details_Report" asp-route-id="@TheID" asp-route-Status="@CurrentStatus">@SubItem.Location.RoomNumber</a>
                                                 break;
                                             }
                                         }
                                     </td>
-                                     <td role="row" class="odd">
+                                    <td role="row" class="odd">
                                         @item.Location
                                     </td>
                                     <td role="row" class="odd">
@@ -300,6 +340,10 @@
                                         TheID = ID.CostType.CostTypeId;
                                         break;
                                     }
+                                    else
+                                    {
+                                        TheID = -100;
+                                    }
 
                                 }
 
@@ -309,7 +353,7 @@
                                         {
                                             if (SubItem.CostType.Name == item.CostType)
                                             {
-                                                <a asp-page="../Reports/cost_type_breakdown" asp-route-id="@TheID">@SubItem.CostType.Name</a>
+                                                <a asp-page="../Reports/cost_type_breakdown" asp-route-id="@TheID" asp-route-Status="@CurrentStatus">@SubItem.CostType.Name</a>
                                                 break;
                                             }
                                         }
@@ -367,7 +411,7 @@
                                         {
                                             if (SubItem.Vendor.Name == item.Vendor)
                                             {
-                                                <a asp-page="../Reports/vendor_breakdown" asp-route-id="@TheID">@SubItem.Vendor.Name</a>
+                                                <a asp-page="../Reports/vendor_breakdown" asp-route-id="@TheID" asp-route-Status="@CurrentStatus">@SubItem.Vendor.Name</a>
                                                 break;
                                             }
                                         }
@@ -469,7 +513,7 @@
         });
 
         $(document).ready(function () {
-            $('#Project_Location').DataTable({             
+            $('#Project_Location').DataTable({
                 "bInfo": false,
                 dom: 'Bfrtip',
                 buttons: [
@@ -483,7 +527,7 @@
                     }
                 ],
                 "aoColumnDefs": [
-                    { "bSearchable": false, "aTargets": [1,2] }
+                    { "bSearchable": false, "aTargets": [1, 2] }
                 ]
             });
         });
@@ -507,7 +551,7 @@
                 ]
             });
         });
-        
+
         $(document).ready(function () {
             $('#vendor_report_table').DataTable({
                 "bInfo": false,
@@ -620,7 +664,7 @@
     function TaskDetails_() {
         var option = document.getElementById("Project_Task_Details_Report");
         var selTask = option.options[option.selectedIndex].text;
-        alert("You selected--->" + selTask);       
+        alert("You selected--->" + selTask);
 
     }
 </script>

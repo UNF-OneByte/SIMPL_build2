@@ -30,13 +30,13 @@
         console.log(today);
 
         $(document).ready(function () {
-            $('#tasks_home').DataTable({               
+            $('#tasks_home').DataTable({
 
             });
         });
 
         $(document).ready(function () {
-            $('#tasks').DataTable({                
+            $('#tasks').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -59,7 +59,7 @@
         });
 
         $(document).ready(function () {
-            $('#vendor').DataTable({          
+            $('#vendor').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -82,7 +82,7 @@
         });
 
         $(document).ready(function () {
-            $('#hours_by_task').DataTable({              
+            $('#hours_by_task').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -105,7 +105,7 @@
         });
 
         $(document).ready(function () {
-            $('#hours_by_cost_type').DataTable({           
+            $('#hours_by_cost_type').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     {
@@ -157,7 +157,21 @@
     }
 }
 
-
+@{
+    var CurrentStatus = " ";
+    @foreach (var x in Model.Projects)
+    {
+        if (x.ActualEndDate == null)
+        {
+            CurrentStatus = "open";
+        }
+        else
+        {
+            CurrentStatus = "closed";
+        }
+        break;
+    }
+}
 
 
 <body>
@@ -172,10 +186,10 @@
                 </div>
                 <div class="row">
                     <h4 class="col-sm-6">Room #: <strong>@name.Location.RoomNumber</strong></h4>
-                </div>                
+                </div>
                 break;
             }
-        </div>  
+        </div>
         <div class="col-lg-6" id="date_filter">
 
         </div>
@@ -192,8 +206,7 @@
                         </option><option value="100">100</option></select> </label></div><div id="example_filter" class="dataTables_filter"><label><input type="search" class="" placeholder="Search:" aria-controls="example"></label></div>-->
                         <table id="tasks_home" class="table table-striped table-bordered" style="width: 100%;" role="grid" aria-describedby="example_info">
                             <thead>
-                                <tr role="row">
-                                    <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 211px;" aria-label="Position: activate to sort column ascending">Status</th>
+                                <tr role="row">                                    
                                     <th class="sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 131px;" aria-sort="ascending" aria-label="Name: activate to sort column descending">Task Name</th>
                                     <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 211px;" aria-label="Position: activate to sort column ascending">Description</th>
                                     <th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 41px;" aria-label="Vendor: activate to sort column ascending">Vendor Id</th>
@@ -206,10 +219,7 @@
                             <tbody>
                                 @foreach (var item in Model.Tasks)
                                 {
-                                    <tr role="row" class="odd">
-                                        <td class="sorting_1">
-                                            This will be the status (Open / Closed)
-                                        </td>
+                                    <tr role="row" class="odd">                                   
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Name)
                                         </td>
@@ -279,7 +289,7 @@
                                     <th>
                                         @if (@item.ActualCost == null)
                                         {
-                                            <p>-</p>                                            
+                                            <p>-</p>
                                         }
                                         else
                                         {
@@ -427,7 +437,7 @@
                         <tfoot>
                             <tr>
                                 <td>TOTAL ($): </td>
-                                @{               
+                                @{
                                     decimal? Temp_Cost_Type = 0;
                                     foreach (var item in Model.CostType)
                                     {
@@ -443,7 +453,7 @@
                     </table>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
 
 </body>

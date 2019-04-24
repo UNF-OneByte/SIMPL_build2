@@ -19,15 +19,17 @@ namespace SIMPL.Pages.tasks
             _context = context;
         }
 
+        //This allows for a query sting named QueryProjectId 
+        //?QueryProjectId= <Project ID>
+        [BindProperty(SupportsGet = true)]
+        public string Id { get; set; }
+
         public IList<Tasks> TheTask { get; set; }
+        public IList<Tasks> AllTask { get; set; }
 
         public IActionResult OnGet()
-        {     
-        ViewData["CostTypeId"] = new SelectList(_context.CostTypes, "CostTypeId", "Name");
-        ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
-        ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "Name");
-        ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectName");
-        ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");
+        {
+            int ProjectId;
 
             TheTask =  _context.Tasks
              .Include(t => t.CostType)
@@ -35,6 +37,28 @@ namespace SIMPL.Pages.tasks
              .Include(t => t.Location)
              .Include(t => t.Project)
              .Include(t => t.Vendor).ToList();
+
+            AllTask =  _context.Tasks
+             .Include(t => t.CostType)
+             .Include(t => t.CreatedBy)
+             .Include(t => t.Location)
+             .Include(t => t.Project)
+             .Include(t => t.Vendor).ToList();
+
+            if (Id != null)
+            {
+                if (int.TryParse(Id, out var ParsedProjectId))
+                {
+                    TheTask = TheTask.Where(i => i.ProjectId == ParsedProjectId).ToList();
+                    ProjectId = ParsedProjectId;
+                }
+            }
+
+            ViewData["CostTypeId"] = new SelectList(_context.CostTypes, "CostTypeId", "Name");
+            ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
+            ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "Name");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectName");
+            ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");
 
             return Page();
         }
