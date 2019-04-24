@@ -12,20 +12,30 @@ namespace SIMPL.Pages.tasks
 {
     public class CreateModel : PageModel
     {
-        private readonly SIMPL.Models.project_trackerContext _context;
+        private readonly SIMPL.Models.project_trackerContext _context;        
 
         public CreateModel(SIMPL.Models.project_trackerContext context)
         {
             _context = context;
         }
 
+        public IList<Tasks> TheTask { get; set; }
+
         public IActionResult OnGet()
-        {
+        {     
         ViewData["CostTypeId"] = new SelectList(_context.CostTypes, "CostTypeId", "Name");
         ViewData["CreatedById"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
         ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "Name");
         ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectName");
         ViewData["VendorId"] = new SelectList(_context.Vendors, "VendorId", "Name");
+
+            TheTask =  _context.Tasks
+             .Include(t => t.CostType)
+             .Include(t => t.CreatedBy)
+             .Include(t => t.Location)
+             .Include(t => t.Project)
+             .Include(t => t.Vendor).ToList();
+
             return Page();
         }
 
