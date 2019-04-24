@@ -18,6 +18,11 @@ namespace SIMPL.Pages.reports
             _context = context;
         }
 
+        //This allows for a query sting named QueryProjectId 
+        //?QueryProjectId= <Project ID>
+        [BindProperty(SupportsGet = true)]
+        public string Status { get; set; }
+
         public IList<Projects> Projects { get; set; }
         public IList<Tasks> Tasks { get; set; }
         
@@ -36,10 +41,43 @@ namespace SIMPL.Pages.reports
         public IList<VendorCountDto> VendorCount { get; set; }        
 
         public async Task OnGetAsync()
-        {
-            Projects = await _context.Projects
-                .Include(p => p.ProjectManager)                
+        {                      
+
+            if (Status == "open")
+            {
+                Projects = await _context.Projects
+              .Include(p => p.ProjectManager)
+              .Where(p => p.ActualEndDate == null)
+              .ToListAsync();
+
+                //How many projects one user is assigned
+                ProjectManagerCount = Projects.Where(p => p.ActualEndDate == null).GroupBy(p => p.ProjectManager.UserName)
+                    .Select(group => new ProjectManagerCountDto { UserName = group.Key, ProjectCount = group.Count() })
+                    .ToList();
+
+            }
+            else if(Status == "closed")
+            {
+                Projects = await _context.Projects
+                 .Include(p => p.ProjectManager)
+                 .Where(p => p.ActualEndDate != null)
+                 .ToListAsync();
+
+                //Projects = Projects.Where(i => i.ActualEndDate != null).ToList();
+
+                //How many projects one user is assigned
+                ProjectManagerCount = Projects.Where(p => p.ActualEndDate != null).GroupBy(p => p.ProjectManager.UserName)
+                    .Select(group => new ProjectManagerCountDto { UserName = group.Key, ProjectCount = group.Count()})
+                    .ToList();             
+
+            }
+            else
+            {
+                Projects = await _context.Projects
+                .Include(p => p.ProjectManager)
+                .Where(p => p.ActualEndDate == null)
                 .ToListAsync();
+            }
 
             //Tasks = await _context.Tasks.ToListAsync();
             Tasks = await _context.Tasks
@@ -53,10 +91,7 @@ namespace SIMPL.Pages.reports
             ClosedProjects = Projects.Where(p => !p.ProjectId.Equals(1)).ToList();
             SingleProject = Projects.Where(p => p.ProjectId.Equals(1)).FirstOrDefault();
 
-            //How many projects one user is assigned
-            ProjectManagerCount = Projects.GroupBy(p => p.ProjectManager.UserName)
-                .Select(group => new ProjectManagerCountDto { UserName = group.Key, ProjectCount = group.Count() })
-                .ToList();
+            
 
             //How many tasks does one project have
             TaskProjectCount = Tasks.GroupBy(t => t.ProjectId.ToString())          
