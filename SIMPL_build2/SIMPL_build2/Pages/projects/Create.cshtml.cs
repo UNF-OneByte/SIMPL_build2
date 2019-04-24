@@ -26,8 +26,7 @@ namespace SIMPL.Pages.projects
             ViewData["ProjectManagerId"] = new SelectList(_context.AspNetUsers, "Id", "UserName");
 
             TheProject = _context.Projects
-                 .Include(p => p.ProjectId).ToList();              
-
+                 .Include(p => p.ProjectManager).ToList();
 
             return Page();
         }
