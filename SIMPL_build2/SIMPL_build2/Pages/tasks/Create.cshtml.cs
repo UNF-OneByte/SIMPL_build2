@@ -25,12 +25,20 @@ namespace SIMPL.Pages.tasks
         public string Id { get; set; }
 
         public IList<Tasks> TheTask { get; set; }
+        public IList<Tasks> AllTask { get; set; }
 
         public IActionResult OnGet()
         {
             int ProjectId;
 
             TheTask =  _context.Tasks
+             .Include(t => t.CostType)
+             .Include(t => t.CreatedBy)
+             .Include(t => t.Location)
+             .Include(t => t.Project)
+             .Include(t => t.Vendor).ToList();
+
+            AllTask =  _context.Tasks
              .Include(t => t.CostType)
              .Include(t => t.CreatedBy)
              .Include(t => t.Location)

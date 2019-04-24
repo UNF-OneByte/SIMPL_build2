@@ -5,16 +5,16 @@
     ViewData["Title"] = "Create";
 }
 
-@{
+@{   
     var countT = 0;
-    foreach (var x in Model.TheTask)
+    foreach (var x in Model.AllTask)
     {
         countT++;
     }
     countT += 1;
 
     var TheName = "";
-    foreach(var x in Model.TheTask)
+    foreach (var x in Model.TheTask)
     {
         TheName = x.Project.ProjectName;
         break;
@@ -40,10 +40,10 @@
                 <select asp-for="Tasks.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
             </div>
             @*<div class="form-group col-md-5">
-                <label class="control-label">Project Name</label>
-                <input asp-for="Tasks.Project.ProjectName" class="form-control" value="@TheName" readonly />
-                <span asp-validation-for="Tasks.Project.ProjectName" class="text-danger"></span>
-            </div>*@
+                    <label class="control-label">Project Name</label>
+                    <input asp-for="Tasks.Project.ProjectName" class="form-control" value="@TheName" readonly />
+                    <span asp-validation-for="Tasks.Project.ProjectName" class="text-danger"></span>
+                </div>*@
             <div class="form-group col-md-5">
                 <label class="control-label">Task Name</label>
                 <input asp-for="Tasks.Name" class="form-control" />
