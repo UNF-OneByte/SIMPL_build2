@@ -61,6 +61,10 @@
             }
            
         </div>
+    @{ 
+        var ThisProject = 0;
+    }
+
     <div class="container">
         <form class="form-horizontal" onload="test()">
             @foreach (var i in Model.Projects)
@@ -85,7 +89,7 @@
                         <div class="col-sm-8">
                             <p class="form-control-static">@i.ProjectId</p>
                             @{ 
-                                var ThisProject = i.ProjectId;
+                                ThisProject = i.ProjectId;
                             }
                         </div>
 
@@ -150,7 +154,7 @@
     </div>
 
     <p>
-        <a asp-page="../tasks/Create" asp-route-Id="@ThisId">Create New Task</a>
+        <a asp-page="../tasks/Create" asp-route-PID="@ThisProject">Create New Task</a>
     </p>
     <div class="row">
 
