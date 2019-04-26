@@ -63,13 +63,13 @@
         </div>
     <div class="container">
         <form class="form-horizontal" onload="test()">
-            @foreach (var i in Model.TasksToProjects)
+            @foreach (var i in Model.Projects)
             {
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="control-label col-sm-4 form-spacing" for="email">Status:</label>
                         <div class="col-sm-8">
-                            @if (i.Project.ActualEndDate == null)
+                            @if (i.ActualEndDate == null)
                             {
                                 <p class="form-control-static"><font color="#239B56"><strong>Open</strong></font></p>
                                 Open = true;
@@ -91,41 +91,41 @@
 
                         <label class="control-label col-sm-4 form-spacing" for="email">Project Manager:</label>
                         <div class="col-sm-8">
-                            <p class="form-control-static">@i.Project.ProjectManager.UserName</p>
+                            <p class="form-control-static">@i.ProjectManager?.UserName</p>
                         </div>
 
                         <label class="control-label col-sm-4 form-spacing">Start Date:</label>
                         <div class="col-sm-8 form-spacing">
-                            <p class="form-control-static">@i.Project.EstimatedStartDate</p>
+                            <p class="form-control-static">@i.EstimatedStartDate</p>
                         </div>
 
                         <label class="control-label col-sm-4 form-spacing">Estimated End Date:</label>
                         <div class="col-sm-8 form-spacing">
-                            <p class="form-control-static">@i.Project.EstimatedEndDate</p>
+                            <p class="form-control-static">@i.EstimatedEndDate</p>
                         </div>
 
-                        @if (i.Project.ActualEndDate != null)
+                        @if (i.ActualEndDate != null)
                         {
                             <label class="control-label col-sm-4 form-spacing">Actual End Date:</label>
                             <div class="col-sm-8 form-spacing">
-                                <p class="form-control-static">@i.Project.ActualEndDate</p>
+                                <p class="form-control-static">@i.ActualEndDate</p>
                             </div>
                         }
 
                         <label class="control-label col-sm-4 form-spacing">Project Description:</label>
                         <div class="col-sm-8 form-spacing">
-                            <p class="form-control-static">@i.Project.Description</p>
+                            <p class="form-control-static">@i.Description</p>
                         </div>
                         <div class="form-row">
                             <label class="control-label col-md-4 form-spacing">Project Costs:</label>
 
                             <div class="form-group col-md-4 form-spacing">
                                 <label for="inputPassword4">Estimated Costs:</label>
-                                <p class="form-control-static" id="estCost" value="@i.Project.EstimatedInitialCost">$ @i.Project.EstimatedInitialCost</p>
+                                <p class="form-control-static" id="estCost" value="@i.EstimatedInitialCost">$ @i.EstimatedInitialCost</p>
                             </div>
                             <div class="form-group col-md-4 form-spacing">
                                 <label for="inputPassword4">Estimated Hours:</label>
-                                <p class="form-control-static">@i.Project.EstimatedInitialHours</p>
+                                <p class="form-control-static">@i.EstimatedInitialHours</p>
                             </div>
                         </div>
 

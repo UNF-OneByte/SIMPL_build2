@@ -5,11 +5,29 @@
     ViewData["Title"] = "Create";
 }
 
-@{   
+<script>
+        //Gets todays date
+        var today = new Date();
+        var dd = today.getDate();
+
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = mm + '-' + dd + '-' + yyyy;
+        console.log(today);
+</script>
+
+@{
     var countT = 0;
     foreach (var x in Model.AllTask)
     {
-        countT++;
+        countT = x.TaskId;
     }
     countT += 1;
 
@@ -21,15 +39,13 @@
     }
 }
 
-<h2>Create</h2>
+<h2>Create Task</h2>
 
-<h4>Tasks</h4>
 <hr />
-<div class="row">
 
     <form method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-row">
+        <div class="row">
             <div class="form-group col-md-2">
                 <label class="control-label">Task Id</label>
                 <input asp-for="Tasks.TaskId" class="form-control" value="@countT" readonly />
@@ -57,7 +73,7 @@
                 <span asp-validation-for="Tasks.Description" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-row">
+        <div class="row">
             <div class="form-group col-md-4">
                 <label class="control-label">Vendor     </label><a asp-page="/Vendors/index" style="font-size:x-small;">Manage Vendors</a>
                 <select asp-for="Tasks.VendorId" class="form-control" asp-items="ViewBag.VendorId"></select>
@@ -66,13 +82,18 @@
                 <label class="control-label">Location     </label><a asp-page="/Locations/index" style="font-size:x-small;">Manage Locations</a>
                 <select asp-for="Tasks.LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
             </div>
+
+            @{ 
+                var date = DateTime.Now.ToString("MM/d/yyyy");
+            }
+
             <div class="form-group col-md-4">
                 <label class="control-label">Date Created</label>
-                <input asp-for="Tasks.DateCreated" type="date" class="form-control" />
+                <input asp-for="Tasks.DateCreated" type="datetime" class="form-control" value="@date" readonly/>
                 <span asp-validation-for="Tasks.DateCreated" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-row">
+        <div class="row">
             <div class="form-group col-md-6">
                 <label class="control-label">Created By</label>
                 <select asp-for="Tasks.CreatedById" class="form-control" asp-items="ViewBag.CreatedById"></select>
@@ -82,7 +103,7 @@
                 <select asp-for="Tasks.CostTypeId" class="form-control" asp-items="ViewBag.CostTypeId"></select>
             </div>
         </div>
-        <div class="form-row">
+        <div class="row">
             <div class="form-group col-md-3">
                 <label class="control-label">Estimated Cost</label>
                 <input asp-for="Tasks.EstimatedCost" class="form-control" />
@@ -102,14 +123,14 @@
                 <label class="control-label">Actual Hours</label>
                 <input asp-for="Tasks.ActualHours" class="form-control" />
                 <span asp-validation-for="Tasks.ActualHours" class="text-danger"></span>
-            </div>
+            </div>            
         </div>
+        <br />
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Create" class="btn btn-primary" />
         </div>
     </form>
 
-</div>
 
 <div>
     <a asp-page="Index">Back to List</a>

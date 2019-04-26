@@ -42,7 +42,8 @@ namespace SIMPL.Pages.projects
                 .Include(t => t.Project)
                 .Include(t => t.Vendor).ToListAsync();
 
-            Projects = await _context.Projects.ToListAsync();
+            Projects = await _context.Projects
+                    .Include(p => p.ProjectManager).ToListAsync(); 
 
             if (Id != null)
             {
